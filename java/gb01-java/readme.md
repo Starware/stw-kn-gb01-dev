@@ -1,8 +1,8 @@
-#SAMPLE FATJAR PROJECT
+#SAMPLE FATJAR PROJECT  
 This is a sample Java project to illustrate building jars for inclusion in the JDA runtime. 
  
 
-##Summary
+##Summary  
 The key point is that jars deployed should have all their dependencies included but 
 should NOT include dependencies that clash with the libraries deployed by JDA.  
 
@@ -22,14 +22,14 @@ in this list, care should be taken in this instance to check for compatibility b
 the latest version should  work in most cases. At least there won't be any new versions 
 of these libraries on the classpath.  
 
-##Usage
+##Usage  
 
 to create a jar with necessary dependencies, just use the fatjar task in the gradle 
 build:
 
 `gb01-java$ ./gradlew fatjar`
 
-##Notes
+##Notes  
 
 This is by no means the only method to achieve this, nor is it guaranteed to work for 
 all cases (merging contents from META-INF directories is a possible issue). It should 
