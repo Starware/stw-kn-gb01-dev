@@ -1,0 +1,56 @@
+/*
+ * A sample java project for building jars targeted at the JDA runtime.
+ * It avoids 'jar hell' dependency clashes when deploying jars with dependencies already supplied on the JDA
+ * classpath
+ */
+
+plugins {
+    // the java plugin: https://docs.gradle.org/current/userguide/java_plugin.html
+    id 'java'
+}
+
+//create a single Jar with all dependencies, allows excluding certain jars and parts of jars
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',  
+        	'Implementation-Version': '1.0',
+        	'Main-Class': 'eg.sample.pack.Sample'
+    }
+    
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    {
+        // don't bring these files from 3rd parties for example
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+    with jar
+}
+
+
+dependencies {
+    // These dependencies are included in any 'fat' jar - they are not provided by JDA
+    compile  "sax:sax:2.0.1"
+    compile  "uk.org.binky:lexinator:0.2.0"
+    
+
+    // Use JUnit test framework. Not exported to a 'fat' jar
+    testCompile 'junit:junit:4.12'
+    
+    // These dependencies are required to compile the code but will not be packaged. 
+    // It must be provided at runtime by other means (e.g. the JDA server classpath).
+    // See the file 2018jdajars.txt for a list of jars that can be declared thus.
+    compileOnly "kn.int.swift:moca-core:${mocaCoreVersion}"
+    compileOnly  'com.google.guava:guava:20.0'
+    compileOnly  'org.apache.commons:commons-math3:3.4.1'
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use jcenter for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+    mavenCentral()
+    maven { url 'https://mvnrepository.com/artifact' }
+	maven { url 'http://repository.int.kn:8081/nexus/content/groups/public' }
+}
