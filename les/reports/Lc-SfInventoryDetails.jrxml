@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Screwfix" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" scriptletClass="com.redprairie.moca.jrds.ReportingIreportScriptlet" resourceBundle="com.redprairie.moca.jrds.Xlate" uuid="f11c6509-817d-418e-92b7-8856e57a48eb">
+	<property name="ireport.zoom" value="1.7715610000000017"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<property name="MOCA" value="true"/>
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MOCA_REPORT_LOCALE" class="java.lang.String" isForPrompting="false">
+		<property name="MOCA" value="true"/>
+		<defaultValueExpression><![CDATA["US_ENGLISH"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MOCA_REPORT_CONNECTION" class="com.redprairie.moca.jrds.JRMocaConnection" isForPrompting="false">
+		<property name="MOCA" value="true"/>
+		<defaultValueExpression><![CDATA[new com.redprairie.moca.jrds.JRMocaConnection("http://nphstdevwms02.replgroup.com:15500/service", "super", "super")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MOCA_REPORT_DATE" class="java.lang.String" isForPrompting="false">
+		<property name="MOCA" value="true"/>
+		<defaultValueExpression><![CDATA[DateFormat.getDateInstance(DateFormat.SHORT).format(new Date())]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MOCA_REPORT_TIME" class="java.lang.String" isForPrompting="false">
+		<property name="MOCA" value="true"/>
+		<defaultValueExpression><![CDATA[DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date())]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MOCA_REPORT_TZ" class="java.lang.String" isForPrompting="false">
+		<property name="MOCA" value="true"/>
+		<defaultValueExpression><![CDATA[new java.text.SimpleDateFormat("z").format(new Date())]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MOCA_REPORT_DATE_FMT" class="java.lang.String" isForPrompting="false">
+		<property name="MOCA" value="true"/>
+		<defaultValueExpression><![CDATA["MM/dd/yyyy"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MOCA_REPORT_TIME_FMT" class="java.lang.String" isForPrompting="false">
+		<property name="MOCA" value="true"/>
+		<defaultValueExpression><![CDATA["HH:mm:ss"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ordnum" class="java.lang.String">
+		<property name="prompt" value="^ordnum^"/>
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="wh_id" class="java.lang.String">
+		<property name="prompt" value="^wh_id^"/>
+	</parameter>
+	<queryString language="MOCA">
+		<![CDATA[list lc rpt inventory details sfcustomer
+where ordnum =@ordnum and wh_id = @wh_id]]>
+	</queryString>
+	<field name="ordnum" class="java.lang.String"/>
+	<field name="cponum" class="java.lang.String"/>
+	<field name="lodnum" class="java.lang.String"/>
+	<field name="prtnum" class="java.lang.String"/>
+	<field name="untqty" class="java.lang.Integer"/>
+	<field name="untqty_cs" class="java.lang.Integer"/>
+	<field name="row_num" class="java.lang.Double"/>
+	<field name="tot_count" class="java.lang.Integer"/>
+	<group name="Group_01" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{ordnum} + $F{lodnum} +$F{prtnum}]]></groupExpression>
+		<groupHeader>
+			<band height="276">
+				<line>
+					<reportElement x="0" y="139" width="555" height="1" uuid="bda255b7-4aa9-464b-bdb9-2e49efe19946"/>
+				</line>
+				<rectangle>
+					<reportElement x="428" y="153" width="113" height="61" uuid="7d96e5c4-f3c7-42e3-8230-af404cc4de69"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="428" y="155" width="113" height="20" uuid="bb984171-3dee-4ad4-a09d-11478652b521"/>
+					<textElement textAlignment="Center">
+						<font isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Pallet Number]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="0" width="261" height="26" uuid="d20770b2-63fe-4f8b-9c6a-254aace3e6f7"/>
+					<textElement>
+						<font size="14"/>
+					</textElement>
+					<text><![CDATA[Screwfix Pallet Identification Label
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="37" width="175" height="24" uuid="6cb8a746-e479-494e-946e-ac26ee8dc9af"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Supplier Name
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="61" width="175" height="24" uuid="ab3f4411-a600-4094-bab9-7107011c884f"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Screwfix P/O Number
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="85" width="175" height="24" uuid="72f7ed56-0419-4197-829c-32f15e6a58a7"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Booking Reference
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="109" width="175" height="24" uuid="8a2f8944-1d01-4b0a-933f-01fa8d1b1e03"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Screwfix Delivery Reference Number]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="219" y="37" width="209" height="24" uuid="3a39db53-9901-49e8-9559-ff329fad90a6"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Deb Ltd
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="153" width="175" height="24" uuid="2f36b14a-1066-4367-a9c2-b66867800289"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Screwfix SKU
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="177" width="175" height="24" uuid="06e11ab1-61fe-4565-b483-c1137b51f1aa"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Total Cartons
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="201" width="100" height="24" uuid="ec61546f-0717-4d09-9029-326571124591"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Total Selling Units
+]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="219" y="61" width="209" height="24" uuid="c9274099-3f0f-4af4-ba33-ef00b1e4863d"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{ordnum}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="219" y="85" width="209" height="24" uuid="2f9d9afb-1a96-4079-9343-e4a570209560"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{cponum}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="219" y="109" width="209" height="24" uuid="a28aacc8-8a25-46c8-95be-c24f646bbf45"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{cponum}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="219" y="153" width="178" height="24" uuid="ac6534a4-df39-4bb5-94c9-ff0a9dba2be0"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{prtnum}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="219" y="177" width="178" height="24" uuid="3554fc7c-ce86-4917-b697-7a61deb2546a"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{untqty_cs}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="219" y="201" width="178" height="24" uuid="234554fb-c13b-4d5e-aa3b-88d0a47784fa"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{untqty}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="453" y="175" width="22" height="20" uuid="055cb0b6-4966-4571-b8c4-daded8d436c3"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[(int)($F{row_num})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="496" y="175" width="22" height="20" uuid="2f5683bd-0125-46fe-8fc1-cf610f0a1dca"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{tot_count}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="475" y="175" width="21" height="20" uuid="a2c45866-e344-4077-9fdb-8a24d5970faf"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[of]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="80" splitType="Stretch"/>
+	</detail>
+</jasperReport>
