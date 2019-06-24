@@ -1,0 +1,6 @@
+colnam,colval,locale_id,lngdsc,short_dsc,grp_nam
+rpt_id,Lc-CarrierAddressDetails,EN-GB,"Transbridge Carrier Report","Trans Rep",lc_dscmst_rpt_id
+rpt_id,Lc-RsInventoryDetails,EN-GB,"RS Customer Report","RS Rep",lc_dscmst_rpt_id
+rpt_id,Lc-SfInventoryDetails,EN-GB,"Screwfix Customer Report","Screwfix Rep",lc_dscmst_rpt_id
+rpt_id,Lc-WksInventoryDetails,EN-GB,"Wickes Customer Report","Wickes Rep",lc_dscmst_rpt_id
+rpt_id,Lc-DgNotes,EN-GB,"Dangerous Goods Report","DG Rep",lc_dscmst_rpt_id
