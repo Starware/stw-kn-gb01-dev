@@ -1,0 +1,58 @@
+<command>
+<name>generate lc dangerous goods report</name>
+<description>List LC Dangerous Goods Report</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+validate stack variable not null
+ where name = 'lodnum'
+|
+validate stack variable not null
+ where name = 'wh_id'
+|
+[select distinct shipment_line.ordnum,
+        shipment_line.client_id
+  from all_inventory_view
+  join shipment_line
+	on shipment_line.ship_line_id = all_inventory_view.ship_line_id
+   and shipment_line.wh_id = all_inventory_view.wh_id
+   and all_inventory_view.prtnum = shipment_line.prtnum
+   and all_inventory_view.prt_client_id = shipment_line.prt_client_id
+   and all_inventory_view.prt_client_id = shipment_line.client_id
+ where all_inventory_view.lodnum = @lodnum
+   and exists(select 1
+				from prtmst_view
+			   where prtmst_view.prtnum = shipment_line.prtnum
+				 and prtmst_view.wh_id = shipment_line.wh_id
+				 and prtmst_view.prt_client_id = shipment_line.prt_client_id
+				 and prtmst_view.hazmat_flg = 1)
+ and all_inventory_view.wh_id = nvl(@wh_id, @@wh_id)]catch(-1403)
+|
+if(@?= 0)
+{
+	
+	if (!@prtadr)
+	{
+		[select def_printer prtadr
+		   from rpt_config
+		  where rpt_id = 'LcDgNotes'] catch(-1403)
+	}
+	|
+	if(@? = 0)
+	{
+		generate moca report
+		 where rpt_id = 'LcDgNotes'
+		   and dest_typ = 'printer'
+		   and dest = @prtadr
+		   and gen_usr_id = nvl(@usr_id, @@usr_id)     
+		   and locale_id = nvl(@locale_id, @@loacle_id)
+		   and lodnum = @ordnum
+		   and wh_id = @wh_id
+		   and client_id = @client_id catch(@?)
+	}
+	
+}
+		
+]]>
+</local-syntax>
+</command>

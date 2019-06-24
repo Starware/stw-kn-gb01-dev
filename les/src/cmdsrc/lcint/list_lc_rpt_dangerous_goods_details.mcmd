@@ -1,0 +1,74 @@
+<command>
+<name>list lc rpt dangerous goods details</name>
+<description>List LC Rpt Dangerous Goods Details</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select shipment_line.ordnum,
+        ord_line.carcod,
+        min(adrmst.adrnam) adrnam,
+        min(adrmst.adrln1) adrln1,
+        min(adrmst.adrln2) adrln2,
+        min(adrmst.adrln3) adrln3,
+        min(adrmst.adrcty) adrcty,
+        min(adrmst.adrpsz) adrpsz,
+        min(adrmst.ctry_name) ctry_name,
+        all_inventory_view.prtnum,
+        min(prtdsc.lngdsc) lngdsc,
+        max(uc_dgdsc.uc_dg_dsc) uc_dg_dsc,
+        sum(all_inventory_view.untqty) untqty,
+        (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.netwgt)) / (1000.0) net_wgt,
+        (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.grswgt)) / (1000.0) grs_wgt,
+        (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.len) *min(prtftp_dtl.hgt) *min(prtftp_dtl.wid)) / (100.0) vol
+   from all_inventory_view
+   join shipment_line
+     on shipment_line.ship_line_id = all_inventory_view.ship_line_id
+    and shipment_line.wh_id = all_inventory_view.wh_id
+    and all_inventory_view.prtnum = shipment_line.prtnum
+   join ord_line
+     on ord_line.ordnum = shipment_line.ordnum
+    and ord_line.prtnum = shipment_line.prtnum
+    and ord_line.ordlin = shipment_line.ordlin
+    and ord_line.wh_id = shipment_line.wh_id
+    and ord_line.client_id = shipment_line.client_id
+   join ord
+     on ord.ordnum = ord_line.ordnum
+    and ord.wh_id = ord_line.wh_id
+    and ord.client_id = ord_line.client_id
+   join prtmst_view
+     on prtmst_view.prtnum = all_inventory_view.prtnum
+    and prtmst_view.wh_id = all_inventory_view.wh_id
+    and prtmst_view.prt_client_id = all_inventory_view.prt_client_id
+    and prtmst_view.hazmat_flg = 1
+   join prtdsc
+     on prtdsc.colval = all_inventory_view.prtnum || '|' || all_inventory_view.prt_client_id || '|' || all_inventory_view.wh_id
+    and prtdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
+    and prtdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
+   join uc_dgdsc
+     on uc_dgdsc.prtnum = prtmst_view.prtnum
+    and uc_dgdsc.prt_client_id = prtmst_view.prt_client_id
+    and uc_dgdsc.wh_id = prtmst_view.wh_id
+    and uc_dgdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
+   join adrmst
+     on adrmst.adr_id = ord.st_adr_id
+   join prtftp
+     on prtftp.prtnum = prtmst_view.prtnum
+    and prtftp.prt_client_id = prtmst_view.prt_client_id
+    and prtftp.wh_id = prtmst_view.wh_id
+    and prtftp.defftp_flg = 1
+   join prtftp_dtl
+     on prtftp_dtl.prtnum = prtftp.prtnum
+    and prtftp_dtl.prt_client_id = prtftp.prt_client_id
+    and prtftp_dtl.wh_id = prtftp.wh_id
+    and prtftp_dtl.ftpcod = prtftp.ftpcod
+    and prtftp_dtl.cas_flg = 1
+  where all_inventory_view.ship_line_id is not null
+    and shipment_line.ordnum = @ordnum
+    and shipment_line.wh_id = @wh_id 
+	group by shipment_line.ordnum,ord_line.carcod,all_inventory_view.prtnum	
+  order by shipment_line.ordnum,
+        ord_line.carcod,
+        all_inventory_view.prtnum] catch(-1403)		
+]]>
+</local-syntax>
+</command>
