@@ -39,40 +39,11 @@
 		<property name="MOCA" value="true"/>
 		<defaultValueExpression><![CDATA["HH:mm:ss"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="wh_id" class="java.lang.String"/>
+	<parameter name="wh_id" class="java.lang.String">
+		<property name="prompt" value="^wh_id^"/>
+	</parameter>
 	<queryString language="MOCA">
-		<![CDATA[[select shipment_line.ordnum,
-        all_inventory_view.lodnum,
-        all_inventory_view.prtnum,
-        sum(all_inventory_view.untqty) untqty,
-        sum(all_inventory_view.untqty / all_inventory_view.untcas) untqty_cs,
-        lpncount.tot_count,
-        lpncount.row_num
-   from all_inventory_view
-   join shipment_line
-     on shipment_line.ship_line_id = all_inventory_view.ship_line_id
-    and shipment_line.wh_id = all_inventory_view.wh_id
-   join (select x.lodnum,
-                to_number(ROW_NUMBER() OVER(ORDER BY x.ordnum)) row_num,
-                count(x.lodnum) OVER(PARTITION BY x.ordnum) tot_count
-           from (select distinct iv.lodnum,
-                        sl.ordnum
-                   from all_inventory_view iv
-                   join shipment_line sl
-                     on sl.ship_line_id = iv.ship_line_id
-                    and sl.wh_id = iv.wh_id
-                  where iv.ship_line_id is not null
-                    and sl.ordnum = @ordnum) x) lpncount
-     on lpncount.lodnum = all_inventory_view.lodnum
-  where all_inventory_view.ship_line_id is not null
-    and shipment_line.ordnum = @ordnum
-  GROUP by shipment_line.ordnum,
-        all_inventory_view.lodnum,
-        lpncount.row_num,
-        lpncount.tot_count,
-        all_inventory_view.prtnum
-  order by shipment_line.ordnum,
-        all_inventory_view.lodnum]]]>
+		<![CDATA[list lc rpt inventory details rscustomer where wh_id =@wh_id and ordnum = @ordnum]]>
 	</queryString>
 	<field name="ordnum" class="java.lang.String"/>
 	<field name="lodnum" class="java.lang.String"/>
@@ -86,35 +57,35 @@
 		<groupHeader>
 			<band height="200">
 				<staticText>
-					<reportElement x="0" y="31" width="100" height="20" uuid="88343a51-2615-4e3c-9e20-b2a1d3ebc1ea"/>
+					<reportElement x="2" y="31" width="100" height="20" uuid="88343a51-2615-4e3c-9e20-b2a1d3ebc1ea"/>
 					<textElement verticalAlignment="Middle">
 						<font isBold="true" isUnderline="true"/>
 					</textElement>
 					<text><![CDATA[ASN]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="51" width="100" height="30" uuid="a0ae452a-cd48-4a95-a03d-08d67aff515f"/>
+					<reportElement x="2" y="51" width="100" height="30" uuid="a0ae452a-cd48-4a95-a03d-08d67aff515f"/>
 					<textElement>
 						<font isBold="true" isUnderline="true"/>
 					</textElement>
 					<text><![CDATA[Delivery Date]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="137" width="100" height="20" uuid="9bdfefaf-e05a-41e4-b3f0-9cc332a7850e"/>
+					<reportElement x="2" y="137" width="100" height="20" uuid="9bdfefaf-e05a-41e4-b3f0-9cc332a7850e"/>
 					<textElement>
 						<font isBold="true" isUnderline="true"/>
 					</textElement>
 					<text><![CDATA[Pallet Number]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="106" width="100" height="31" uuid="8d389cae-738e-4f1a-8d3f-75cf9e61bc4b"/>
+					<reportElement x="2" y="106" width="100" height="31" uuid="8d389cae-738e-4f1a-8d3f-75cf9e61bc4b"/>
 					<textElement>
 						<font isBold="true" isUnderline="true"/>
 					</textElement>
 					<text><![CDATA[Vendor]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="81" width="87" height="25" uuid="fc57f08b-3f3e-4f57-b6be-9c97a724c07f"/>
+					<reportElement x="2" y="81" width="87" height="25" uuid="fc57f08b-3f3e-4f57-b6be-9c97a724c07f"/>
 					<textElement>
 						<font isBold="true" isUnderline="true"/>
 					</textElement>
@@ -200,6 +171,10 @@
 					</textElement>
 					<text><![CDATA[of]]></text>
 				</staticText>
+				<image>
+					<reportElement x="412" y="31" width="140" height="39" uuid="7d298fd8-9c66-4e1b-b43b-7104f914b393"/>
+					<imageExpression><![CDATA["RS.jpg"]]></imageExpression>
+				</image>
 			</band>
 		</groupHeader>
 		<groupFooter>
@@ -241,18 +216,6 @@
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{untqty}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="350" y="0" width="163" height="20" uuid="c6495afe-9109-44d1-8706-5a843bbc6bed"/>
-				<box>
-					<pen lineWidth="0.0"/>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{untqty_cs}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="516" y="0" width="1" height="24" uuid="e472e095-d836-4822-8a84-3cd2f0df01be"/>

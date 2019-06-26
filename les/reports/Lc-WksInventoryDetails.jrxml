@@ -56,12 +56,12 @@ where ordnum =@ordnum and wh_id =@wh_id]]>
 	<group name="Group_01" isStartNewPage="true">
 		<groupExpression><![CDATA[$F{ordnum}+$F{lodnum}+$F{prtnum}]]></groupExpression>
 		<groupHeader>
-			<band height="371">
+			<band height="405">
 				<rectangle>
-					<reportElement x="22" y="44" width="500" height="281" uuid="403c6b64-2c09-4a3b-b578-aa7a2fa555c6"/>
+					<reportElement x="22" y="109" width="500" height="281" uuid="403c6b64-2c09-4a3b-b578-aa7a2fa555c6"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="26" y="44" width="242" height="35" uuid="9586c472-514b-4cf3-8292-2083a56f5b16"/>
+					<reportElement x="26" y="109" width="242" height="35" uuid="9586c472-514b-4cf3-8292-2083a56f5b16"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
@@ -69,39 +69,39 @@ where ordnum =@ordnum and wh_id =@wh_id]]>
 ]]></text>
 				</staticText>
 				<line>
-					<reportElement x="268" y="44" width="1" height="280" uuid="c268b8d5-f82a-48cb-b6a6-66e3f37932fb"/>
+					<reportElement x="268" y="109" width="1" height="280" uuid="c268b8d5-f82a-48cb-b6a6-66e3f37932fb"/>
 				</line>
 				<line>
-					<reportElement x="22" y="149" width="500" height="1" uuid="f8625113-c814-42aa-a1aa-6bf4aad2d84b"/>
+					<reportElement x="22" y="214" width="500" height="1" uuid="f8625113-c814-42aa-a1aa-6bf4aad2d84b"/>
 				</line>
 				<line>
-					<reportElement x="22" y="114" width="500" height="1" uuid="e17de3e0-133d-4b2d-9d24-08efa7a09adc"/>
+					<reportElement x="22" y="179" width="500" height="1" uuid="e17de3e0-133d-4b2d-9d24-08efa7a09adc"/>
 				</line>
 				<line>
-					<reportElement x="22" y="79" width="500" height="1" uuid="57cfe819-9700-42eb-b9a6-c9c68360f995"/>
+					<reportElement x="22" y="144" width="500" height="1" uuid="57cfe819-9700-42eb-b9a6-c9c68360f995"/>
 				</line>
 				<line>
-					<reportElement x="22" y="184" width="500" height="1" uuid="2063198c-4ab4-452d-af00-8ba7c50b1aa3"/>
+					<reportElement x="22" y="249" width="500" height="1" uuid="2063198c-4ab4-452d-af00-8ba7c50b1aa3"/>
 				</line>
 				<line>
-					<reportElement x="22" y="254" width="500" height="1" uuid="4396372d-b90a-4f68-9db8-3a09dbef0626"/>
+					<reportElement x="22" y="319" width="500" height="1" uuid="4396372d-b90a-4f68-9db8-3a09dbef0626"/>
 				</line>
 				<line>
-					<reportElement x="22" y="219" width="500" height="1" uuid="8daae06a-f922-49ba-951e-f7d71e6b7223"/>
+					<reportElement x="22" y="284" width="500" height="1" uuid="8daae06a-f922-49ba-951e-f7d71e6b7223"/>
 				</line>
 				<line>
-					<reportElement x="22" y="289" width="500" height="1" uuid="dbc8b42f-92b2-4022-bf38-d34002708c96"/>
+					<reportElement x="22" y="354" width="500" height="1" uuid="dbc8b42f-92b2-4022-bf38-d34002708c96"/>
 				</line>
 				<staticText>
-					<reportElement x="26" y="79" width="235" height="35" uuid="2fba1e52-b85c-44c9-99b8-734e5af90b9d"/>
+					<reportElement x="26" y="144" width="235" height="35" uuid="2fba1e52-b85c-44c9-99b8-734e5af90b9d"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
-					<text><![CDATA[DEB ORDER NO:
+					<text><![CDATA[SCJP ORDER NO:
 ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="26" y="115" width="235" height="35" uuid="87c8b4ac-fb0a-48d4-a754-6e0079128394"/>
+					<reportElement x="26" y="180" width="235" height="35" uuid="87c8b4ac-fb0a-48d4-a754-6e0079128394"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
@@ -109,15 +109,15 @@ where ordnum =@ordnum and wh_id =@wh_id]]>
 ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="26" y="149" width="235" height="35" uuid="11956e9a-e1e8-4ba2-b876-dba5c0d5e705"/>
+					<reportElement x="26" y="214" width="235" height="35" uuid="11956e9a-e1e8-4ba2-b876-dba5c0d5e705"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
-					<text><![CDATA[DEB STOCKCODE:
+					<text><![CDATA[SCJP STOCKCODE:
 ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="26" y="185" width="235" height="35" uuid="2f5d6ae6-836e-43bf-8e5a-73042ce385fd"/>
+					<reportElement x="26" y="250" width="235" height="35" uuid="2f5d6ae6-836e-43bf-8e5a-73042ce385fd"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
@@ -125,7 +125,7 @@ where ordnum =@ordnum and wh_id =@wh_id]]>
 ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="26" y="220" width="235" height="35" uuid="603d1dd4-abb2-4eb3-9012-48622afbcb26"/>
+					<reportElement x="26" y="285" width="235" height="35" uuid="603d1dd4-abb2-4eb3-9012-48622afbcb26"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
@@ -133,7 +133,7 @@ where ordnum =@ordnum and wh_id =@wh_id]]>
 ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="26" y="255" width="235" height="35" uuid="5590f44d-d00c-459c-bfdf-1f9f2b9a541b"/>
+					<reportElement x="26" y="320" width="235" height="35" uuid="5590f44d-d00c-459c-bfdf-1f9f2b9a541b"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
@@ -141,7 +141,7 @@ where ordnum =@ordnum and wh_id =@wh_id]]>
 ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="26" y="289" width="235" height="35" uuid="a5cb2128-03b4-4139-82bd-6d3c5b1ee356"/>
+					<reportElement x="26" y="354" width="235" height="35" uuid="a5cb2128-03b4-4139-82bd-6d3c5b1ee356"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
@@ -149,69 +149,73 @@ where ordnum =@ordnum and wh_id =@wh_id]]>
 ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="22" y="15" width="500" height="26" uuid="d2a29ad3-9861-445b-8550-dc7d1aef1f9d"/>
+					<reportElement x="22" y="80" width="500" height="26" uuid="d2a29ad3-9861-445b-8550-dc7d1aef1f9d"/>
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font size="15" isBold="true" isUnderline="true"/>
 					</textElement>
 					<text><![CDATA[WICKES - WAKEFIELD (PALLET LABELS X2)]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="273" y="79" width="249" height="35" uuid="96f2a9ce-8815-47a4-b710-2eb71eb47ef0"/>
+					<reportElement x="273" y="144" width="249" height="35" uuid="96f2a9ce-8815-47a4-b710-2eb71eb47ef0"/>
 					<textElement verticalAlignment="Top">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ordnum}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="273" y="115" width="249" height="35" uuid="8f79d61c-c10d-41a5-9883-bf6bbbe0272b"/>
+					<reportElement x="273" y="180" width="249" height="35" uuid="8f79d61c-c10d-41a5-9883-bf6bbbe0272b"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{cponum}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="273" y="150" width="249" height="35" uuid="942ec20a-bd73-46c6-ae12-1bb6c5667bcc"/>
+					<reportElement x="273" y="215" width="249" height="35" uuid="942ec20a-bd73-46c6-ae12-1bb6c5667bcc"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{prtnum}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="273" y="185" width="249" height="35" uuid="2411cf1b-4ff2-443e-b725-5fda2b2ffa7d"/>
+					<reportElement x="273" y="250" width="249" height="35" uuid="2411cf1b-4ff2-443e-b725-5fda2b2ffa7d"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{wickes_item}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="273" y="220" width="249" height="35" uuid="d55c7e0e-182d-4888-8258-3078b2ea4210"/>
+					<reportElement x="273" y="285" width="249" height="35" uuid="d55c7e0e-182d-4888-8258-3078b2ea4210"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{lngdsc}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="273" y="254" width="249" height="35" uuid="edcd7b86-bda5-4d44-94c6-ef1f71b1965d"/>
+					<reportElement x="273" y="319" width="249" height="35" uuid="edcd7b86-bda5-4d44-94c6-ef1f71b1965d"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{untqty}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="273" y="289" width="249" height="35" uuid="83b5da93-f2b4-458d-96d3-8735f06c5d0a"/>
+					<reportElement x="273" y="354" width="249" height="35" uuid="83b5da93-f2b4-458d-96d3-8735f06c5d0a"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{untqty_cs}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="273" y="44" width="249" height="35" uuid="7bbfedc1-9d4e-48c0-a31b-61c73d61ebf6"/>
+					<reportElement x="273" y="109" width="249" height="35" uuid="7bbfedc1-9d4e-48c0-a31b-61c73d61ebf6"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
-					<text><![CDATA[DEB LIMITED
+					<text><![CDATA[SCJP LIMITED
 ]]></text>
 				</staticText>
+				<image>
+					<reportElement x="431" y="12" width="124" height="37" uuid="f0a124a9-a22d-46a3-9223-701c868617c6"/>
+					<imageExpression><![CDATA["Wickes.jpg"]]></imageExpression>
+				</image>
 			</band>
 		</groupHeader>
 	</group>

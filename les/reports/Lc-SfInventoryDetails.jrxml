@@ -106,8 +106,7 @@ where ordnum =@ordnum and wh_id = @wh_id]]>
 				<staticText>
 					<reportElement x="219" y="37" width="209" height="24" uuid="3a39db53-9901-49e8-9559-ff329fad90a6"/>
 					<textElement verticalAlignment="Middle"/>
-					<text><![CDATA[Deb Ltd
-]]></text>
+					<text><![CDATA[SCJ Professional Limited]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="8" y="153" width="175" height="24" uuid="2f36b14a-1066-4367-a9c2-b66867800289"/>
@@ -178,6 +177,10 @@ where ordnum =@ordnum and wh_id = @wh_id]]>
 					</textElement>
 					<text><![CDATA[of]]></text>
 				</staticText>
+				<image>
+					<reportElement x="428" y="0" width="113" height="49" uuid="224dd312-a630-4b22-9447-5445cb85356e"/>
+					<imageExpression><![CDATA["ScrewFix.jpg"]]></imageExpression>
+				</image>
 			</band>
 		</groupHeader>
 	</group>
