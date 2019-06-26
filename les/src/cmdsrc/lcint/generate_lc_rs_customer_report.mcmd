@@ -1,0 +1,76 @@
+<command>
+<name>generate lc rs customer report</name>
+<description>List LC RS Customer Report</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+validate stack variable not null
+ where name = 'lodnum'
+|
+validate stack variable not null
+ where name = 'wh_id'
+|
+[select distinct shipment_line.ordnum,
+        cstmst.cstnum,
+        ord_line.client_id
+   from all_inventory_view
+   join shipment_line
+     on shipment_line.ship_line_id = all_inventory_view.ship_line_id
+    and shipment_line.wh_id = all_inventory_view.wh_id
+    and all_inventory_view.prtnum = shipment_line.prtnum
+    and all_inventory_view.prt_client_id = shipment_line.prt_client_id
+    and all_inventory_view.prt_client_id = shipment_line.client_id
+   join ord_line
+     on ord_line.ordnum = shipment_line.ordnum
+    and shipment_line.ordlin = ord_line.ordlin
+    and shipment_line.ordsln = ord_line.ordsln
+    and shipment_line.client_id = ord_line.client_id
+    and shipment_line.wh_id = ord_line.wh_id
+    and shipment_line.prtnum = ord_line.prtnum
+   join ord
+     on ord.ordnum = ord_line.ordnum
+    and ord.client_id = ord_line.client_id
+    and ord.wh_id = ord_line.wh_id
+   join cstmst
+     on cstmst.cstnum = ord.stcust
+    and cstmst.client_id = ord.client_id
+  where all_inventory_view.lodnum = @lodnum
+    and all_inventory_view.wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+|
+if(@?= 0)
+{
+	[select 1
+	   from poldat_view
+	  where polcod = 'LC_PICKING'
+		and polvar = 'RS_CUSTOMER_REPORT'
+		and polval = 'ENABLED'
+		and wh_id = @wh_id
+		and rtstr1 = @cstnum] catch(-1403)
+	|
+	if (@? = 0)
+	{
+		if (!@prtadr)
+		{
+			[select def_printer prtadr
+			   from rpt_config
+			  where rpt_id = 'Lc-RsInventoryDetails'] catch(-1403)
+		}
+		|
+		if(@?=0)
+		{
+			generate moca report
+			 where rpt_id = 'Lc-RsInventoryDetails'
+			   and dest_typ = 'printer'
+			   and dest = @prtadr
+			   and gen_usr_id = nvl(@usr_id, @@usr_id)     
+			   and locale_id = nvl(@locale_id, @@locale_id)
+			   and ordnum = @ordnum
+			   and wh_id = @wh_id
+			   and client_id = @client_id catch(@?)
+		}
+	}
+}
+		
+]]>
+</local-syntax>
+</command>

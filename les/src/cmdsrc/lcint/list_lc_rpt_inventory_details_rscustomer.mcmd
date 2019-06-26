@@ -1,0 +1,44 @@
+<command>
+<name>list lc rpt inventory details rscustomer</name>
+<description>List LC Rpt Inventory Details RSCustomer</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select shipment_line.ordnum,
+        all_inventory_view.lodnum,
+        all_inventory_view.prtnum,
+        sum(all_inventory_view.untqty) untqty,
+        '' untqty_cs,
+        lpncount.tot_count,
+        lpncount.row_num
+   from all_inventory_view
+   join shipment_line
+     on shipment_line.ship_line_id = all_inventory_view.ship_line_id
+    and shipment_line.wh_id = all_inventory_view.wh_id
+   join (select x.lodnum,
+                to_number(ROW_NUMBER() OVER(ORDER BY x.ordnum)) row_num,
+                count(x.lodnum) OVER(PARTITION BY x.ordnum) tot_count
+           from (select distinct iv.lodnum,
+                        sl.ordnum
+                   from all_inventory_view iv
+                   join shipment_line sl
+                     on sl.ship_line_id = iv.ship_line_id
+                    and sl.wh_id = iv.wh_id
+                  where iv.ship_line_id is not null
+                    and sl.ordnum = @ordnum
+					and sl.wh_id = @wh_id ) x) lpncount
+     on lpncount.lodnum = all_inventory_view.lodnum
+  where all_inventory_view.ship_line_id is not null
+    and shipment_line.ordnum = @ordnum
+	and shipment_line.wh_id = @wh_id
+  GROUP by shipment_line.ordnum,
+        all_inventory_view.lodnum,
+        lpncount.row_num,
+        lpncount.tot_count,
+        all_inventory_view.prtnum
+  order by shipment_line.ordnum,
+        all_inventory_view.lodnum]catch(-1403)
+		
+]]>
+</local-syntax>
+</command>

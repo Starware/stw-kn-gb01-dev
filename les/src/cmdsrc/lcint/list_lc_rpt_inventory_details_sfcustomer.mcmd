@@ -1,0 +1,56 @@
+<command>
+<name>list lc rpt inventory details sfcustomer</name>
+<description>List LC Rpt Inventory Details SFCustomer</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select shipment_line.ordnum,
+        ''cponum,
+        all_inventory_view.lodnum,
+        all_inventory_view.prtnum,
+        sum(all_inventory_view.untqty) untqty,
+        sum(all_inventory_view.untqty / all_inventory_view.untcas) untqty_cs,
+        lpncount.row_num,
+        lpncount.tot_count
+   from all_inventory_view
+   join shipment_line
+     on shipment_line.ship_line_id = all_inventory_view.ship_line_id
+    and shipment_line.wh_id = all_inventory_view.wh_id
+   join ord_line
+     on ord_line.ordnum = shipment_line.ordnum
+    and ord_line.prtnum = shipment_line.prtnum
+    and ord_line.ordlin = shipment_line.ordlin
+    and ord_line.wh_id = shipment_line.wh_id
+    and ord_line.client_id = shipment_line.client_id
+   join ord
+     on ord.ordnum = ord_line.ordnum
+    and ord.wh_id = ord_line.wh_id
+    and ord.client_id = ord_line.client_id
+   join (select x.lodnum,
+                ROW_NUMBER() OVER(ORDER BY x.ordnum) AS row_num,
+                count(x.lodnum) OVER(PARTITION BY x.ordnum) tot_count
+           from (select distinct iv.lodnum,
+                        sl.ordnum
+                   from all_inventory_view iv
+                   join shipment_line sl
+                     on sl.ship_line_id = iv.ship_line_id
+                    and sl.wh_id = iv.wh_id
+                  where iv.ship_line_id is not null
+				    and sl.ordnum = @ordnum
+					and sl.wh_id = @wh_id) x) lpncount
+     on lpncount.lodnum = all_inventory_view.lodnum
+  where all_inventory_view.ship_line_id is not null
+    and shipment_line.ordnum = @ordnum 
+	and shipment_line.wh_id = @wh_id
+	group by shipment_line.ordnum,
+	         all_inventory_view.lodnum,
+			 all_inventory_view.prtnum,
+			 lpncount.row_num,
+			 lpncount.tot_count
+  order by shipment_line.ordnum,
+        all_inventory_view.lodnum,
+        all_inventory_view.prtnum]catch(-1403)
+		
+]]>
+</local-syntax>
+</command>

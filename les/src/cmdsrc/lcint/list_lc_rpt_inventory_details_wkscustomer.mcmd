@@ -1,0 +1,44 @@
+<command>
+<name>list lc rpt inventory details wkscustomer</name>
+<description>List LC Rpt Inventory Details WKScustomer</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select shipment_line.ordnum,
+        ord.cponum,
+         '' wickes_item,
+        all_inventory_view.lodnum,
+        all_inventory_view.prtnum,
+        min(prtdsc.lngdsc) lngdsc,
+        sum(all_inventory_view.untqty) untqty,
+        sum(all_inventory_view.untqty / all_inventory_view.untcas) untqty_cs
+   from all_inventory_view
+   join shipment_line
+     on shipment_line.ship_line_id = all_inventory_view.ship_line_id
+    and shipment_line.wh_id = all_inventory_view.wh_id
+    and all_inventory_view.prtnum = shipment_line.prtnum
+   join ord_line
+     on ord_line.ordnum = shipment_line.ordnum
+    and ord_line.prtnum = shipment_line.prtnum
+    and ord_line.ordlin = shipment_line.ordlin
+    and ord_line.wh_id = shipment_line.wh_id
+    and ord_line.client_id = shipment_line.client_id
+   join ord
+     on ord.ordnum = ord_line.ordnum
+    and ord.wh_id = ord_line.wh_id
+    and ord.client_id = ord_line.client_id
+   join prtdsc
+     on prtdsc.colval = all_inventory_view.prtnum || '|' || all_inventory_view.prt_client_id || '|' || all_inventory_view.wh_id
+    and prtdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
+    and prtdsc.locale_id = @@locale_id
+  where all_inventory_view.ship_line_id is not null
+    and shipment_line.ordnum = @ordnum
+    and shipment_line.wh_id = @wh_id	GROUP by shipment_line.ordnum, ord.cponum, all_inventory_view.lodnum, all_inventory_view.prtnum
+  order by shipment_line.ordnum,
+        ord.cponum,
+        all_inventory_view.lodnum,
+        all_inventory_view.prtnum]catch(-1403)
+		
+]]>
+</local-syntax>
+</command>

@@ -1,0 +1,35 @@
+<command>
+<name>list lc rpt address details carrier</name>
+<description>List LC Rpt Address Details Carrier</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select distinct shipment_line.ordnum,
+        all_inventory_view.lodnum,
+        adrmst.adrnam,
+        adrmst.adrln1,
+        adrmst.adrln2,
+        adrmst.adrln3,
+        adrmst.adrcty,
+        adrmst.adrpsz,
+        adrmst.ctry_name
+   from all_inventory_view
+   join shipment_line
+     on shipment_line.ship_line_id = all_inventory_view.ship_line_id
+    and shipment_line.wh_id = all_inventory_view.wh_id
+    and shipment_line.prtnum = all_inventory_view.prtnum
+   join ord
+     on ord.ordnum = shipment_line.ordnum
+    and ord.client_id = shipment_line.client_id
+    and ord.wh_id = shipment_line.wh_id
+   join adrmst
+     on adrmst.adr_id = ord.st_adr_id
+  where all_inventory_view.ship_line_id is not null
+ and all_inventory_view.lodnum = @lodnum
+ and all_inventory_view.wh_id = @wh_id
+  order by shipment_line.ordnum,
+        all_inventory_view.lodnum]catch(-1403)
+		
+]]>
+</local-syntax>
+</command>
