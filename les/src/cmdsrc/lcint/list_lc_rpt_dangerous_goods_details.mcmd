@@ -14,8 +14,11 @@
         min(adrmst.adrpsz) adrpsz,
         min(adrmst.ctry_name) ctry_name,
         all_inventory_view.prtnum,
+		all_inventory_view.prt_client_id,
+		shipment_line.client_id,
         min(prtdsc.lngdsc) lngdsc,
         max(uc_dgdsc.uc_dg_dsc) uc_dg_dsc,
+		max(uc_dgdsc.uc_dg_shipnam)uc_dg_shipnam,
         sum(all_inventory_view.untqty) untqty,
         (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.netwgt)) / (1000.0) net_wgt,
         (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.grswgt)) / (1000.0) grs_wgt,
@@ -25,9 +28,11 @@
      on shipment_line.ship_line_id = all_inventory_view.ship_line_id
     and shipment_line.wh_id = all_inventory_view.wh_id
     and all_inventory_view.prtnum = shipment_line.prtnum
+	and all_inventory_view.prt_client_id = shipment_line.prt_client_id
    join ord_line
      on ord_line.ordnum = shipment_line.ordnum
     and ord_line.prtnum = shipment_line.prtnum
+	and ord_line.prt_client_id = shipment_line.prt_client_id
     and ord_line.ordlin = shipment_line.ordlin
     and ord_line.wh_id = shipment_line.wh_id
     and ord_line.client_id = shipment_line.client_id
@@ -64,8 +69,8 @@
     and prtftp_dtl.cas_flg = 1
   where all_inventory_view.ship_line_id is not null
     and shipment_line.ordnum = @ordnum
-    and shipment_line.wh_id = @wh_id 
-	group by shipment_line.ordnum,ord_line.carcod,all_inventory_view.prtnum	
+    and shipment_line.wh_id = @wh_id
+	group by shipment_line.ordnum,ord_line.carcod,all_inventory_view.prtnum,all_inventory_view.prt_client_id,shipment_line.client_id	
   order by shipment_line.ordnum,
         ord_line.carcod,
         all_inventory_view.prtnum] catch(-1403)		

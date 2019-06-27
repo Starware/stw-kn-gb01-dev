@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Test" language="groovy" pageWidth="592" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="552" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" scriptletClass="com.redprairie.moca.jrds.ReportingIreportScriptlet" resourceBundle="com.redprairie.moca.jrds.Xlate" uuid="99435dc6-c4fd-4946-8274-d36e7067fe47">
 	<property name="ireport.zoom" value="1.6105100000000019"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="482"/>
 	<subDataset name="dataset1" uuid="136e282a-e5c8-4fe2-9367-5a641722369e"/>
 	<parameter name="ordnum" class="java.lang.String">
 		<property name="prompt" value="^ordnum^"/>
@@ -17,7 +17,7 @@
 	</parameter>
 	<parameter name="MOCA_REPORT_CONNECTION" class="com.redprairie.moca.jrds.JRMocaConnection" isForPrompting="false">
 		<property name="MOCA" value="true"/>
-		<defaultValueExpression><![CDATA[new com.redprairie.moca.jrds.JRMocaConnection("http://nphstdevwms02.replgroup.com:15500/service", "super", "super")]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new com.redprairie.moca.jrds.JRMocaConnection("https://sgb01d1.int.kn:8010/service", "sneha.hegde", "Repl2019")]]></defaultValueExpression>
 	</parameter>
 	<parameter name="MOCA_REPORT_DATE" class="java.lang.String" isForPrompting="false">
 		<property name="MOCA" value="true"/>
@@ -57,8 +57,11 @@
 	<field name="adrpsz" class="java.lang.String"/>
 	<field name="ctry_name" class="java.lang.String"/>
 	<field name="prtnum" class="java.lang.String"/>
+	<field name="prt_client_id" class="java.lang.String"/>
+	<field name="client_id" class="java.lang.String"/>
 	<field name="lngdsc" class="java.lang.String"/>
 	<field name="uc_dg_dsc" class="java.lang.String"/>
+	<field name="uc_dg_shipnam" class="java.lang.String"/>
 	<field name="untqty" class="java.lang.Double"/>
 	<field name="net_wgt" class="java.lang.Double"/>
 	<field name="grs_wgt" class="java.lang.Double"/>
@@ -599,26 +602,26 @@ You must specify: UN No., Proper Shipping Name, hazard class, packing group, (wh
 				<reportElement x="490" y="0" width="1" height="100" uuid="2a0f845b-686e-47e8-8f2d-0db068b2d5f3"/>
 			</line>
 			<textField>
-				<reportElement x="2" y="28" width="18" height="20" uuid="771bbe2e-9965-4f6a-8287-7b94290a0b73"/>
+				<reportElement x="2" y="48" width="18" height="20" uuid="771bbe2e-9965-4f6a-8287-7b94290a0b73"/>
 				<textFieldExpression><![CDATA[$F{untqty}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="362" y="28" width="57" height="20" uuid="16feea2f-1d52-4567-8dec-ae6d30ff8c2d"/>
+				<reportElement x="362" y="68" width="57" height="20" uuid="16feea2f-1d52-4567-8dec-ae6d30ff8c2d"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{net_wgt}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="427" y="28" width="55" height="20" uuid="7962b54a-8a35-4f5a-8757-b2e6e70638f1"/>
+				<reportElement x="427" y="68" width="55" height="20" uuid="7962b54a-8a35-4f5a-8757-b2e6e70638f1"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{grs_wgt}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="492" y="28" width="54" height="20" uuid="0086287c-f3d3-493e-af7f-4a9a8adf7f63"/>
+				<reportElement x="492" y="68" width="54" height="20" uuid="0086287c-f3d3-493e-af7f-4a9a8adf7f63"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{vol}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="20" y="28" width="340" height="46" uuid="d22721a2-7a77-49c5-bcc4-0843a97fa3c0"/>
+				<reportElement x="20" y="48" width="340" height="46" uuid="d22721a2-7a77-49c5-bcc4-0843a97fa3c0"/>
 				<textFieldExpression><![CDATA[$F{uc_dg_dsc}]]></textFieldExpression>
 			</textField>
 			<line>
@@ -627,6 +630,10 @@ You must specify: UN No., Proper Shipping Name, hazard class, packing group, (wh
 			<line>
 				<reportElement x="0" y="0" width="1" height="100" uuid="891e8731-9852-44f9-a0cd-a768959c2e54"/>
 			</line>
+			<textField>
+				<reportElement x="2" y="8" width="358" height="40" uuid="5aef6427-4f0a-4c1c-b092-280ca2306205"/>
+				<textFieldExpression><![CDATA[$F{uc_dg_shipnam}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
