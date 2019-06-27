@@ -1,0 +1,69 @@
+<command>
+  <name>process lc dg description</name>
+  <description>Process LC Dangerous Goods Description</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[    
+
+	if (@moca_verb = 'create')
+	{
+		validate key not exists
+		 where key = 'prtnum, prt_client_id, locale_id'
+		   and table = 'uc_dgdsc'
+		|
+		validate stack variable not null
+		 where name = 'uc_dg_dsc'
+		|
+		validate stack variable not null
+		 where name = 'uc_dg_shipnam'
+		 |
+		/* 
+		 * If wh_id is not passed,then set it to default warehouse id '----'.
+		 */
+		if (@wh_id = null or @wh_id = '')
+		{
+			publish data
+			 where wh_id = '----'
+		}
+		|
+		/* 
+		 * If warehouse id is '----',then create description for all warehouses.
+		 */
+		if (@wh_id = '----')
+		{
+			[select wh_id
+			   from wh
+			  where wh_id = '----'] catch(-1403)
+		}
+		|
+		create record
+		 where table = 'uc_dgdsc'
+	}
+	else if (@moca_verb = 'change')
+	{
+		/* 
+		 * If wh_id is not passed,then set it to default warehouse id '----'.
+		 */
+		if (@wh_id = null or @wh_id = '')
+		{
+			publish data
+			 where wh_id = '----'
+		}
+		|
+		/* 
+		 * If warehouse id is '----',then create description for all warehouses.
+		 */
+		if (@wh_id = '----')
+		{
+			[select wh_id
+			   from wh
+			  where wh_id = '----'] catch(-1403)
+		}
+		|
+		change record
+		 where table = 'uc_dgdsc'
+	}
+	
+]]>
+</local-syntax>
+</command>
