@@ -22,7 +22,7 @@
         sum(all_inventory_view.untqty) untqty,
         (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.netwgt)) / (1000.0) net_wgt,
         (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.grswgt)) / (1000.0) grs_wgt,
-        (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.len) *min(prtftp_dtl.hgt) *min(prtftp_dtl.wid)) / (100.0) vol
+        (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.len) *min(prtftp_dtl.hgt) *min(prtftp_dtl.wid)) / (1000000.0) vol
    from all_inventory_view
    join shipment_line
      on shipment_line.ship_line_id = all_inventory_view.ship_line_id
