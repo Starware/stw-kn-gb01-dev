@@ -3,4 +3,4 @@ rpt_id,Lc-CarrierAddressDetails,EN-GB,"Transbridge Carrier Report","Trans Rep",d
 rpt_id,Lc-RsInventoryDetails,EN-GB,"RS Customer Report","RS Rep",dscmst_rpt_id
 rpt_id,Lc-SfInventoryDetails,EN-GB,"Screwfix Customer Report","Screwfix Rep",dscmst_rpt_id
 rpt_id,Lc-WksInventoryDetails,EN-GB,"Wickes Customer Report","Wickes Rep",dscmst_rpt_id
-rpt_id,Lc-DgNotes,EN-GB,"Dangerous Goods Report","DG Rep",lc_dscmst_rpt_id
+rpt_id,Lc-DgNotes,EN-GB,"Dangerous Goods Report","DG Rep",dscmst_rpt_id
