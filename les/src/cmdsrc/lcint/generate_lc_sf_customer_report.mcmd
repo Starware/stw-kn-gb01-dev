@@ -1,6 +1,6 @@
 <command>
 <name>generate lc sf customer report</name>
-<description>List LC SF Customer Report</description>
+<description>List LC ScrewFix Customer Report</description>
 <type>Local Syntax</type>
 <local-syntax>
 <![CDATA[

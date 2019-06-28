@@ -1,6 +1,6 @@
 <command>
 <name>list lc rpt inventory details sfcustomer</name>
-<description>List LC Rpt Inventory Details SFCustomer</description>
+<description>List LC Report Inventory Details SFCustomer</description>
 <type>Local Syntax</type>
 <local-syntax>
 <![CDATA[
