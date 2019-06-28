@@ -42,6 +42,9 @@ done
 echo "slImp -f LC_PART_INB_IFD.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC_PART_INB_IFD.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
+echo "slImp -f LC_ORDER_INB_IFD.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/LC_ORDER_INB_IFD.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
+
 date >> ${POSTINSTALL_LOG}
 echo "Done" >> ${POSTINSTALL_LOG}
 

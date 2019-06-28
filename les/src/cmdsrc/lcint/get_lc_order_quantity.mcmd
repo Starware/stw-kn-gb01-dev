@@ -1,0 +1,54 @@
+<command>
+  <name>get lc order quantity</name>
+  <description>Get LC Order quantity.</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+  <![CDATA[
+
+if (@ordnum and @ordtyp and @ordqty)
+{
+    publish data
+     where prtnum = @prtnum
+       and prt_client_id = @prt_client_id
+       and client_id = @client_id
+       and wh_id = @wh_id
+       and ordtyp = @ordtyp
+       and ordqty = @ordqty
+    |
+    [select 1
+       from poldat_view
+      where polcod = 'LC_ORDER_TYPE'
+        and polvar = 'QUANTITY_CONVERSION'
+        and polval = 'ENABLED'
+        and wh_id = @wh_id
+        and rtstr2 = @client_id
+        and rtstr1 = @ordtyp] catch(-1403)
+    |
+    if (@? = 0)
+    {
+        [select decode((round(@ordqty *prtftp_dtl.untqty)), 0, 1, round(@ordqty *prtftp_dtl.untqty)) mod_ordqty,
+                prtftp_dtl.untqty
+           from prtftp
+           join prtftp_dtl
+             on prtftp_dtl.prtnum = prtftp.prtnum
+            and prtftp_dtl.prt_client_id = prtftp.prt_client_id
+            and prtftp_dtl.wh_id = prtftp.wh_id
+            and prtftp_dtl.ftpcod = prtftp.ftpcod
+            and prtftp_dtl.cas_flg = 1
+          where prtftp.prtnum = @prtnum
+            and prtftp.prt_client_id = @prt_client_id
+            and prtftp.wh_id = @wh_id
+            and prtftp.defftp_flg = 1]
+    }
+    else
+    {
+        publish data
+         where mod_ordqty = @ordqty
+    }
+    |
+    publish data
+     where mod_ordqty = @mod_ordqty
+}
+]]>
+  </local-syntax>
+</command>

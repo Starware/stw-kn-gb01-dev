@@ -1,0 +1,3 @@
+polcod,polvar,polval,srtseq,rtstr1,rtstr2,rtnum1,rtnum2,rtflt1,rtflt2,moddte,mod_usr_id,grp_nam,wh_id_tmpl
+LC_ORDER_TYPE,QUANTITY_CONVERSION,ENABLED,1,C,SCJP,,,,,,,,GBRPY01
+LC_ORDER_TYPE,QUANTITY_CONVERSION,ENABLED,2,CS,SCJP,,,,,,,,GBRPY01
