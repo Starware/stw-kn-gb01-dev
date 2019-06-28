@@ -1,5 +1,5 @@
 rpt_id,prod_id,rpt_layout_file,def_printer,rpt_typ,keep_days,ena_ems_flg,ems_evt_nam,func_area,dig_sig_req_flg,grp_nam
-Lc-CarrierAddressDetails,WM,Lc-CarrierAddressDetails.jrxml,,JR,7,0,,,0,
+Lc-CarrierAddressDetails,WM,Lc-CarrierAddressDetails.jrxml,,JR,7,0,,,0,les_data
 Lc-RsInventoryDetails,WM,Lc-RsInventoryDetails.jrxml,,JR,7,0,,,0,
 Lc-SfInventoryDetails,WM,Lc-SfInventoryDetails.jrxml,,JR,7,0,,,0,
 Lc-WksInventoryDetails,WM,Lc-WksInventoryDetails.jrxml,,JR,7,0,,,0,
