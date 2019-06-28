@@ -27,6 +27,15 @@ cd $LESDIR/db/data/load/base/safetoload
 echo "running mload_all" >> ${POSTINSTALL_LOG}
 mload_all 2>&1 >> ${POSTINSTALL_LOG}
 
+# Remove some existing system setup by looping over all msql files
+for x in $LESDIR/db/data/unload/integrator/lc/*.msql; do
+    echo "msql @ " $x >> ${POSTINSTALL_LOG}
+    printf "@ %s" $x | $MOCADIR/bin/msql -S 2>&1 >> ${POSTINSTALL_LOG} || false
+done
+
+# SLEXP files
+echo "slImp -f LC_PART_INB_IFD.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/LC_PART_INB_IFD.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
 date >> ${POSTINSTALL_LOG}
 echo "Done" >> ${POSTINSTALL_LOG}

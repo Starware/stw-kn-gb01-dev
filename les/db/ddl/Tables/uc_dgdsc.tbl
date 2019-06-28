@@ -37,6 +37,6 @@ create db documentation
    and prt_client_id = "Item Client Id"
    and locale_id = "Locale"
    and uc_dg_dsc  = "Dangerous Goods description"
-   and uc_dg_shipnam = "Dangerous Goods Shipper name"
+   and uc_dg_shipnam = "Dangerous Goods Shipper Name"
    and wh_id = "Warehouse Id"
 /

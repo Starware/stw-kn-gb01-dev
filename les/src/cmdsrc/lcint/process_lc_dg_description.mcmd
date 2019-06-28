@@ -51,7 +51,7 @@
 		}
 		|
 		/* 
-		 * If warehouse id is '----',then create description for all warehouses.
+		 * If warehouse id is '----',then create description for all warehouses enabled.
 		 */
 		if (@wh_id = '----')
 		{
