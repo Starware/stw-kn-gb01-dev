@@ -46,7 +46,7 @@ if(@?= 0)
 		   and dest = @prtadr
 		   and gen_usr_id = nvl(@usr_id, @@usr_id)     
 		   and locale_id = nvl(@locale_id, @@loacle_id)
-		   and lodnum = @ordnum
+		   and ordnum = @ordnum
 		   and wh_id = @wh_id
 		   and client_id = @client_id catch(@?)
 	}
