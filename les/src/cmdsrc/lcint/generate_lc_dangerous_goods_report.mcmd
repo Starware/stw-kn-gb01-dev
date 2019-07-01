@@ -35,13 +35,13 @@ if(@?= 0)
 	{
 		[select def_printer prtadr
 		   from rpt_config
-		  where rpt_id = 'LcDgNotes'] catch(-1403)
+		  where rpt_id = 'Lc-DgNotes'] catch(-1403)
 	}
 	|
 	if(@? = 0)
 	{
 		generate moca report
-		 where rpt_id = 'LcDgNotes'
+		 where rpt_id = 'Lc-DgNotes'
 		   and dest_typ = 'printer'
 		   and dest = @prtadr
 		   and gen_usr_id = nvl(@usr_id, @@usr_id)     
