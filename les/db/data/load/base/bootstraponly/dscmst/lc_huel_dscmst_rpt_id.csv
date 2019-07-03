@@ -1,3 +1,5 @@
 colnam,colval,locale_id,lngdsc,short_dsc,grp_nam
 rpt_id,Lc-DeliveryNote,EN-GB,"Delivery Note Report","Dlv Note Rep",dscmst_rpt_id
 rpt_id,Lc-DeliveryNote,US_ENGLISH,"Delivery Note Report","Dlv Note Rep",dscmst_rpt_id
+rpt_id,Lc-PackingList,EN-GB,"Packing List Report","Pck List Rep",dscmst_rpt_id
+rpt_id,Lc-PackingList,US_ENGLISH,"Packing List Report","Pck List Rep",dscmst_rpt_id
