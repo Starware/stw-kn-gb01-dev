@@ -1,0 +1,127 @@
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def
+SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_commit_ctxt_defn_cd,pre_async_alg_id,post_async_alg_id,pre_dwnld_alg_id,post_dwnld_alg_id,fail_evt_id,prsrv_evt_seq_flg,snd_err_stat_flg,rcv_fail_evt_id,rcv_succ_evt_id,null_ind_char,nochg_ind_char,absent_ind_char,eol_delim,mailbox_nam,host_port,host_nam,service,sys_user_id,sys_password,sys_conn_data,moca_sys_flg,xml_tag_data_inst,xml_tag_ifd,xml_tag_data,max_grp_siz
+2018.1,'HOST_HTTP','Customized system for HTTP','HOST_HTTP','LES','T','F','SIFD','','','','','','F','T','','','','','','<10>','','','','','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_GEN_HTTP_HEADERS','SL_COMM_ARG','MOCA','Create HTTP headers','F','F','F','F','F','T','T','publish data where <<overstacked_args>>
+|
+publish data
+  where username = ''ws_swiftlog''
+    and password = ''aY3DWnZn''
+|
+sl_generate doc filename from ifd data where <<OVERSTACKED_ARGS>> and fld_id = ''WH_ID'' catch (@?)
+|
+if (@? != 0) {
+[select evt_arg_val as hdr_wh_id
+   from sl_evt_arg_data
+  where @+evt_data_seq 
+    and evt_arg_id = ''WH_ID'']
+} else {
+publish data where hdr_wh_id = @filename
+}
+|
+[select adr_id
+   from wh
+  where wh_id = @hdr_wh_id]
+|
+list addresses
+ where adr_id = @adr_id
+   and all_addr_flg = 1
+|
+[select iso_2_ctry_name
+   from ctry_mst
+  where ctry_name = @ctry_name]
+|
+publish data where hdr_ctry_name = @iso_2_ctry_name
+|
+sl_generate doc filename from ifd data  where <<OVERSTACKED_ARGS>> and fld_id = ''CLIENT_ID'' catch (@?)
+|
+if (@? != 0)
+{
+sl_generate doc filename from ifd data  where <<OVERSTACKED_ARGS>> and fld_id = ''PRT_CLIENT_ID''
+}
+|
+publish data where hdr_client_id = @filename
+|
+sl_generate doc filename from ifd data  where <<OVERSTACKED_ARGS>> and fld_id = ''UUID'' catch (@?)
+|
+if (@? != 0)
+{
+generate uuid
+} else {
+publish data where uuid = @filename
+}
+|
+publish data where hdr_uuid = @uuid
+|
+if (@comm_mode_cd = ''SYNCD'') {
+sl_list ifd_data_ptr where ifd_data_ptr = @ifd_data_ptr
+} else {
+[select ifd_id from sl_ifd_data_hdr where @+ifd_data_seq]
+}
+|
+[[ifd_id = ifd_id.replace(''_'',''-'')]]
+|
+publish data
+  where credentials = @username || '':'' || @password
+|
+publish data
+  where value = ''Authorization'' || '':'' || ''Basic '' || [[ credentials.bytes.encodeBase64().toString() ]]
+            || ''&Content-Type'' || '':'' || ''text/xml''
+            || ''&X-KN-ApplicationID'' || '':'' || ''SwiftLOG''
+            || ''&X-KN-RequestID'' || '':'' || @hdr_uuid
+            || ''&X-KN-MessageType'' || '':'' || @ifd_id || ''V1''
+            || ''&X-KN-Routing-Country'' || '':'' || @hdr_ctry_name
+            || ''&X-KN-Routing-Warehouse'' || '':'' || @hdr_wh_id
+            || ''&X-KN-Routing-Client'' || '':'' || @hdr_client_id
+
+','1147'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
+2018.1,'HOST_HTTP','ASYNC','I','SL_INB_HTTP','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
+2018.1,'HOST_HTTP','ASYNC','I','SL_INB_HTTP','PROVIDER_ENDPOINT','GBRPY01_SCJP_DEFAULT','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
+2018.1,'HOST_HTTP','ASYNC','O','SL_XML_TO_HTTP_2','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
+2018.1,'HOST_HTTP','ASYNC','O','SL_XML_TO_HTTP_2','ENCODE_DATA','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
+2018.1,'HOST_HTTP','ASYNC','O','SL_XML_TO_HTTP_2','HTTP_HEADERS','','LC_GEN_HTTP_HEADERS',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
+2018.1,'HOST_HTTP','ASYNC','O','SL_XML_TO_HTTP_2','URL','http://noop','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
+2018.1,'HOST_HTTP','ASYNC','O','SL_XML_TO_HTTP_2','XML_ENCODING','utf-8','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
+2018.1,'HOST_HTTP','SYNCD','O','SL_XML_TO_HTTP_2','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
+2018.1,'HOST_HTTP','SYNCD','O','SL_XML_TO_HTTP_2','ENCODE_DATA','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
+2018.1,'HOST_HTTP','SYNCD','O','SL_XML_TO_HTTP_2','HTTP_HEADERS','','LC_GEN_HTTP_HEADERS',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
+2018.1,'HOST_HTTP','SYNCD','O','SL_XML_TO_HTTP_2','URL','http://noop','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
+2018.1,'HOST_HTTP','SYNCD','O','SL_XML_TO_HTTP_2','XML_ENCODING','utf-8','',''

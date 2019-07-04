@@ -1,0 +1,15 @@
+/************************************************************************/
+/* *Please* back up database prior to executing this script.            */
+/*                                                                      */
+/* WARNING: Use with caution (dangerous components follow)!             */
+/*                                                                      */
+/* This script will attempt to wipe system communication definitions.   */
+/*                                                                      */
+/************************************************************************/
+sl_wipe sys_comm where sys_id = 'HOST_HTTP' and comm_mode_cd = 'ASYNC' and comm_dir_cd = 'I' catch (-1403)
+/
+sl_wipe sys_comm where sys_id = 'HOST_HTTP' and comm_mode_cd = 'ASYNC' and comm_dir_cd = 'O' catch (-1403)
+/
+sl_wipe sys_comm where sys_id = 'HOST_HTTP' and comm_mode_cd = 'SYNCD' and comm_dir_cd = 'O' catch (-1403)
+/
+quit
