@@ -1,0 +1,34 @@
+<command>
+<name>retrieve lc pick carton label</name>
+<description>Retrieve data for Pick carton label</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select cur_cas,
+        tot_cas_cnt,
+        subnum,
+        ordnum,
+        ctnmst.ctncod,
+        dscmst.lngdsc
+   from pckwrk_view
+   join ctnmst
+     on ctnmst.ctncod = pckwrk_view.ctncod
+    and ctnmst.wh_id = pckwrk_view.wh_id
+   join dscmst
+     on ctnmst.ctncod || '|' || ctnmst.wh_id = dscmst.colval
+    and dscmst.colnam = 'ctncod|wh_id'
+    and dscmst.locale_id = nvl(@locale_id, @@locale_id)
+  where ordnum = @ordnum
+    and pckwrk_view.wh_id = @wh_id
+    and wrktyp = 'K'
+  order by cur_cas] catch(-1403)
+|
+publish data
+ where ordnum = @ordnum || '-' || @cur_cas
+   and subnum = @subnum
+   and ctncod = @lngdsc
+   and cur_cas = @cur_cas
+   and tot_cas_cnt = @tot_cas_cnt;
+]]>
+</local-syntax>
+</command>

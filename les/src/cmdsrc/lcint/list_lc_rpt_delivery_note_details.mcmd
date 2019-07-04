@@ -1,0 +1,92 @@
+<command>
+<name>list lc rpt delivery note details</name>
+<description>List LC Rpt Delivery Note Details</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select ord.ordnum,
+        ord.dlvnum,
+        ord_note.nottxt,
+        to_char(shipment.stgdte, 'DD-MM-YYYY') stgdte,
+        to_char(ord.entdte, 'DD-MM-YYYY') entdte,
+        ord.cponum,
+        ord_line.crncy_code,
+        ord_line.prtnum,
+        min(prtdsc.lngdsc) lngdsc,
+        sum(ord_line.ordqty) ordqty,
+        sum(pckwrk_view.dtl_pckqty) pckqty,
+        decode(sum(shipment_line.stgqty), 0, sum(shipment_line.shpqty)) shpqty,
+        sum(shipment_line.tot_pln_wgt) tot_pln_wgt,
+        max(adrmst.adrnam) adrnam,
+        max(adrmst.adrln1) adrln1,
+        max(adrmst.adrln2) adrln2,
+        max(adrmst.adrln3) adrln3,
+        max(adrmst.adrcty) adrcty,
+        max(adrmst.adrstc) adrstc,
+        max(adrmst.ctry_name) ctry_name,
+        max(adrmst.adrpsz) adrpsz,
+        max(bt.adrnam) bt_adrnam,
+        max(bt.adrln1) bt_adrln1,
+        max(bt.adrln2) bt_adrln2,
+        max(bt.adrln3) bt_adrln3,
+        max(bt.adrcty) bt_adrcty,
+        max(bt.adrstc) bt_adrstc,
+        max(bt.ctry_name) bt_ctry_name,
+        max(bt.adrpsz) bt_adrpsz
+   from ord
+   join adrmst
+     on adrmst.adr_id = ord.st_adr_id
+   left
+   join adrmst bt
+     on bt.adr_id = ord.bt_adr_id
+   join ord_line
+     on ord.ordnum = ord_line.ordnum
+    and ord.wh_id = ord_line.wh_id
+    and ord.client_id = ord_line.client_id
+   join pckwrk_view
+     on pckwrk_view.ordnum = ord_line.ordnum
+    and pckwrk_view.ordlin = ord_line.ordlin
+    and pckwrk_view.prtnum = ord_line.prtnum
+    and pckwrk_view.prt_client_id = ord_line.prt_client_id
+    and pckwrk_view.client_id = ord_line.client_id
+    and pckwrk_view.wh_id = ord_line.wh_id
+   join shipment_line
+     on shipment_line.ship_line_id = pckwrk_view.ship_line_id
+    and shipment_line.wh_id = pckwrk_view.wh_id
+    and pckwrk_view.client_id = shipment_line.client_id
+    and pckwrk_view.prtnum = shipment_line.prtnum
+    and pckwrk_view.prt_client_id = shipment_line.prt_client_id
+    and pckwrk_view.ship_id = shipment_line.ship_id
+    and pckwrk_view.schbat = shipment_line.schbat
+    and pckwrk_view.ordnum = shipment_line.ordnum
+    and pckwrk_view.ordlin = shipment_line.ordlin
+   join shipment
+     on shipment.ship_id = shipment_line.ship_id
+    and shipment.wh_id = shipment_line.wh_id
+   join prtdsc
+     on prtdsc.colval = ord_line.prtnum || '|' || ord_line.prt_client_id || '|' || ord_line.wh_id
+    and prtdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
+    and prtdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
+   join ord_note
+     on ord.client_id = ord_note.client_id
+    and ord.ordnum = ord_note.ordnum
+    and ord.wh_id = ord_note.wh_id
+    and ord_note.nottyp in ('GEN', 'SUPACC','CUSTCOD')
+  where pckwrk_view.pckqty > 0
+    and ord.ordnum = @ordnum
+    and ord.wh_id = @wh_id
+  GROUP by ord.ordnum,
+        ord.dlvnum,
+        ord.cponum,
+        ord_line.prtnum,
+        ord_note.nottxt,
+        ord_line.crncy_code,
+        to_char(shipment.stgdte, 'DD-MM-YYYY'),
+        to_char(ord.entdte, 'DD-MM-YYYY')
+  ORDER by ord.ordnum,
+        ord.dlvnum,
+        ord.cponum,
+        ord_line.prtnum] catch(-1403)
+]]>
+</local-syntax>
+</command>

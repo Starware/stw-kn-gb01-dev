@@ -1,0 +1,3 @@
+rpt_id,prod_id,rpt_layout_file,def_printer,rpt_typ,keep_days,ena_ems_flg,ems_evt_nam,func_area,dig_sig_req_flg,grp_nam
+Lc-DeliveryNote,WM,Lc-DeliveryNote.jrxml,,JR,7,0,,,0,les_data
+Lc-PackingList,WM,Lc-PackingList.jrxml,,JR,7,0,,,0,les_data

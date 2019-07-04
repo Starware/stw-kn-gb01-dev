@@ -1,0 +1,70 @@
+<command>
+<name>generate lc packing list report</name>
+<description>List LC Packing List Report</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+validate stack variable not null
+ where name = 'lodnum'
+|
+validate stack variable not null
+ where name = 'wh_id'
+|
+[select distinct shipment_line.ordnum,
+        shipment_line.client_id,
+        ord.ordtyp
+   from all_inventory_view
+   join shipment_line
+     on shipment_line.ship_line_id = all_inventory_view.ship_line_id
+    and shipment_line.wh_id = all_inventory_view.wh_id
+    and all_inventory_view.prtnum = shipment_line.prtnum
+    and all_inventory_view.prt_client_id = shipment_line.prt_client_id
+    and all_inventory_view.prt_client_id = shipment_line.client_id
+   join ord
+     on ord.ordnum = shipment_line.ordnum
+    and ord.client_id = shipment_line.client_id
+    and ord.wh_id = shipment_line.wh_id
+  where all_inventory_view.lodnum = @lodnum
+    and all_inventory_view.wh_id = nvl(@wh_id, @@wh_id)]catch(-1403)
+|
+if(@?= 0)
+{
+    [select 1
+      from poldat_view
+     where polcod = 'LC_PICKING'
+       and polvar = 'PACKING_LIST_REPORT'
+       and polval = 'ENABLED'
+       and wh_id = @wh_id
+       and rtstr1 = @ordtyp] catch(-1403)
+       
+    |
+    if(@?= 0)
+    {
+    
+        if (!@prtadr)
+        {
+            [select def_printer prtadr
+               from rpt_config
+              where rpt_id = 'Lc-PackingList'] catch(-1403)
+        }
+        |
+        if(@? = 0)
+        {
+            generate moca report
+             where rpt_id = 'Lc-PackingList'
+               and dest_typ = 'printer'
+               and dest = @prtadr
+               and gen_usr_id = nvl(@usr_id, @@usr_id)     
+               and locale_id = nvl(@locale_id, @@loacle_id)
+               and ordnum = @ordnum
+               and wh_id = @wh_id
+			   and lodnum = @lodnum
+               and client_id = @client_id catch(@?)
+        }
+    }
+    
+}
+        
+]]>
+</local-syntax>
+</command>

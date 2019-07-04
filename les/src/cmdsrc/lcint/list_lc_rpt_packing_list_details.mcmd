@@ -1,0 +1,82 @@
+<command>
+<name>list lc rpt packing list details</name>
+<description>List LC Rpt Packing List Details</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select o.ordnum,
+        o.client_id,
+        am.adrnam,
+        am.adrln1,
+        am.adrln2,
+        am.adrln3,
+        am.adrcty,
+        am.ctry_name,
+        am.adrpsz,
+        iv.lodnum,
+        ol.ordlin,
+        iv.prtnum,
+        pd.lngdsc,
+        row_num,
+        tot_count,
+        sum(iv.untqty)untqty
+   from all_inventory_view iv
+   join shipment_line sl
+     on sl.ship_line_id = iv.ship_line_id
+    and sl.prtnum = iv.prtnum
+    and sl.prt_client_id = iv.prt_client_id
+    and sl.wh_id = iv.wh_id
+   join ord_line ol
+     on ol.ordnum = sl.ordnum
+    and ol.ordlin = sl.ordlin
+    and ol.wh_id = sl.wh_id
+    and ol.client_id = sl.client_id
+   join ord o
+     on o.ordnum = ol.ordnum
+    and o.wh_id = ol.wh_id
+    and o.client_id = ol.client_id
+   join prtdsc pd
+     on pd.colval = iv.prtnum || '|' || iv.prt_client_id || '|' || iv.wh_id
+    and pd.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
+    and pd.locale_id = nvl(@locale_id,'US_ENGLISH')
+   join adrmst am
+     on am.adr_id = o.st_adr_id
+   join (select x.lodnum,
+                ROW_NUMBER() OVER(ORDER BY x.ordnum) AS row_num,
+                count(x.lodnum) OVER(PARTITION BY x.ordnum) tot_count
+           from (select distinct iv.lodnum,
+                        sl.ordnum
+                   from all_inventory_view iv
+                   join shipment_line sl
+                     on sl.ship_line_id = iv.ship_line_id
+                    and sl.wh_id = iv.wh_id
+                  where iv.ship_line_id is not null
+                    and sl.ordnum = @ordnum
+                    and sl.wh_id = @wh_id) x) lpncount
+     on lpncount.lodnum = iv.lodnum
+  where iv.ship_line_id is not null
+    and iv.lodnum = @lodnum
+    and sl.ordnum = @ordnum
+    and sl.wh_id = @wh_id
+  group by iv.prtnum,
+        o.ordnum,
+        o.client_id,
+        am.adrnam,
+        am.adrln1,
+        am.adrln2,
+        am.adrln3,
+        am.adrcty,
+        am.ctry_name,
+        am.adrpsz,
+        iv.lodnum,
+        ol.ordlin,
+        pd.lngdsc,
+        row_num,
+        tot_count
+  order by o.ordnum,
+        ol.ordlin,
+		iv.lodnum,
+        iv.prtnum] catch(-1403)
+]]>
+</local-syntax>
+</command>
