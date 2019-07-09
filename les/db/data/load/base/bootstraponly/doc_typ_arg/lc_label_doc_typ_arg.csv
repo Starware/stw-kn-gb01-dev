@@ -1,3 +1,6 @@
 doc_typ,doc_typ_arg,rqdflg,moddte,mod_usr_id
 Lc-CartonLabel,ordnum,1,,
 Lc-CartonLabel,wh_id,1,,
+Lc-PalletLabel,ordnum,1,,
+Lc-PalletLabel,wh_id,1,,
+Lc-PalletLabel,client_id,1,,

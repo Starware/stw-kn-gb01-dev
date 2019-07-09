@@ -1,0 +1,41 @@
+<command>
+<name>retrieve lc pick pallet label</name>
+<description>Retrieve data for Pick Pallet label</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select distinct list_id,
+        dstloc,
+        ordnum,
+        min(to_char(adddte, 'DD-MM-YYYY')) adddte,
+        adrmst.adrnam
+   from pckwrk_view
+   join cstmst
+     on cstmst.cstnum = pckwrk_view.stcust
+    and cstmst.client_id = pckwrk_view.client_id
+   join adrmst
+     on adrmst.adr_id = cstmst.adr_id
+  where pckwrk_view.ordnum = @ordnum
+    and pckwrk_view.wh_id = @wh_id
+    and pckwrk_view.client_id = @client_id
+  group by list_id,
+        dstloc,
+        ordnum,
+        adrmst.adrnam] catch(-1403)
+|
+if (@? = 0)
+{
+    generate next number
+     where numcod = 'lodnum'
+    |
+    publish data
+     where lodnum = @nxtnum
+       and ordnum = @ordnum
+       and list_id = @list_id
+       and dstloc = @dstloc
+       and adrnam = @adrnam
+       and adddte = @adddte
+}
+]]>
+</local-syntax>
+</command>
