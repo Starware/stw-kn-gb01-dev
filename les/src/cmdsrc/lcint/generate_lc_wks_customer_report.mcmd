@@ -5,7 +5,7 @@
 <local-syntax>
 <![CDATA[
 validate stack variable not null
- where name = 'lodnum'
+ where name = 'ship_id'
 |
 validate stack variable not null
  where name = 'wh_id'
@@ -13,13 +13,7 @@ validate stack variable not null
 [select distinct shipment_line.ordnum,
         cstmst.cstnum,
         ord_line.client_id
-   from all_inventory_view
-   join shipment_line
-     on shipment_line.ship_line_id = all_inventory_view.ship_line_id
-    and shipment_line.wh_id = all_inventory_view.wh_id
-    and all_inventory_view.prtnum = shipment_line.prtnum
-    and all_inventory_view.prt_client_id = shipment_line.prt_client_id
-    and all_inventory_view.prt_client_id = shipment_line.client_id
+   from shipment_line   
    join ord_line
      on ord_line.ordnum = shipment_line.ordnum
     and shipment_line.ordlin = ord_line.ordlin
@@ -34,8 +28,8 @@ validate stack variable not null
    join cstmst
      on cstmst.cstnum = ord.stcust
     and cstmst.client_id = ord.client_id
-  where all_inventory_view.lodnum = @lodnum
-    and all_inventory_view.wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+  where shipment_line.ship_id = @ship_id
+    and shipment_line.wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
 |
 if(@?= 0)
 {
@@ -74,4 +68,3 @@ if(@?= 0)
 ]]>
 </local-syntax>
 </command>
-
