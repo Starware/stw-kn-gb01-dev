@@ -84,7 +84,7 @@ SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
 SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST_HTTP','ASYNC','I','SL_INB_HTTP','PROVIDER_ENDPOINT','GBRPY01_SCJP_DEFAULT','',''
+2018.1,'HOST_HTTP','ASYNC','I','SL_INB_HTTP','PROVIDER_ENDPOINT','GB_DEFAULT','',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm
 SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
