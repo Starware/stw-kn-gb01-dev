@@ -55,8 +55,8 @@ slImp -f $LESDIR/db/data/load/integrator/lc/LC-HUEL-ORDER-INB-IFD.slexp -v 2>&1 
 echo "slImp -f LC-RA-INB-IFD.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC-HUEL-RA-INB-IFD.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
-echo "slImp -f HOST_HTTP_COMMUINCATIONS.slexp -v" >> ${POSTINSTALL_LOG}
-slImp -f $LESDIR/db/data/load/integrator/lc/HOST_HTTP_COMMUINCATIONS.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
+echo "slImp -f HOST_HTTP_COMMUNICATIONS.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/HOST_HTTP_COMMUNICATIONS.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
 date >> ${POSTINSTALL_LOG}
 echo "Done" >> ${POSTINSTALL_LOG}
