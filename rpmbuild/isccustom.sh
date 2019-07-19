@@ -29,14 +29,18 @@ mload_all 2>&1 >> ${POSTINSTALL_LOG}
 
 echo "cd $LESDIR/db/ddl/Tables" >> ${POSTINSTALL_LOG}
 cd $LESDIR/db/ddl/Tables
-echo "running installsql uc_dgdsc" >> ${POSTINSTALL_LOG}
-installsql uc_dgdsc.tbl 2>&1 >> ${POSTINSTALL_LOG} || false
+echo "running installsql in " >> ${POSTINSTALL_LOG}
+installsql *.tbl 2>&1 >> ${POSTINSTALL_LOG} || false
 
 # Remove some existing system setup by looping over all msql files
 for x in $LESDIR/db/data/unload/integrator/lc/*.msql; do
     echo "msql @ " $x >> ${POSTINSTALL_LOG}
     printf "@ %s" $x | $MOCADIR/bin/msql -S 2>&1 >> ${POSTINSTALL_LOG} || false
 done
+
+# Table creation for logging inbound http messages
+echo "installsql $LESDIR/tables/*.tbl" >> ${POSTINSTALL_LOG}
+installsql $LESDIR/tables/*.tbl 2>&1 >> ${POSTINSTALL_LOG} || false
 
 # SLEXP files
 echo "slImp -f LC_PART_INB_IFD.slexp -v" >> ${POSTINSTALL_LOG}
