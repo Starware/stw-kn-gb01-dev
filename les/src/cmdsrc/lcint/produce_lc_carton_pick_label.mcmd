@@ -1,0 +1,15 @@
+<command>
+<name>produce lc carton pick label</name>
+<description>Produce LC Carton Pick Label</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+get label format where format = "Lc-CartonLabel" | produce label
+|
+if (@outfile_name <> '' and @outfile_name is not null)
+    {
+       print label
+    }
+]]>
+</local-syntax>
+</command>

@@ -18,9 +18,9 @@
      on ctnmst.ctncod || '|' || ctnmst.wh_id = dscmst.colval
     and dscmst.colnam = 'ctncod|wh_id'
     and dscmst.locale_id = nvl(@locale_id, @@locale_id)
-  where ordnum = @ordnum
-    and pckwrk_view.wh_id = @wh_id
+  where pckwrk_view.wh_id = @wh_id
     and wrktyp = 'K'
+	and pckwrk_view.wrkref = @wrkref
   order by cur_cas] catch(-1403)
 |
 publish data

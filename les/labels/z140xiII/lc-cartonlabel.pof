@@ -1,0 +1,17 @@
+﻿CT~~CD,~CC^~CT~
+^XA
+^XA
+^MMT
+^PW600
+^LL1200
+^LS0
+^BY4,3,100^FT250,70^BCR,,Y,N
+^FD~ordnum,20~^FS
+^BY3,3,80^FT110,180^BCR,,Y,N
+^FD~subnum,30~^FS
+^FT574,221^A@R,13,11,TT0003M_^FB54,1,0,C^FH\^CI17^F8^FD~CMD=retrieve lc pick carton label,25~^FS^CI0
+^FT8,360^A0R,25,28^FH\^FD~cur_cas,3~^FS
+^FT8,410^A0R,25,28^FH\^FD~tot_cas_cnt,3~^FS
+^FT8,380^A0R,25,28^FH\^FDof^FS
+^FT45,300^A0R,32,32^FH\^FD~ctncod,18~^FS
+^PQ1,0,1,Y^XZ
