@@ -12,7 +12,8 @@ validate stack variable not null
 |
 [select distinct shipment_line.ordnum,
         shipment_line.client_id,
-        ord.ordtyp
+        ord.ordtyp,
+		all_inventory_view.lodnum
    from all_inventory_view
    join shipment_line
      on shipment_line.ship_line_id = all_inventory_view.ship_line_id
