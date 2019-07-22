@@ -38,10 +38,6 @@ for x in $LESDIR/db/data/unload/integrator/lc/*.msql; do
     printf "@ %s" $x | $MOCADIR/bin/msql -S 2>&1 >> ${POSTINSTALL_LOG} || false
 done
 
-# Table creation for logging inbound http messages
-echo "installsql $LESDIR/tables/*.tbl" >> ${POSTINSTALL_LOG}
-installsql $LESDIR/tables/*.tbl 2>&1 >> ${POSTINSTALL_LOG} || false
-
 # SLEXP files
 echo "slImp -f LC_PART_INB_IFD.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC_PART_INB_IFD.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
