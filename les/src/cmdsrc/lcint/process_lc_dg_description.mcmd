@@ -9,13 +9,13 @@
 	{
 		validate key not exists
 		 where key = 'prtnum, prt_client_id, locale_id'
-		   and table = 'uc_dgdsc'
+		   and table = 'usr_lc_dgdsc'
 		|
 		validate stack variable not null
-		 where name = 'uc_dg_dsc'
+		 where name = 'lc_dg_dsc'
 		|
 		validate stack variable not null
-		 where name = 'uc_dg_shipnam'
+		 where name = 'lc_dg_shipnam'
 		 |
 		/* 
 		 * If wh_id is not passed,then set it to default warehouse id '----'.
@@ -37,7 +37,7 @@
 		}
 		|
 		create record
-		 where table = 'uc_dgdsc'
+		 where table = 'usr_lc_dgdsc'
 	}
 	else if (@moca_verb = 'change')
 	{
@@ -51,7 +51,7 @@
 		}
 		|
 		/* 
-		 * If warehouse id is '----',then create description for all warehouses enabled.
+		 * If warehouse id is '----',then create description for all warehouses.
 		 */
 		if (@wh_id = '----')
 		{
@@ -61,7 +61,7 @@
 		}
 		|
 		change record
-		 where table = 'uc_dgdsc'
+		 where table = 'usr_lc_dgdsc'
 	}
 	
 ]]>

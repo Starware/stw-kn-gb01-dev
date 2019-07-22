@@ -17,8 +17,8 @@
 		all_inventory_view.prt_client_id,
 		shipment_line.client_id,
         min(prtdsc.lngdsc) lngdsc,
-        max(uc_dgdsc.uc_dg_dsc) uc_dg_dsc,
-		max(uc_dgdsc.uc_dg_shipnam)uc_dg_shipnam,
+        max(usr_lc_dgdsc.lc_dg_dsc) uc_dg_dsc,
+		max(usr_lc_dgdsc.lc_dg_shipnam)uc_dg_shipnam,
         sum(all_inventory_view.untqty) untqty,
         (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.netwgt)) / (1000.0) net_wgt,
         (sum(all_inventory_view.untqty / all_inventory_view.untcas) * min(prtftp_dtl.grswgt)) / (1000.0) grs_wgt,
@@ -49,11 +49,11 @@
      on prtdsc.colval = all_inventory_view.prtnum || '|' || all_inventory_view.prt_client_id || '|' || all_inventory_view.wh_id
     and prtdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
     and prtdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
-   join uc_dgdsc
-     on uc_dgdsc.prtnum = prtmst_view.prtnum
-    and uc_dgdsc.prt_client_id = prtmst_view.prt_client_id
-    and uc_dgdsc.wh_id = prtmst_view.wh_id
-    and uc_dgdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
+   join usr_lc_dgdsc
+     on usr_lc_dgdsc.prtnum = prtmst_view.prtnum
+    and usr_lc_dgdsc.prt_client_id = prtmst_view.prt_client_id
+    and usr_lc_dgdsc.wh_id = prtmst_view.wh_id
+    and usr_lc_dgdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
    join adrmst
      on adrmst.adr_id = ord.st_adr_id
    join prtftp
@@ -77,4 +77,3 @@
 ]]>
 </local-syntax>
 </command>
-
