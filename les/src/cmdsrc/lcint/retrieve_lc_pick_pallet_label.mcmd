@@ -7,7 +7,7 @@
 [select distinct list_id,
         dstloc,
         ordnum,
-        min(to_char(adddte, 'DD-MM-YYYY')) adddte,
+        to_char(adddte, 'DD-MM-YYYY') adddte,
         adrmst.adrnam
    from pckwrk_view
    join cstmst
@@ -15,13 +15,8 @@
     and cstmst.client_id = pckwrk_view.client_id
    join adrmst
      on adrmst.adr_id = cstmst.adr_id
-  where pckwrk_view.ordnum = @ordnum
-    and pckwrk_view.wh_id = @wh_id
-    and pckwrk_view.client_id = @client_id
-  group by list_id,
-        dstloc,
-        ordnum,
-        adrmst.adrnam] catch(-1403)
+  where pckwrk_view.wh_id = @wh_id
+	and pckwrk_view.wrkref = @wrkref] catch(-1403)
 |
 if (@? = 0)
 {
@@ -31,7 +26,7 @@ if (@? = 0)
     publish data
      where lodnum = @nxtnum
        and ordnum = @ordnum
-       and list_id = @list_id
+       and ref_val = nvl(@list_id, @wrkref)
        and dstloc = @dstloc
        and adrnam = @adrnam
        and adddte = @adddte
