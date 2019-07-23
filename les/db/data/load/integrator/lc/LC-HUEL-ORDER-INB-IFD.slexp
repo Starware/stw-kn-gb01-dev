@@ -112,16 +112,22 @@ else
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
 SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
-2018.1,'PROCESS_DCS50_ORD_PREPARE','SL_IFD_PRE','MOCA','Prepare Sales Order For  Edit','F','F','F','F','F','F','T','{     publish data where client_id = :i_c_client_id     |     if (@client_id='''')      {         sl_get sys_parm where parm_id = ''SL_DCS_HOST_CLIENT_ID''  	|   	publish data where client_id = @sysparmvalue     }     |     /* Update Order Line EDTFLG  */     {[update 	ord_line set edtflg = 0       where 	ordnum = :i_c_ordnum       and 	client_id = @client_id and wh_id = :i_c_whse_id]} catch (@?)     |     /* Update Order Header Notes EDTFLG  */     {[update ord_note set edtflg = 0        where ordnum = :i_c_ordnum       and client_id = @client_id and wh_id = :i_c_whse_id]} catch (@?)     |     /* Update Order Detail Notes EDTFLG */     {[update ord_line_note        set edtflg = 0        where ordnum = :i_c_ordnum and client_id = @client_id and wh_id = :i_c_whse_id]} catch (@?) }','786'
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
-SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
-2018.1,'VALIDATE_HOST_ORDER','SL_IFD_POST','MOCA','Validate Host Order Download','F','F','F','F','F','T','T','publish data where wh_id = :i_c_whse_id
+2018.1,'LC_HUEL_VALIDATE_HOST_ORDER','SL_IFD_POST','MOCA','Validate Host Order Download','F','F','F','F','F','T','T','publish data where wh_id = :i_c_whse_id
 |
 execute integrator transaction
     where validate_override_cmd = ''validate post process host order''
       and override_cmd = ''post process host order''
-      and <<OVERSTACKED_ARGS>>','223'
+      and <<OVERSTACKED_ARGS>>
+|
+publish data where <<OVERSTACKED_ARGS>>
+|
+sl_log event where evt_id = ''LC-HUEL-ORDER-INB-ACK''
+and sys_id = ''DCS''
+','339'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'PROCESS_DCS50_ORD_PREPARE','SL_IFD_PRE','MOCA','Prepare Sales Order For  Edit','F','F','F','F','F','F','T','{     publish data where client_id = :i_c_client_id     |     if (@client_id='''')      {         sl_get sys_parm where parm_id = ''SL_DCS_HOST_CLIENT_ID''  	|   	publish data where client_id = @sysparmvalue     }     |     /* Update Order Line EDTFLG  */     {[update 	ord_line set edtflg = 0       where 	ordnum = :i_c_ordnum       and 	client_id = @client_id and wh_id = :i_c_whse_id]} catch (@?)     |     /* Update Order Header Notes EDTFLG  */     {[update ord_note set edtflg = 0        where ordnum = :i_c_ordnum       and client_id = @client_id and wh_id = :i_c_whse_id]} catch (@?)     |     /* Update Order Detail Notes EDTFLG */     {[update ord_line_note        set edtflg = 0        where ordnum = :i_c_ordnum and client_id = @client_id and wh_id = :i_c_whse_id]} catch (@?) }','786'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
 SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
@@ -618,6 +624,10 @@ SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_HUEL_VALIDATE_HOST_ORDER','I_C_WHSE_ID',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
 2018.1,'PROCESS_DCS50_ORD_PREPARE','I_C_CLIENT_ID',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
@@ -627,10 +637,6 @@ SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
 2018.1,'PROCESS_DCS50_ORD_PREPARE','I_C_WHSE_ID',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
-SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'VALIDATE_HOST_ORDER','I_C_WHSE_ID',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
@@ -5918,7 +5924,7 @@ SL_VERSION,ifd_id,ifd_ver,ifd_descr,ifd_typ_cd,data_lay_id,ifd_grp_id,eo_id,eo_v
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def
 SL_VERSION,ifd_id,ifd_ver,ifd_descr,ifd_typ_cd,data_lay_id,ifd_grp_id,eo_id,eo_ver,root_seg_rpt_brk_flg,recursive_flg,post_alg_id,pre_alg_id,ifd_tag,post_proc_flg
-2018.1,'LC_HUEL_ORDER_DCS_IFD','2017.1','Order download transaction','O','CSV','SHIPPING','LC_HUEL_ORDER_TRAN','2017.1','T','T','VALIDATE_HOST_ORDER','PROCESS_DCS50_ORD_PREPARE','ORDER_DCS_IFD',''
+2018.1,'LC_HUEL_ORDER_DCS_IFD','2017.1','Order download transaction','O','CSV','SHIPPING','LC_HUEL_ORDER_TRAN','2017.1','T','T','LC_HUEL_VALIDATE_HOST_ORDER','PROCESS_DCS50_ORD_PREPARE','ORDER_DCS_IFD',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
 SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
@@ -7327,5 +7333,6 @@ SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mt
 CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
 SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
 2018.1,'LC_HUEL_ORDER_DCS_IFD','2017.1','DCS','BLOCK_FOR_ADD_CHANGE','B','SYNCD','','F','F','T','','','','','',''
+
 
 CSV__TAG__KLUDGE___COMMIT
