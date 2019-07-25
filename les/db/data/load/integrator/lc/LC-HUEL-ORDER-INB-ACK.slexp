@@ -145,7 +145,7 @@ SL_VERSION,evt_id,evt_descr,log_evt_flg,evt_grp_id
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
 SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
-2018.1,'LC-HUEL-ORDER-INB-ACK','CLIENT_ID','Client ID','C','T'
+2018.1,'LC-HUEL-ORDER-INB-ACK','CLIENT_ID','Client ID','C','F'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
 SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
@@ -153,7 +153,11 @@ SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
 SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
-2018.1,'LC-HUEL-ORDER-INB-ACK','WH_ID','Warehouse ID','C','F'
+2018.1,'LC-HUEL-ORDER-INB-ACK','WH_ID','Warehouse ID','C','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-HUEL-ORDER-INB-ACK','CPONUM','Customer PO Number','C','T'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_def
 SL_VERSION,eo_id,eo_ver,eo_descr,evt_id,always_create_flg
@@ -190,6 +194,10 @@ SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_f
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
 SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
 2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','ORDER_INB_ACK','WH_ID','warehouse id','60','','','','','','LC-HUEL-ORDER-INB-ACK','WH_ID','','','EA','C','','','','','','','','N','','N','','','140','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','ORDER_INB_ACK','CPONUM','Customer PO Number','90','','','','','','LC-HUEL-ORDER-INB-ACK','CPONUM','','','EA','C','','','','','','','','N','','N','','','120','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
 SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id

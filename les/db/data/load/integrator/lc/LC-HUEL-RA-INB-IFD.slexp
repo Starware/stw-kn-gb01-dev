@@ -117,6 +117,8 @@ if(:i_c_trntyp = ''A'' or :i_c_trntyp = ''C'')
 |
 publish data where <<OVERSTACKED_ARGS>>
 |
+[select orgref from rimhdr where @+invnum]
+|
 sl_log event where evt_id = ''LC-HUEL-RA-INB-ACK''
 and sys_id = ''DCS''
 ','2798'

@@ -121,6 +121,8 @@ execute integrator transaction
 |
 publish data where <<OVERSTACKED_ARGS>>
 |
+[select cponum from ord where @+ordnum]
+|
 sl_log event where evt_id = ''LC-HUEL-ORDER-INB-ACK''
 and sys_id = ''DCS''
 ','339'
