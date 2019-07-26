@@ -157,7 +157,7 @@ SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
 SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
-2018.1,'LC-HUEL-RA-INB-ACK','ORGREF','Currently, no English translation is available.','C','T'
+2018.1,'LC-HUEL-RA-INB-ACK','ORGREF','Currently, no English translation is available.','C','F'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_def
 SL_VERSION,eo_id,eo_ver,eo_descr,evt_id,always_create_flg
