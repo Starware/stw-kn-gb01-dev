@@ -1,0 +1,14 @@
+<command>
+<name>retrieve lc pcip error label</name>
+
+<description>Retrieve LC PCIP Error Label</description>
+
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+publish data
+where stoloc =@err_msg
+
+]]>
+</local-syntax>
+</command>

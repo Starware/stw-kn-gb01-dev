@@ -1,0 +1,46 @@
+<command>
+  <name>create lc pcip consignment</name>
+  <description>creates a PCIP consignment</description>
+  <type>Java Method</type>
+  <class>LC_PCIP</class>
+  <method>createLcPcipConsignment</method>
+  <argument name="url" required="yes" datatype="string" />
+  <argument name="culture" required="yes" datatype="string" />
+  <argument name="user_id" required="yes" datatype="string" />
+  <argument name="password" required="yes" datatype="string" />
+  <argument name="applicationid" required="yes" datatype="string" />
+  <argument name="businesskey1" required="yes" datatype="string" />
+  <argument name="businesskey2" required="yes" datatype="string" />
+  <argument name="businesskey3" required="yes" datatype="string" />
+  <argument name="businesskey4" required="yes" datatype="string" />
+  <argument name="ordnum" required="yes" datatype="string" />
+  <argument name="wh_id" required="yes" datatype="string" />
+  <argument name="depot" required="yes" datatype="string" />
+  <argument name="client_id" required="yes" datatype="string" />
+  <argument name="carcod" required="yes" datatype="string" />
+  <argument name="cur_pkg" required="yes" datatype="integer" />
+  <argument name="tot_pkg_count" required="yes" datatype="integer" />
+  <argument name="weight" required="yes" datatype="float" />
+  <argument name="height" required="yes" datatype="float" />
+  <argument name="width" required="yes" datatype="float" />
+  <argument name="length" required="yes" datatype="float" />
+  <argument name="volume" required="yes" datatype="float" />
+  <argument name="stname" required="yes" datatype="string" />
+  <argument name="stadd1" required="yes" datatype="string" />
+  <argument name="stadd2" required="yes" datatype="string" />
+  <argument name="stadd3" required="yes" datatype="string" />
+  <argument name="stcity" required="yes" datatype="string" />
+  <argument name="stposc" required="yes" datatype="string" />
+  <argument name="stcnty" required="yes" datatype="string" />
+  <argument name="stphon" required="yes" datatype="string" />
+  <argument name="invtid" required="yes" datatype="string" />
+  <argument name="prtnum" required="yes" datatype="string" />
+  <argument name="dg_dsc" required="yes" datatype="string" />
+  <argument name="goods_content" required="yes" datatype="string" />
+  <argument name="output_queue" required="yes" datatype="string" />
+  <documentation>
+<remarks></remarks>
+<exception value="eOK">Normal successful completion</exception>
+
+</documentation>
+</command>
