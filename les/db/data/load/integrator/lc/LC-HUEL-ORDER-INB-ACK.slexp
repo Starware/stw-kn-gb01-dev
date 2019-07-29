@@ -1,0 +1,206 @@
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LEF_GET_DEF_CLIENT_ID_IF_NULL','SL_IFD_FLD','MOCA','Get Default Client ID IF passed in Client ID is Null','F','F','F','F','F','F','T','sl_get sys_data_attr where sys_id = :i_c_evt_sys_id
+|
+[select LPAD(@nochg_ind_char, length(:i_c_client_id), @nochg_ind_char) nochg_char,
+        LPAD(@absent_ind_char, length(:i_c_client_id), @absent_ind_char) abs_char
+   from dual]
+|
+if (:i_c_client_id = '''' or
+    :i_c_client_id = @abs_char or
+    :i_c_client_id = @nochg_char)
+{
+    sl_get sys_parm where parm_id = ''SL_DCS_HOST_CLIENT_ID''
+    |
+    publish data where client_id = @sysparmvalue
+}
+else
+    publish data where client_id = :i_c_client_id
+|
+publish data where client_id = upper(@client_id)','554'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_GEN_HTTP_HEADERS','SL_COMM_ARG','MOCA','Create HTTP headers','F','F','F','F','F','T','T','publish data where <<overstacked_args>>
+|
+publish data
+  where username = ''ws_swiftlog''
+    and password = ''aY3DWnZn''
+|
+sl_generate doc filename from ifd data where <<OVERSTACKED_ARGS>> and fld_id = ''WH_ID'' catch (@?)
+|
+if (@? != 0) {
+[select evt_arg_val as hdr_wh_id
+   from sl_evt_arg_data
+  where @+evt_data_seq 
+    and evt_arg_id = ''WH_ID'']
+} else {
+publish data where hdr_wh_id = @filename
+}
+|
+[select adr_id
+   from wh
+  where wh_id = @hdr_wh_id]
+|
+list addresses
+ where adr_id = @adr_id
+   and all_addr_flg = 1
+|
+[select iso_2_ctry_name
+   from ctry_mst
+  where ctry_name = @ctry_name]
+|
+publish data where hdr_ctry_name = @iso_2_ctry_name
+|
+sl_generate doc filename from ifd data  where <<OVERSTACKED_ARGS>> and fld_id = ''CLIENT_ID'' catch (@?)
+|
+if (@? != 0)
+{
+sl_generate doc filename from ifd data  where <<OVERSTACKED_ARGS>> and fld_id = ''PRT_CLIENT_ID''
+}
+|
+publish data where hdr_client_id = @filename
+|
+sl_generate doc filename from ifd data  where <<OVERSTACKED_ARGS>> and fld_id = ''UUID'' catch (@?)
+|
+if (@? != 0)
+{
+generate uuid
+} else {
+publish data where uuid = @filename
+}
+|
+publish data where hdr_uuid = @uuid
+|
+if (@comm_mode_cd = ''SYNCD'') {
+sl_list ifd_data_ptr where ifd_data_ptr = @ifd_data_ptr
+} else {
+[select ifd_id from sl_ifd_data_hdr where @+ifd_data_seq]
+}
+|
+[[ifd_id = ifd_id.replace(''_'',''-'')]]
+|
+publish data
+  where credentials = @username || '':'' || @password
+|
+publish data
+  where value = ''Authorization'' || '':'' || ''Basic '' || [[ credentials.bytes.encodeBase64().toString() ]]
+            || ''&Content-Type'' || '':'' || ''text/xml''
+            || ''&X-KN-ApplicationID'' || '':'' || ''SwiftLOG''
+            || ''&X-KN-RequestID'' || '':'' || @hdr_uuid
+            || ''&X-KN-MessageType'' || '':'' || @ifd_id || ''V1''
+            || ''&X-KN-Routing-Country'' || '':'' || @hdr_ctry_name
+            || ''&X-KN-Routing-Warehouse'' || '':'' || @hdr_wh_id
+            || ''&X-KN-Routing-Client'' || '':'' || @hdr_client_id
+','1927'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LEF_GET_DEF_CLIENT_ID_IF_NULL','I_C_CLIENT_ID',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LEF_GET_DEF_CLIENT_ID_IF_NULL','I_C_EVT_SYS_ID',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def_grp
+SL_VERSION,sys_grp_id,sys_grp_descr
+2018.1,'LS','Group - LES'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def_grp
+SL_VERSION,sys_grp_id,sys_grp_descr
+2018.1,'LES','Group - LES'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def
+SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_commit_ctxt_defn_cd,pre_async_alg_id,post_async_alg_id,pre_dwnld_alg_id,post_dwnld_alg_id,fail_evt_id,prsrv_evt_seq_flg,snd_err_stat_flg,rcv_fail_evt_id,rcv_succ_evt_id,null_ind_char,nochg_ind_char,absent_ind_char,eol_delim,mailbox_nam,host_port,host_nam,service,sys_user_id,sys_password,sys_conn_data,moca_sys_flg,xml_tag_data_inst,xml_tag_ifd,xml_tag_data,max_grp_siz
+2018.1,'DCS','DCS Warehouse Management System','DCS','LS','T','T','COMM','','','','','','F','T','','','','','+','','','','','','','','','T','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def
+SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_commit_ctxt_defn_cd,pre_async_alg_id,post_async_alg_id,pre_dwnld_alg_id,post_dwnld_alg_id,fail_evt_id,prsrv_evt_seq_flg,snd_err_stat_flg,rcv_fail_evt_id,rcv_succ_evt_id,null_ind_char,nochg_ind_char,absent_ind_char,eol_delim,mailbox_nam,host_port,host_nam,service,sys_user_id,sys_password,sys_conn_data,moca_sys_flg,xml_tag_data_inst,xml_tag_ifd,xml_tag_data,max_grp_siz
+2018.1,'HOST_HTTP','Customized system for HTTP','HOST_HTTP','LES','T','F','SIFD','','','','','','F','T','','','','','','<10>','','','','','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def_grp
+SL_VERSION,ifd_grp_id,ifd_grp_descr
+2018.1,'LENS','Logistice Execution Nervous System'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_def
+SL_VERSION,retr_mthd_id,retr_mthd_descr
+2018.1,'DCS_DUMMY_RM','DCS Dummy Retrieval Method'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_impl_def
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,retr_mthd_impl_cd,alg_id
+2018.1,'DCS_DUMMY_RM','SYS_DCS','DCS','','','','SD',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sql_crsr_component
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,component_ordr,sql_set_oper,sql_code,sql_code_len
+2018.1,'DCS_DUMMY_RM','SYS_DCS','DCS','','','','0','0','','from dual','9'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_def_grp
+SL_VERSION,evt_grp_id,evt_grp_descr
+2018.1,'INVENTORY','Group - Inventory'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_def
+SL_VERSION,evt_id,evt_descr,log_evt_flg,evt_grp_id
+2018.1,'LC-HUEL-ORDER-INB-ACK','LC Huel Order Acknowledgement','F','INVENTORY'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-HUEL-ORDER-INB-ACK','CLIENT_ID','Client ID','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-HUEL-ORDER-INB-ACK','ORDNUM','Order Number','C','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-HUEL-ORDER-INB-ACK','WH_ID','Warehouse ID','C','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-HUEL-ORDER-INB-ACK','CPONUM','Customer PO Number','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_def
+SL_VERSION,eo_id,eo_ver,eo_descr,evt_id,always_create_flg
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','Lens Order Create Transaction','LC-HUEL-ORDER-INB-ACK','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_seg
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_seg_descr,parent_eo_id,parent_eo_ver,parent_eo_seg_id,blk_alg_id,blk_alg_eval_cd,retr_mthd_id,eo_seg_ordr
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','LC-HUEL-ORDER-INB-ACK','Currently, no English translation is available.','','','','','','DCS_DUMMY_RM','1'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','LC-HUEL-ORDER-INB-ACK','DUMMY','Currently, no English translation is available.','C','10','','4','1'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','LC-HUEL-ORDER-INB-ACK','DUMMY','DCS_DUMMY_RM','SYS_DCS','DCS','','','','0','''x''','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def
+SL_VERSION,ifd_id,ifd_ver,ifd_descr,ifd_typ_cd,data_lay_id,ifd_grp_id,eo_id,eo_ver,root_seg_rpt_brk_flg,recursive_flg,post_alg_id,pre_alg_id,ifd_tag,post_proc_flg
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','Huel Order acknowledgment','O','CSV','LENS','LC-HUEL-ORDER-INB-ACK','9.1','F','T','','','LC-HUEL-ORDER-INB-ACK',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','ORDER_INB_ACK','','Currently, no English translation is available.','1','LC-HUEL-ORDER-INB-ACK','9.1','LC-HUEL-ORDER-INB-ACK','','','','','','','','','','ORDER_INB_ACK_SEG','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','ORDER_INB_ACK','CLIENT_ID','Currently, no English translation is available.','70','','','','','','LC-HUEL-ORDER-INB-ACK','CLIENT_ID','','','EA','C','LEF_GET_DEF_CLIENT_ID_IF_NULL','','','','','','','N','','R','','','128','','','','','Currently, no English translation is available.','','Currently, no English translation is available.','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','ORDER_INB_ACK','ORDNUM','Currently, no English translation is available.','80','','','','','','LC-HUEL-ORDER-INB-ACK','ORDNUM','','','EA','C','','','','','','','','N','','R','','','140','','','','','Currently, no English translation is available.','','Currently, no English translation is available.','35'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','ORDER_INB_ACK','WH_ID','warehouse id','60','','','','','','LC-HUEL-ORDER-INB-ACK','WH_ID','','','EA','C','','','','','','','','N','','N','','','140','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','ORDER_INB_ACK','CPONUM','Customer PO Number','90','','','','','','LC-HUEL-ORDER-INB-ACK','CPONUM','','','EA','C','','','','','','','','N','','N','','','120','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
+SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
+2018.1,'LC-HUEL-ORDER-INB-ACK','9.1','HOST_HTTP','','','ASYNC','','F','F','T','','','','','',''
+
+CSV__TAG__KLUDGE___COMMIT
