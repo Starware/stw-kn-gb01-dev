@@ -63,6 +63,12 @@ slImp -f $LESDIR/db/data/load/integrator/lc/HOST_HTTP_COMMUNICATIONS.slexp -v 2>
 echo "slImp -f LC-WO-CLOSE.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC-WO-CLOSE.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
+echo "slImp -f LC_WORKORDER_HEADER.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/LC_WORKORDER_HEADER.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
+
+echo "slImp -f LC_WORKORDER_DETAIL.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/LC_WORKORDER_DETAIL.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
+
 
 date >> ${POSTINSTALL_LOG}
 echo "Done" >> ${POSTINSTALL_LOG}
