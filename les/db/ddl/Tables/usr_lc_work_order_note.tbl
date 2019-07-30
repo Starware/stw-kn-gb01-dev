@@ -1,0 +1,42 @@
+#use $MOCADIR/include
+#use $DCSDIR/include
+#use $SALDIR/include
+#use $MCSDIR/include
+
+#include <dcsddl.h>
+#include <sqlDataTypes.h>
+#include <dcscolwid.h>
+#include <dcstbldef.h>
+
+mset command on
+
+[
+CREATE_TABLE(usr_lc_workorder_note_inb)
+(
+    wh_id             STRING_TY (WH_ID_LEN) not null,  /* PK */
+    wkonum            STRING_TY (20) not null,         /* PK */
+    wkolin            STRING_TY (5) not null,          /* PK */
+    notlin            STRING_TY (5) not null,          /* PK */
+    nottxt            STRING_TY (40),
+    ins_dt            date
+) 
+] catch (ERR_TABLE_ALREADY_EXISTS)
+RUN_DDL
+
+[
+  CREATE_PK_CONSTRAINT_BEGIN(usr_lc_workorder_note_inb, usr_lc_workorder_component_inb_pk)
+  (wh_id, wkonum, wkolin,notlin)
+  CREATE_PK_CONSTRAINT_USING_INDEX
+  CREATE_PK_CONSTRAINT_END
+] catch (ERR_PRIMARY_KEY_ALREADY_EXISTS)
+RUN_DDL
+
+create db documentation
+ where table = "usr_lc_workorder_note_inb"
+   and wh_id = "Warehouse Id"
+   and wkonum = "Works Order Number"
+   and wkolin = "Works Order Line Number"
+   and ins_dt = "Insert Date"
+   and notlin = "Line order note number"
+   and nottxt = "text of note"
+/

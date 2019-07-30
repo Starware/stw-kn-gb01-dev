@@ -1,0 +1,55 @@
+#use $MOCADIR/include
+#use $DCSDIR/include
+#use $SALDIR/include
+#use $MCSDIR/include
+
+#include <dcsddl.h>
+#include <sqlDataTypes.h>
+#include <dcscolwid.h>
+#include <dcstbldef.h>
+
+mset command on
+
+[
+CREATE_TABLE(usr_lc_workorder_header_inb)(
+    wh_id             STRING_TY (WH_ID_LEN) not null,  /* PK */
+    wkonum            STRING_TY (20) not null,  /* PK */
+    trntyp            STRING_TY (1),
+    duedte            STRING_TY (10),
+    ins_dt            DATE_TY,
+    prcpri            STRING_TY (1),
+    prtnum            STRING_TY (PRTNUM_LEN) not null,
+    prt_client_id     STRING_TY (32) not null,
+    invsts            STRING_TY (INVSTS_LEN),
+    prdqty            INTEGER_TY not null,
+    prcare            STRING_TY (30),
+    prcloc            STRING_TY (30),
+    hdr_sts           STRING_TY (10) not null
+) 
+] catch (ERR_TABLE_ALREADY_EXISTS)
+RUN_DDL
+
+[
+  CREATE_PK_CONSTRAINT_BEGIN(usr_lc_workorder_header_inb, usr_lc_workorder_header_inb_pk)
+  (wh_id, wkonum)
+  CREATE_PK_CONSTRAINT_USING_INDEX
+  CREATE_PK_CONSTRAINT_END
+] catch (ERR_PRIMARY_KEY_ALREADY_EXISTS)
+RUN_DDL
+
+create db documentation
+ where table = "usr_lc_workorder_header_inb"
+   and wh_id = "Warehouse Id"
+   and wkonum = "Works Order Number"
+   and duedte = "Due date for Works Order"
+   and ins_dt = "Insert Date"
+   and prcpri = "Priority for Works Order"
+   and prtnum = "Product code for Works Order"
+   and prt_client_id = "Part Client ID"
+   and invsts = "Work Order inventory status"
+   and prdqty = "Ordered quantity for Works Order"
+   and trntyp = "Transaction type"
+   and prcare = "Processing Area"
+   and prcloc = "Processing Location"
+   and hdr_sts = "Header Staging status"
+/
