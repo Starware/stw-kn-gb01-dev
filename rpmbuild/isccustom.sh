@@ -60,6 +60,10 @@ slImp -f $LESDIR/db/data/load/integrator/lc/LC-HUEL-RA-INB-ACK.slexp -v 2>&1 >> 
 echo "slImp -f HOST_HTTP_COMMUNICATIONS.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/HOST_HTTP_COMMUNICATIONS.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
+echo "slImp -f LC-WO-CLOSE.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/LC-WO-CLOSE.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
+
+
 date >> ${POSTINSTALL_LOG}
 echo "Done" >> ${POSTINSTALL_LOG}
 
