@@ -24,8 +24,8 @@ CREATE_TABLE(usr_lc_workorder_note_inb)
 RUN_DDL
 
 [
-  CREATE_PK_CONSTRAINT_BEGIN(usr_lc_workorder_note_inb, usr_lc_workorder_component_inb_pk)
-  (wh_id, wkonum, wkolin,notlin)
+  CREATE_PK_CONSTRAINT_BEGIN(usr_lc_workorder_note_inb, usr_lc_workorder_note_inb_pk)
+  (wh_id, wkonum, wkolin, notlin)
   CREATE_PK_CONSTRAINT_USING_INDEX
   CREATE_PK_CONSTRAINT_END
 ] catch (ERR_PRIMARY_KEY_ALREADY_EXISTS)
