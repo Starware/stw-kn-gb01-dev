@@ -4,12 +4,31 @@
 <type>Local Syntax</type>
 <local-syntax>
 <![CDATA[
-get label format where format = "Lc-PalletLabel" | produce label
+[select distinct wrkref
+   from pckwrk_view
+  where wrktyp = 'P'
+    and ship_id = @ship_id
+    and wh_id = @wh_id
+    and (lodlvl= 'L' 
+	or list_id is not null)] catch(-1403)
 |
-if (@outfile_name <> '' and @outfile_name is not null)
-    {
-       print label
-    }
+if (@? = 0)
+{
+    [select def_printer prtadr
+       from lblfmt
+      where lblfmt = 'Lc-PalletLabel'] catch(-1403)
+    |
+	if(@? =0)
+	{
+       get label format where format = "Lc-PalletLabel" | produce label
+       |
+       if (@outfile_name <> '' and @outfile_name is not null)
+       {
+         print label
+       }
+	}
+}
+
 ]]>
 </local-syntax>
 </command>
