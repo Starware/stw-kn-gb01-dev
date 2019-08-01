@@ -4,19 +4,38 @@
 <type>Local Syntax</type>
 <local-syntax>
 <![CDATA[
-[select distinct list_id,
-        dstloc,
-        ordnum,
-        to_char(adddte, 'DD-MM-YYYY') adddte,
-        adrmst.adrnam
-   from pckwrk_view
-   join cstmst
-     on cstmst.cstnum = pckwrk_view.stcust
-    and cstmst.client_id = pckwrk_view.client_id
-   join adrmst
-     on adrmst.adr_id = cstmst.adr_id
-  where pckwrk_view.wh_id = @wh_id
-	and pckwrk_view.wrkref = @wrkref] catch(-1403)
+if(@wrkref)
+{
+	[select distinct list_id,
+			dstloc,
+			ordnum,
+			to_char(adddte, 'DD-MM-YYYY') adddte,
+			adrmst.adrnam
+	   from pckwrk_view
+	   join cstmst
+		 on cstmst.cstnum = pckwrk_view.stcust
+		and cstmst.client_id = pckwrk_view.client_id
+	   join adrmst
+		 on adrmst.adr_id = cstmst.adr_id
+	  where pckwrk_view.wh_id = @wh_id
+		and pckwrk_view.wrkref = @wrkref] catch(-1403)
+}
+else if (@list_id)
+{
+    [select distinct list_id,
+			dstloc,
+			ordnum,
+			to_char(adddte, 'DD-MM-YYYY') adddte,
+			adrmst.adrnam
+	   from pckwrk_view
+	   join cstmst
+		 on cstmst.cstnum = pckwrk_view.stcust
+		and cstmst.client_id = pckwrk_view.client_id
+	   join adrmst
+		 on adrmst.adr_id = cstmst.adr_id
+	  where pckwrk_view.wh_id = @wh_id
+		and pckwrk_view.list_id = @list_id] catch(-1403)
+}
 |
 if (@? = 0)
 {
