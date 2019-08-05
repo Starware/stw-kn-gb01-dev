@@ -57,9 +57,6 @@ slImp -f $LESDIR/db/data/load/integrator/lc/LC-HUEL-ORDER-INB-ACK.slexp -v 2>&1 
 echo "slImp -f LC-HUEL-RA-INB-ACK.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC-HUEL-RA-INB-ACK.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
-echo "slImp -f HOST_HTTP_COMMUNICATIONS.slexp -v" >> ${POSTINSTALL_LOG}
-slImp -f $LESDIR/db/data/load/integrator/lc/HOST_HTTP_COMMUNICATIONS.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
-
 echo "slImp -f LC-WO-CLOSE.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC-WO-CLOSE.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
@@ -69,6 +66,12 @@ slImp -f $LESDIR/db/data/load/integrator/lc/LC_WORKORDER_HEADER.slexp -v 2>&1 >>
 echo "slImp -f LC_WORKORDER_DETAIL.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC_WORKORDER_DETAIL.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
+echo "slImp -f HOST_HTTP_COMMUNICATIONS.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/HOST_HTTP_COMMUNICATIONS.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
+
+# Override the ESB HTTP endpoint for outbound comms to ESB, if setup in policy
+echo "Override ESB HTTP endpoint" >> ${POSTINSTALL_LOG}
+printf "@ %s" $LESDIR/db/data/load/integrator/lc/HOST_HTTP_COMMUNICATIONS_ENDPOINT.msql | $MOCADIR/bin/msql -S 2>&1 >> ${POSTINSTALL_LOG} || false
 
 date >> ${POSTINSTALL_LOG}
 echo "Done" >> ${POSTINSTALL_LOG}

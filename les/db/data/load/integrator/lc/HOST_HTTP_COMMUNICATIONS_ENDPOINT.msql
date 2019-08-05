@@ -1,0 +1,41 @@
+/************************************************************************************************/
+/* The initial http endpoint will be a dummy value to ensure            					 	*/
+/* communication with ESB will not take place until ready. To override  					 	*/
+/* this value you can setup the following policy which will be used to 							*/
+/* override the dummy endpoint.	This is specific to HTTP_HOST and will affect both ASYNC and 	*/
+/* SYNC.																					 	*/
+/* Policy Code      	USR_HTTP                                                              	*/
+/* Policy Variable      ESB                                                               		*/
+/* Policy Value         ENDPOINT                                                            	*/
+/* Return String One    http://esb-test.int.kn:8888/ws/kn-EsbHttpListener-V1-VS/SwiftLog     	*/                                                         
+/*                                                                      						*/
+/************************************************************************************************/
+[select rtstr1,
+        wh_id
+   from poldat_view
+  where polcod = 'USR_HTTP'
+    and polvar = 'ESB'
+    and polval = 'ENDPOINT'
+    and wh_id = '----'] catch(-1403, 510)
+|
+if (@? = 0) {
+	change record
+		where table = 'sl_sys_comm_val'
+		and sys_id = 'HOST_HTTP'
+		and comm_mode_cd = 'ASYNC'
+		and comm_dir_cd = 'O'
+		and comm_mthd_id = 'SL_XML_TO_HTTP_2'
+		and comm_mthd_attr = 'URL'
+		and comm_mthd_attr_val = @rtstr1
+   |
+   change record
+		where table = 'sl_sys_comm_val'
+		and sys_id = 'HOST_HTTP'
+		and comm_mode_cd = 'SYNCD'
+		and comm_dir_cd = 'O'
+		and comm_mthd_id = 'SL_XML_TO_HTTP_2'
+		and comm_mthd_attr = 'URL'
+		and comm_mthd_attr_val = @rtstr1
+	}
+/
+quit
