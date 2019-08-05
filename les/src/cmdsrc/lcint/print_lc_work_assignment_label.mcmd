@@ -1,0 +1,36 @@
+<command>
+  <name>print lc work assignment label</name>
+  <description>Print LC Work Assignment Label</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+if(@list_id)
+    {	
+		[select distinct list_id
+		   from pckwrk_hdr
+		  where pckwrk_hdr.list_id= @list_id
+		    and pckwrk_hdr.schbat = @schbat
+			and wh_id = nvl(@wh_id,@@wh_id)] catch(-1403)
+		|
+		if (@? = 0)
+		{
+			[select def_printer prtadr
+			   from lblfmt
+			  where lblfmt = 'Lc-PalletLabel'] catch(-1403)
+			|
+			if(@? =0)
+			{
+			   get label format where format = "Lc-PalletLabel" catch(@?) 
+			   | 
+			   produce label catch(@?)
+			   |
+			   if (@outfile_name <> '' and @outfile_name is not null)
+			   {
+				 print label catch(@?)
+			   }
+			}
+		}
+	}
+]]>
+</local-syntax>
+</command>

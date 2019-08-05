@@ -1,0 +1,250 @@
+<command>
+  <name>create lc pcip package</name>
+  <description>Create LC PCIP package</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+    [select 1
+	   from inventory_view
+	  where lodnum = @invtid
+	    and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+	|	
+	if(@? = 0)
+    {	
+		[select decode(count(distinct inventory_view.prtnum), 1, max(inventory_view.prtnum), 'MIXED') prtnum,
+				decode(sum(prtmst_view.hazmat_flg), 0, 'NDG', NULL, 'NDG', 'DG') dg_dscp,
+				lpncount.row_num cur_pkg,
+				lpncount.tot_count tot_pkg_count,
+				inventory_view.lodnum
+		   from inventory_view
+		   join prtmst_view
+			 on prtmst_view.prtnum = inventory_view.prtnum
+			and prtmst_view.wh_id = inventory_view.wh_id
+			and prtmst_view.prt_client_id = inventory_view.prt_client_id
+		   join (select x.lodnum,
+						to_number(ROW_NUMBER() OVER(ORDER BY x.ordnum)) row_num,
+						count(x.lodnum) OVER(PARTITION BY x.ordnum) tot_count
+				   from (select distinct iv.lodnum,
+								sl.ordnum
+						   from inventory_view iv
+						   join shipment_line sl
+							 on sl.ship_line_id = iv.ship_line_id
+							and sl.wh_id = iv.wh_id
+						  where iv.ship_line_id is not null
+							and sl.ordnum = @ordnum) x) lpncount
+			 on lpncount.lodnum = inventory_view.lodnum
+		  where (inventory_view.lodnum = @invtid)
+			and inventory_view.wh_id = nvl(@wh_id, @@wh_id)
+		  group by inventory_view.lodnum,lpncount.row_num, lpncount.tot_count
+		  order by inventory_view.lodnum] catch(-1403)
+	}
+    else if (@? = -1403)
+    {
+	   [select decode(count(distinct inventory_view.prtnum), 1, max(inventory_view.prtnum), 'MIXED') prtnum,
+				decode(sum(prtmst_view.hazmat_flg), 0, 'NDG', NULL, 'NDG', 'DG') dg_dscp,
+				lpncount.row_num cur_pkg,
+				lpncount.tot_count tot_pkg_count,
+				inventory_view.subnum
+		   from inventory_view
+		   join prtmst_view
+			 on prtmst_view.prtnum = inventory_view.prtnum
+			and prtmst_view.wh_id = inventory_view.wh_id
+			and prtmst_view.prt_client_id = inventory_view.prt_client_id
+		   join (select x.subnum,
+						to_number(ROW_NUMBER() OVER(ORDER BY x.ordnum)) row_num,
+						count(x.subnum) OVER(PARTITION BY x.ordnum) tot_count
+				   from (select distinct iv.subnum,
+								sl.ordnum
+						   from inventory_view iv
+						   join shipment_line sl
+							 on sl.ship_line_id = iv.ship_line_id
+							and sl.wh_id = iv.wh_id
+						  where iv.ship_line_id is not null
+							and sl.ordnum = @ordnum) x) lpncount
+			 on lpncount.subnum = inventory_view.subnum
+		  where (inventory_view.subnum = @invtid)
+			and inventory_view.wh_id = nvl(@wh_id, @@wh_id)
+		  group by inventory_view.subnum,lpncount.row_num, lpncount.tot_count
+		  order by inventory_view.subnum] catch(-1403)
+	
+	}   
+	|
+	[select rtstr1 applicationid
+       from poldat_view
+      where polcod = 'LC_PCIP'
+        and polvar = 'CONFIG'
+        and polval = 'APPLICATION_ID'
+        and wh_id = @wh_id] catch(-1403)
+	|
+	[select rtstr1 culture
+       from poldat_view
+      where polcod = 'LC_PCIP'
+        and polvar = 'CONFIG'
+        and polval = 'CULTURE'
+        and wh_id = @wh_id] catch(-1403)
+	|
+    [select rtstr1 user_id
+       from poldat_view
+      where polcod = 'LC_PCIP'
+        and polvar = 'CONFIG'
+        and polval = 'USER'
+        and wh_id = @wh_id] catch(-1403)
+    |
+	[select rtstr1 password
+       from poldat_view
+      where polcod = 'LC_PCIP'
+        and polvar = 'CONFIG'
+        and polval = 'PASSWORD'
+        and wh_id = @wh_id] catch(-1403)
+    |
+	[select rtstr1 url
+       from poldat_view
+      where polcod = 'LC_PCIP'
+        and polvar = 'CONFIG'
+        and polval = 'URL'
+        and wh_id = @wh_id] catch(-1403)
+		
+	|
+	[select rtstr1 goods_content
+       from poldat_view
+      where polcod = 'LC_PCIP'
+        and polvar = 'CONFIG'
+        and polval = 'GOODS_CONTENT'
+        and wh_id = @wh_id] catch(-1403)
+    |	
+	[select rtstr1 output_queue
+       from poldat_view
+      where polcod = 'LC_PCIP'
+        and polvar = 'CONFIG'
+        and polval = 'OUTPUT_QUEUE'
+        and wh_id = @wh_id] catch(-1403)
+	|
+	create lc pcip consignment 
+	 where url =@url
+       and culture = @culture
+	   and user_id  = @user_id
+       and password = @password
+       and applicationid = @applicationid
+       and businesskey1 = @wh_id
+       and businesskey2 = @client_id
+       and businesskey3 = @ship_id
+       and businesskey4 = @invtid
+       and ordnum = @ordnum
+       and wh_id =  @wh_id
+       and depot =  @wh_id
+       and client_id = @client_id
+       and carcod = @carcod
+       and cur_pkg = @cur_pkg
+       and tot_pkg_count = @tot_pkg_count
+       and weight = @weight
+       and height = @height
+       and width = @width
+       and length = @length
+       and volume = @volume
+       and stname = @stname
+       and stadd1 = @stadd1
+       and stadd2 = nvl(@stadd2,'.')
+       and stadd3 = nvl(@stadd3,'.')
+       and stcity = nvl(@stcity,'.')
+       and stposc = @stposc
+       and stcnty = @stcnty
+       and stphon = nvl(@stphon,'.')
+       and invtid = @invtid
+       and prtnum = @prtnum
+       and dg_dsc = @dg_dscp
+	   and goods_content =@goods_content
+	   and output_queue = @output_queue
+	|
+	if(@? = 0)
+	{
+	   if(@status_code = 'Success')
+	   {
+	     publish data 
+		   where traknm = @parcel_identcode
+		     and manifest_id = @shipment_identcode
+			 and kn_carcod = @kn_carrierid
+	   }
+	   else 
+	   {
+		  if (@status_code = 'Error')
+		  {
+			 publish data 
+			   where err_msg =nvl(@message,'PCIP error (e.g. no address / post code etc)')
+			  		    
+		  }
+		  else if (@status_code = 'Fail')
+		  {
+			 publish data 
+			   where err_msg = nvl(@message,'Could not communicate with PCIP')
+		  }
+		  |
+		  [select locmst.lbl_prtadr
+             from locmst
+             join prsmst
+               on prsmst.prtadr = locmst.lbl_prtadr
+              and prsmst.wh_id = locmst.wh_id
+            where locmst.stoloc = @dstloc
+              and locmst.wh_id = @wh_id
+              and prsmst.prtque is not null] catch(-1403)
+		  |
+		  generate label
+			 where locale_id = nvl(@locale_id, @@locale_id)
+			   and label_name = 'Lc-errorlbl' catch(@?)
+		  |
+		  print lbl label operations label 
+		   where filename = @outfile_name 
+		     and prtadr = @lbl_prtadr catch(@?)
+		  |
+		  [select rtstr1
+		    from poldat_view
+		   where polcod = 'LC_PCIP'
+			 and polvar = 'ERROR_EMAIL_ALERTS'
+			 and polval = 'EMAIL_ID'
+			 and wh_id = @wh_id] >> res
+		  |
+		  if (rowcount(@res) > 0)
+	      {
+		     convert column results to string
+			  where colnam = 'rtstr1'
+			    and resultset = @res
+			    and separator = ';'
+			 |
+			 publish data
+			 where email_to = @result_string
+			 |
+			 [select rtstr2 mail_from
+			    from poldat_view
+			   where polcod = 'LC_PCIP'
+				 and polvar = 'ERROR_EMAIL_ALERTS'
+				 and polval = 'EMAIL_ID'
+				 and wh_id = @wh_id]
+			 |
+			 send email
+			  where mail_from = @mail_from
+			    and send_to = @email_to
+			    and subject = 'PCIP Error Alert - ' || @invtid
+			    and msg = @err_msg || '-For LPN ' || @invtid || '-Automatic Alert '
+			    and hostname = 'localhost'
+		  } 
+		  |	  
+		  set return status
+		  where status = 10609
+		    and message = @err_msg
+            and parcel_errmsg = @err_msg
+            and parcel_err = 10609
+				
+       }	   
+	  
+	}
+]]>
+</local-syntax>
+<documentation>
+<remarks>
+<![CDATA[
+    This is a customized command used to make a call to PCIP to create a package
+	to create the package
+]]>
+</remarks>
+
+</documentation>
+</command>

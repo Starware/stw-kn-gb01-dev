@@ -1,0 +1,113 @@
+<command>
+  <name>create lc pm package</name>
+  <description>Create LC PM Package</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+    get pm shipper identifier
+    |
+    get pm custom where action='CREATE PACKAGE'
+    |
+     [select ctry_name,
+             cs_ctry_name,
+             iso_2_ctry_name
+        from ctry_mst
+       where ctry_name = @stcnty] 
+    |
+    if (@dstnam = 'FASCOR')
+    {
+        get pm fascor configuration
+        |
+        publish data 
+          where stcnty = @iso_2_ctry_name
+        |
+        /*
+         * Check if the user has enabled the trace from GUI,
+         * if it has, then we send the trace_flag as 1 even
+         * the policy is not set as 1.
+         * And if the policy is enabled, then we always send
+         * the trace flag as 1.
+         */
+        if(@manfst_pckg_tracing = 0)
+        {
+            get current trace levels
+            |
+            if(@levels != 0)
+            {
+                publish data where trace_flg = 1
+            }
+            else
+            {
+                publish data where trace_flg = 0
+            }
+        }
+        else
+        {
+            publish data where trace_flg = 1
+        }
+        |
+        create lc pcip package
+          where mfsmsn = @mfsmsn
+            and usrfd1 = @usrfd1
+            and usrfd2 = @usrfd2
+            and usrfd3 = @usrfd3
+			and ordnum = @ordnum 
+			and wh_id = @wh_id
+			and weight = @weight/(1000.0)
+			and height = @height
+			and length = @length
+			and width = @width
+			and volume = @length*@height*@width
+			and client_id = @client_id
+			and carcod = @carcod
+			and stname = @stname
+			and stadd1 = @stadd1
+			and stadd2 = @stadd2
+			and stadd3 = @stadd3
+			and stcity = @stcity
+			and stposc = @stposc
+			and stcnty = @stcnty
+			and stphon = @stphon
+			and invtid = @invtid
+			and @*
+    }
+    else if (@dstnam = 'FEDEX')
+    {
+        /* 
+         * This will ignore the reference call to
+         * command "create fedex package"
+         * if the command is not found. This is
+         * done so departments that do not utilize
+         * this command will not receive the warning
+         * message that is generated during mbuild.
+         */
+        @SuppressWarnings("noref")
+        {
+            publish data 
+                where stcnty = @iso_2_ctry_name
+            |
+            create fedex package
+        }
+    }
+    else
+    {
+        get pm tandata configuration 
+        |  
+        publish data
+          where stcnty = @cs_ctry_name
+        |
+        remote (@pm_remote_host) create parcel package 
+        where service_code = @dstcar
+          and mfsmsn       = @mfsmsn
+    }
+]]>
+</local-syntax>
+<documentation>
+<remarks>
+<![CDATA[
+    This is an overrriden version of the SAL command create pm package, this  calls create fascor package with the required arguments
+]]>
+</remarks>
+
+</documentation>
+</command>

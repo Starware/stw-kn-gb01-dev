@@ -1,0 +1,935 @@
+<command>
+  <name>create pm package</name>
+  <description>Create PM Package</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+    [select 1
+	   from poldat_view
+	  where polcod = 'LC_PCIP'
+	    and polvar = 'PCIP_SYSTEM'
+	    and polval = 'ENABLED'
+		and wh_id = @wh_id
+	    and rtnum1 = 1] catch(-1403)
+	|
+	if(@? = 0)
+	{
+/* Verify that we were given a warehouse ID */
+    get warehouse id
+        where wh_id = @wh_id
+    |
+    /* Enforce some limitations */
+    publish data
+        where mnlflg = nvl(@mnlflg, nvl(@manual, 0))
+          and hldflg = nvl(@hldflg, nvl(@hold_flag, 0))
+          and remanifest = nvl(@remanifest, 0)
+    |
+    /* Before performing package lookup, we need to backup the provided */
+    /* carrier code and service level as the looked up information may */
+    /* not match what was passed in here, in which case we need to */
+    /* Get those values synchronized */
+    publish data
+        where carcod_i = @carcod
+          and srvlvl_i = @srvlvl
+    |
+    if ((@wrkref != '') and (!@wrkref_dtl))
+    {
+        [select wrkref_dtl
+           from pckwrk_dtl
+          where wrkref = @wrkref]
+    }
+    |
+    /* If it's not a manual package, we need to look up the package info */
+    if (@mnlflg = 0)
+    {
+        /* Lookup the package information */
+        get pm lookup information
+            where wh_id = @wh_id
+              and invtid = @invtid
+              and wrkref = @wrkref
+              and pakdsc = @pakdsc
+              and wrkref_dtl = @wrkref_dtl
+              and hldflg = @hldflg >> results
+        |
+        /* Check to see if the provided carrier code and service level */
+        /* agree with what we looked up */
+        if ((@carcod_i != '') and (@srvlvl_i != ''))
+        {
+            /* Make our lookup info available */
+            publish data combination
+                where res = @results
+            |
+            /* Do they match with what we found? */
+            if ((@carcod_i != @carcod) or (@srvlvl_i != @srvlvl))
+            {
+                /* Verify that the shipment is empty */
+                [select 'X'
+                   from manfst
+                  where ship_id = @ship_id
+                    and mansts != 'V'] catch(-1403)
+                |
+                if (@? = 0)
+                {
+                    /* Shipment is already in use - cannot change the */
+                    /* carrier or service level now */
+                    set return status
+                        where status = 10081
+                }
+                |
+                /* Update the shipment carrier/service level to use */
+                /* the new input values.  This command handles removing */
+                /* the shipment from any scheduled stops. */
+                assign new carrier
+                    where ship_id = @ship_id
+                      and carcod = @carcod_i
+                      and srvlvl = @srvlvl_i
+                      and export_typ = @export_typ
+            }
+        }
+        |
+        /* Lookup the package information */
+        get pm lookup information
+            where wh_id = @wh_id
+              and invtid = @invtid
+              and wrkref = @wrkref
+              and pakdsc = @pakdsc
+              and wrkref_dtl = @wrkref_dtl
+              and hldflg = @hldflg >> results
+        |
+        /* Make our lookup info available */
+        publish data combination
+            where res = @results
+    }
+    else if (@invtid = '')
+    {
+        /* Use a manual inventory identifier */
+        publish data
+            where invtid = 'MANUAL-PACKAGE'
+    }
+    |
+    /* Some variables cause issues with other commands if */
+    /* they're on the stack.  This wasn't a problem when the */
+    /* commands were developed around the 'C' version of */
+    /* this command, but it's now an issue in Local Syntax */
+    if (@dtlnum = '')
+    {
+        hide stack variable
+            where name = 'dtlnum'
+    }
+    |
+    if (@wrkref = '')
+    {
+        hide stack variable
+            where name = 'wrkref'
+    }
+    |
+    /* Stop now if the package is already manifested */
+    if (@mansts != '')
+    {
+        /* It's already been manifested */
+        set return status
+            where status = 10061
+    }
+    |
+    /* If no ship to country is defined, we should use the policy */
+    /* defined default value */
+    if (@stcnty = '')
+    {
+        [select rtstr1
+           from poldat_view
+          where polcod = 'PARCEL-MANIFEST'
+            and polvar = 'DEFAULT'
+            and polval = 'COUNTRY-CODE'
+            and wh_id = @wh_id
+            and rownum < 2
+          order by srtseq]
+        |
+        publish data
+            where stcnty = @rtstr1
+    }
+    |
+    /* Translate the DCS carrier code and service level into a Parcel */
+    /* Manifest service code.  This command gets dstnam, dstcar, and */
+    /* dstlvl out on the stack as well. */
+    list pm destination carriers
+        where carcod = @carcod
+          and srvlvl = @srvlvl
+          and dstnam = 'FASCOR' catch(-1403)
+    |
+    if (@? = -1403)
+    {
+        /* DCS carrier/service level doesn't translate into */
+        /* a valid Parcel Manifest service code */
+        set return status
+            where status = 10320
+    }
+    |
+    /* Check to see if there's a Parcel Manifest weight */
+    /* multiplier that we should use. */
+    {
+        [select rtstr1,
+                decode(nvl(rtflt1, 0.0), 0.0, 1.0, rtflt1) wgtmul
+           from poldat_view
+          where polcod = 'PARCEL-MANIFEST'
+            and polvar = 'CONFIGURATION'
+            and polval = 'PACKAGE-WEIGHT-MULTIPLIER'
+            and wh_id = @wh_id
+            and rownum < 2
+          order by srtseq]
+        |
+        publish data
+            where weight = @weight *
+                decode(@rtstr1, '/', (1.0 / @wgtmul),
+                    'DIVIDEBY', (1.0 / @wgtmul),
+                    @wgtmul)
+    }
+    |
+    /* If no ship date is provided, use today's date */
+    if (@shpdte = '')
+    {
+        /* If the shipment already contains SHIPPED packages, use the package shpdte */
+        [select shpdte from manfst
+                where ship_id = @ship_id
+                and rownum = 1] catch(-1403)
+        |
+        if (@? = 0)
+        {
+          publish data
+            where shpdte = @shpdte
+        }
+        else
+        {
+        [select to_char(sysdate, 'YYYYMMDDHH24MISS') shpdte
+           from dual]
+        }
+    }
+    |
+    /* Convert the shpdte to a value relative to the facility
+     * the package is shipping from.  This command puts the
+     * sf_shpdte variable on the stack.  Parcel requires the shpdte
+     * to be in this format for proper rating.  However, WM will
+     * continue to store the shpdte according to the WM server. */
+    get pm ship from ship date
+        where shpdte = @shpdte
+          and wh_id = @wh_id
+    |
+    /* Check to see if this carrier has minimum dimensions for */
+    /* packages defined that we must enforce on the provided */
+    /* package dimensions. */
+    {
+        [select rtnum1 minlen,
+                rtnum2 minwid,
+                rtflt1 minhgt
+           from poldat_view
+          where polcod = 'PARCEL-MANIFEST'
+            and polvar = 'MINIMUM-DIMENSIONS'
+            and wh_id = @wh_id
+            and polval = @carcod] catch(-1403)
+        |
+        if (@? = 0)
+        {
+            publish data
+                where length = max(float(@minlen), @length)
+                  and width = max(float(@minwid), @width)
+                  and height = max(float(@minhgt), @height)
+        }
+    }
+    |
+    /* Fetching the custnum for the order and passing it below */
+    [select cstnum
+       from ord,
+            cstmst
+      where ord.stcust = cstmst.cstnum
+        and ord.client_id = cstmst.client_id
+        and wh_id = @wh_id
+        and ordnum = @ordnum] catch(-1403) 
+    |
+    if(!@usrfld1 and !@usrfld2 and !@usrfld3 and !@usrfld4) 
+    {  /* get the configurations for the user fields specific to the customer */
+        [select nvl(pcl_usrfld.usr_col1, 'null') usr_col1,
+                nvl(pcl_usrfld.usr_col2, 'null') usr_col2,
+                nvl(pcl_usrfld.usr_col3, 'null') usr_col3,
+                nvl(pcl_usrfld.usr_col4, 'null') usr_col4
+           from pcl_usrfld
+          where pcl_usrfld.client_id = @client_id
+            and pcl_usrfld.cstnum = @cstnum] catch(-1403) >>res
+        |
+        if(@? != 0)
+        {
+                /*get default record if no customer specific fields are defined */
+                [select nvl(pcl_usrfld.usr_col1, 'null') usr_col1,
+                        nvl(pcl_usrfld.usr_col2, 'null') usr_col2,
+                        nvl(pcl_usrfld.usr_col3, 'null') usr_col3,
+                        nvl(pcl_usrfld.usr_col4, 'null') usr_col4
+                   from pcl_usrfld
+                  where upper(pcl_usrfld.cstnum) = 'DEFAULT'
+                    and pcl_usrfld.client_id = @client_id] catch(-1403) >>res
+        }
+        |
+        publish data combination where res = @res
+        |
+        if(rowcount(@res))
+        {
+           if (@wrkref = '')
+           {
+                [select pckwrk_view.wrkref wrkref
+                   from pckwrk_view,
+                        inventory_view
+                  where pckwrk_view.wrkref = inventory_view.wrkref
+                    and pckwrk_view.ship_line_id = inventory_view.ship_line_id
+                    and pckwrk_view.wh_id = inventory_view.wh_id
+                    and @+pckwrk_view.wh_id
+                    and (inventory_view.dtlnum = @invtid 
+                     or inventory_view.subnum = @invtid
+                     or inventory_view.lodnum = @invtid)
+                    and rownum < 2] catch(-1403)
+           }
+           |
+           [select @usr_col1:raw usrfld1,
+                   @usr_col2:raw usrfld2,
+                   @usr_col3:raw usrfld3,
+                   @usr_col4:raw usrfld4
+              from ord,
+                   cstmst,
+                   pckwrk_view
+             where ord.ordnum = pckwrk_view.ordnum
+               and ord.client_id = pckwrk_view.client_id
+               and ord.wh_id = pckwrk_view.wh_id
+               and ord.stcust = cstmst.cstnum
+               and ord.client_id = cstmst.client_id
+               and @+pckwrk_view.wrkref
+               and rownum < 2] catch(-1403) 
+        }
+    }
+        |
+        publish data where usrfld1 = @usrfld1 
+                       and usrfld2 = @usrfld2 
+                       and usrfld3 = @usrfld3 
+                       and usrfld4 = @usrfld4
+        |
+     
+    {
+        /* Retrieving the parameter data retrieves payment terms as */
+        /* a payment code.  We may have already been provided with a */
+        /* payment term to use, so store that value. */
+        publish data
+            where paytrm_i = @paytrm
+        |
+        /* Retrieve the remaining parameters we'll need */
+        /* for the Parcel Manifest */
+        get pm parameter data
+        |
+        if (@crtnid = '')
+        {
+            /* Generate the next carton ID number in sequence */
+            generate next number
+                where numcod = 'crtnid'
+            |
+            publish data
+                where crtnid = @nxtnum
+        }
+        |
+        /* Do we have payment terms we should be using instead */
+        /* of those that were just looked up? */
+        if (@paytrm_i is not null)
+        {
+            publish data
+                where paytrm = @paytrm_i
+        }
+        else if ((@paytrm != '') and (@paytrm is not null))
+        {
+            /* Convert the payment terms value from a paycod */
+            /* to a payval for Parcel.  For example, paytrm */
+            /* right now could be 'PRD'.  Parcel wants 6 instead. */
+            list pm carrier payment terms
+                where carcod = @carcod
+                  and srvlvl = @srvlvl
+                  and paycod = @paytrm
+            |
+            publish data
+                where paytrm = @payval
+        }
+        |
+        /* If we have a carsrv parameter list, we need to get the */
+        /* service options that it contains on to the stack */
+        if (@carsrv_param_list#onstack)
+        {
+            /* Make sure we have service options to publish */
+            if (@carsrv_param_list != '')
+            {
+                [[
+                    /* The GUI basically gave us the where clause we need
+                     * to publish out the service options.  However, we
+                     * can't easily get them on the stack in Local Syntax.
+                     * Groovy can easily do it for us.
+                     */
+                    moca.executeInline("publish data where " + carsrv_param_list);
+                ]]
+            }
+        }
+        else
+        {
+            /* Lookup the service options for the order line */
+            get pm order line service options
+                where ordnum = @ordnum
+                  and ordlin = @ordlin
+                  and ordsln = @ordsln
+                  and client_id = @client_id
+                  and wh_id = @wh_id
+			|
+			/* Adds Service conditions of the inventory identifier */
+			get pm service conditions where @+invtid and @+wh_id catch(-1403)
+        }
+        |
+        /* If the package is manual and COD, we need to convert from */
+        /* paycod to payval before sending to the Parcel system */
+        if ((@mnlflg != 0) and (@cod_payment_type))
+        {
+            [select payval cod_payment_type,
+                    '1' cod_flg
+               from paytrm
+              where paycod = @cod_payment_type]
+        }
+        |
+        /* List the package value */
+        list pm package value
+        |
+        /* Count all bundled inventory of this shipment*/
+        [select count(*) tot_bundled_inv
+           from shipment_line sl,
+                invdtl d,
+                invsub s,
+                invlod l
+          where sl.ship_line_id = d.ship_line_id
+            and s.subnum = d.subnum
+            and s.lodnum = l.lodnum
+            and sl.ship_id = @ship_id
+            and l.bundled_flg = 1]
+        |
+        /* Count all bundled load of this shipment*/
+        [select count(*) tot_bundled_lod
+           from (select distinct (l.lodnum)
+                   from shipment_line sl,
+                        invdtl d,
+                        invsub s,
+                        invlod l
+                  where sl.ship_line_id = d.ship_line_id
+                    and s.subnum = d.subnum
+                    and s.lodnum = l.lodnum
+                    and sl.ship_id = @ship_id
+                    and l.bundled_flg = 1
+                  group by l.lodnum) ship_lod]
+        |
+        /* Adjust the total case count. */
+        publish data
+          where tot_cas_cnt = @tot_cas_cnt - @tot_bundled_inv + @tot_bundled_lod
+        |
+        /* Check to see if this is an international shipment */
+        check pm international shipment
+            where wh_id = @wh_id
+              and ship_id = @ship_id
+              and stcnty = @stcnty
+        |
+        /*
+         * Skip the internation shipment for manual manifest,
+         * because manual manifest doesn't has any shipment,
+         * and there is no need to register it in parcel.
+         */
+        if (@itlflg = 1 and @mnlflg != 1 )
+        {
+            [[
+                import com.redprairie.moca.*
+                import com.redprairie.moca.util.*
+
+                /* Get a new Editable Result Set that we will
+                 * return from this script 
+                 */
+               EditableResults resExportInf= moca.newResults()
+               MocaResults resDutyInf = moca.newResults()
+               MocaResults resPkgInfo = moca.newResults()
+
+               MocaContext ctx = MocaUtils.currentContext()
+
+               /* Get the exporter information */
+               resExportInf = moca.executeInline(
+                   " get pm exporter information "
+                   +"  where wh_id = @wh_id ");
+
+               resDutyInf = moca.executeInline(
+                   " get pm duty information"
+                   +"  where invtid = @invtid "
+                   +"    and wrkref_dtl = @wrkref_dtl");
+
+               resPkgInfo = moca.executeInline(
+                   " list pm package contents "
+                   +"  where invtid = @invtid "
+                   +"    and wrkref = @wrkref "
+                   +"    and wrkref_dtl = @wrkref_dtl ");
+
+               resExportInf.next();
+               resDutyInf.next();
+               for (int i = 0; i < resDutyInf.getColumnCount(); i++) {
+                   colnam = resDutyInf.getColumnName(i)
+                   resExportInf.addColumn( colnam,resDutyInf.getColumnType(i))
+                   colval = resDutyInf.getValue(colnam);
+                   resExportInf.setValue(colnam,colval)
+               }
+
+               resPkgInfo.next();
+               for (int i = 0; i < resPkgInfo.getColumnCount(); i++) {
+                    colnam = resPkgInfo.getColumnName(i)
+                   resExportInf.addColumn( colnam,resPkgInfo.getColumnType(i))
+                   colval = resPkgInfo.getValue(colnam);
+                   resExportInf.setValue(colnam,colval)
+               }
+               return resExportInf;
+            ]]
+        }
+        |
+        /* Retrieve the system measurement units so that Parcel */
+        /* can properly convert the dimensions and weight we provide. */
+        get pm measurement units
+        |
+        /* If MPS is disabled, we must alter the case counts. */
+        if (@single_pkg_shp_flg = 1)
+        {
+            /* When not using MPS, tell Parcel that all packages are
+             * 1 of 1. */
+            publish data
+                where cur_cas = 1
+                  and tot_cas_cnt = 1
+        }
+        |
+        /*Ensure we are sending the correct currency code */
+        [select crncy_code ol_crncy_code
+           from ord_line
+          where ordnum = @ordnum
+            and ordlin = @ordlin
+            and ordsln = @ordsln
+            and wh_id = nvl(@wh_id, @@wh_id)]catch(-1403)
+        |
+        /* Now, we can actually create the package using the SAL */
+        /* command.  Note that the names for the user fields are */
+        /* changed.  Parcel expects them to be named differently */
+        /* than we've named them.  Also note that we are passing
+        /* in the ship from ship date (sf_shpdte). */
+        create lc pm package
+            where ship_id = decode(@single_pkg_shp_flg, 1, null, @ship_id)
+              and shpdte = @sf_shpdte
+              and usrfd1 = @usrfld1
+              and usrfd2 = @usrfld2
+              and usrfd3 = @usrfld3
+              and usrfd4 = @usrfld4 
+              and crncy_code = nvl(@ol_crncy_code, @crncy_code)
+			  and @* catch(@?)
+        |
+        /* Publish out the Parcel results if the command succeeded. */
+        if (@? = 0)
+        {  
+            /* Update the Pick Work table to clear errors if
+             * the work reference is not null, and the product
+             * is being held
+             */
+            if ((@hldflg = 1) and (@wrkref != ''))
+            {
+                [update pckwrk_dtl
+                    set pm_err_cod = null,
+                        pm_err_desc = null
+                  where wrkref = @wrkref]
+            }
+            |
+            /* Publish out the results of our Parcel package creation. */
+            publish data
+                where delivery_day = @delivery_day
+                  and fdx_dlv = @fdx_dlv
+                  and astra_bar_code = @astra_bar_code
+                  and address_bar_code = @address_bar_code
+                  and dim_weight_info_flg = @dim_weight_info_flg
+                  and invtid = @invtid
+                  and traknm = @traknm
+                  and artecd = @artecd
+                  and hubcod = @hubcod
+                  and dstaircod = @dstaircod
+                  and frtrte = @frtrte
+                  and base_frtrte = @base_frtrte
+                  and mfsmsn = @mfsmsn
+                  and mancls = @manifest_id
+                  and crtnid = @crtnid
+        }
+        else
+        {
+            /* Save the original error information. */
+            publish data
+                where parcel_err = @?
+                  and parcel_errmsg = @!
+            |
+            /* Raise an EMS event for the manifest failure.  */
+            /* We catch all errors here because we don't */
+            /* care about an EMS error - we care about the */
+            /* Parcel failure. */
+            raise ems event for manifest failure
+                where invtid = @invtid
+                  and ship_id = @ship_id
+                  and errcod = @parcel_err
+                  and errtxt = @parcel_errmsg
+                  and carcod = @carcod catch(@?)
+            |
+            /* We want to store the Pick Work table so
+             * users can go back and view the errors and
+             * fix as required.  This is only to happen when
+             * work reference is not null, and the hold flag
+             * is set.
+             */
+            if ((@hldflg = 1) and (@wrkref != ''))
+            {
+                [update pckwrk_dtl
+                    set pm_err_cod = @parcel_err,
+                        pm_err_desc = @parcel_errmsg
+                  where wrkref = @wrkref]
+            }
+            |
+            /* Write out the original error code to the trace
+             * file for logging purposes.
+             */
+            write trace message
+                where message = 'Original Parcel error was: ' || @parcel_err
+            |
+            /* When throwing an error here, we use a special
+             * error code that does NOT have mls text associated
+             * with it.  This is intentionally done to suppress
+             * message translation for the remote exception,
+             * which will not work properly due to limitations
+             * in MOCA.  This forces "set return status" to use
+             * the default message that we received from Parcel
+             * and which is already formatted.
+             */
+            publish data where message = 'Original Parcel returned ' || @parcel_err || ' ' || @parcel_errmsg 
+            |
+            set return status
+                where status = 10609
+                  and message = @message
+                  and errnum = 10609
+                  and errcod = @parcel_err 
+                  and errmsg = @parcel_errmsg
+        }
+    }
+    |
+    /* Is this a remanifest or a new entry? */
+    if ((@remanifest is not null) and (@remanifest != 0))
+    {
+        /* Update the existing manifest entry */
+        change manifest package
+            where crtnid = @crtnid
+              and wh_id  = @wh_id
+              and mfsmsn = @mfsmsn
+              and traknm = @traknm
+              and wrkref = @wrkref
+              and lodnum = @lodnum
+              and subnum = @subnum
+              and dtlnum = @dtlnum
+              and carcod = @carcod
+              and srvlvl = @srvlvl
+              and frtrte = @frtrte
+              and mansts = decode(@hldflg, 0, 'R', 'H')
+              and mstdte = sysdate()
+              and weight = @weight
+              and prtnum = @prtnum
+              and prt_client_id = @prt_client_id
+              and ordnum = @ordnum
+              and shpdte = to_date(@shpdte, 'YYYYMMDD')
+              and ship_id = @ship_id
+              and client_id = @client_id
+              and artecd = @artecd
+              and hubcod = @hubcod
+              and delivery_day = @delivery_day
+              and fdx_dlv = @fdx_dlv
+              and astra_bar_code = @astra_bar_code
+              and address_bar_code = @address_bar_code
+              and dim_weight_info_flg = 0
+              and base_frtrte = @base_frtrte
+              and dstnam = 'FASCOR'
+              and usrfld1 = @usrfld1
+              and usrfld2 = @usrfld2
+              and usrfld3 = @usrfld3
+              and usrfld4 = @usrfld4
+              and mancls  = @mancls
+              and reslv_flg = 0
+    }
+    else
+    {
+        /* When a package is voided, it may not be deleted from */
+        /* the manfst table.  Instead, the mansts for it will be */
+        /* set to 'V' (void).  If this is the case for this package, */
+        /* we should remove the voided package to prevent problems */
+        /* if the system attempts to remanifest the voided one. */
+        {
+            [select crtnid
+               from manfst
+              where subnum = @subnum
+                and dtlnum = @dtlnum
+                and mansts = 'V'] catch(-1403)
+            |
+            if (@? = 0)
+            {
+                [delete from manfst
+                  where crtnid = @crtnid] catch(-1403)
+                ;
+                [delete from manfst_dtl
+                  where crtnid = @crtnid] catch(-1403)
+            }
+        }
+        |
+        /* Create a new package entry in the Manifest table */
+        create manifest package
+            where crtnid = @crtnid
+              and wh_id  = @wh_id
+              and mfsmsn = @mfsmsn
+              and traknm = @traknm
+              and wrkref = @wrkref
+              and wrkref_dtl = @wrkref_dtl
+              and lodnum = @lodnum
+              and subnum = @subnum
+              and dtlnum = @dtlnum
+              and carcod = @carcod
+              and srvlvl = @srvlvl
+              and frtrte = @frtrte
+              and mansts = decode(@hldflg, 0, 'R', 'H')
+              and mstdte = sysdate()
+              and weight = @weight
+              and prtnum = @prtnum
+              and prt_client_id = @prt_client_id
+              and ordnum = @ordnum
+              and shpdte = @shpdte
+              and ship_id = @ship_id
+              and client_id = @client_id
+              and artecd = @artecd
+              and hubcod = @hubcod
+              and delivery_day = @delivery_day
+              and fdx_dlv = @fdx_dlv
+              and astra_bar_code = @astra_bar_code
+              and address_bar_code = @address_bar_code
+              and dim_weight_info_flg = 0
+              and base_frtrte = @base_frtrte
+              and dstnam = 'FASCOR'
+              and usrfld1 = @usrfld1
+              and usrfld2 = @usrfld2
+              and usrfld3 = @usrfld3
+              and usrfld4 = @usrfld4
+              and mancls  = @mancls
+              and mnlflg  = @mnlflg
+        |
+        [[
+            String sDetailCmd = "";
+        
+            /* Setup the map that stores the information needed to
+             * create the manifest details for this package. To add
+             * a new detail to this code, add the variable name and
+             * type to the map.
+             */
+            def mapDetails = [ "pakdsc" : "S",
+                               "consign_cd" : "S",
+                               "paytrm" : "S",
+                               "srv_type" : "S",
+                               "pkgcod" : "S",
+                               "customs_clear_flg" : "I",
+                               "cod_ind_type" : "I" ];
+
+            /* Create a manifest detail entry for each of these fields */
+            mapDetails.each
+            {
+                /* Only add a detail if we have a value according to these rules:
+                 *  - The value must be present on the stack
+                 *  - String values must not be empty
+                 *  - Integer values must not be 0
+                 */
+                if ((moca.getVariable(it.key) != null) && 
+                    (((it.value == "S") && (moca.getVariable(it.key).size())) ||
+                    ((it.value == "I") && (moca.getVariable(it.key) != 0))))
+                {
+                    sDetailCmd += ("""
+                                      create pm manifest detail
+                                          where crtnid = @crtnid
+                                            and varnam = '""" + it.key + """'
+                                            and vartyp = '""" + it.value + """'
+                                            and varcod = @""" + it.key + """
+                                      ;""");
+                }
+            }
+
+            /* Now, we need to parse the carsrv_param_list to
+             * create manifest detail entries for each of the
+             * values it contains.
+             */
+            if ((carsrv_param_list != null) && (carsrv_param_list.size()))
+            {
+                String[] asCarSrvParams = carsrv_param_list.split(" and ");
+
+                /* Create a manifest detail for each of these values */
+                asCarSrvParams.each
+                {
+                    String[] asParam = it.split(" = ");
+
+                    /* Make sure the format is as expected. */
+                    if (asParam.size() == 2)
+                    {
+                        /* Trim unnecessary white space from the values */
+                        asParam[0] = asParam[0].trim();
+                        asParam[1] = asParam[1].trim();
+
+                        /* Remove apostrophes from the values */
+                        asParam[0] = asParam[0].replace("'", "");
+                        asParam[1] = asParam[1].replace("'", "");
+
+                        /* Construct the create detail command */
+                        sDetailCmd += ("""
+                                          create pm manifest detail
+                                              where crtnid = @crtnid
+                                                and varnam = '""" + asParam[0] + """'
+                                                and vartyp = 'L'
+                                                and varcod = '""" + asParam[1] + """'
+                                          ;""");
+                    }
+                }
+            }
+
+            /* Now create all the manifest details in one execution */
+            moca.executeInline(sDetailCmd);
+        ]]
+    }
+    /* Update the values of the weight height length and width
+     * and store it in invlod table.The same will be reflected
+     * on the screen for all the dimensions.
+     */
+    |
+    if (@lodnum)
+    {
+        [update invlod
+            set lodwgt = decode(@weight, 0, @calcwgt, nvl(@weight, @calcwgt)),
+                lodhgt = decode(@height, 0, @calchgt, nvl(@height, @calchgt)),
+                lodwdt = decode(@width, 0, @calcwdt, nvl(@width, @calcwdt)),
+                lodlen = decode(@length, 0, @calclen, nvl(@length, @calclen))
+          where lodnum = @lodnum]
+    }
+    |
+    /* Publish out the final values for the command. */
+    publish data
+        where delivery_day = @delivery_day
+          and fdx_dlv = @fdx_dlv
+          and astra_bar_code = @astra_bar_code
+          and address_bar_code = @address_bar_code
+          and dim_weight_info_flg = @dim_weight_info_flg
+          and invtid = @invtid
+          and traknm = @traknm
+          and artecd = @artecd
+          and hubcod = @hubcod
+          and dstaircod = @dstaircod
+          and frtrte = @frtrte
+          and base_frtrte = @base_frtrte
+          and mfsmsn = @mfsmsn
+          and mancls = @mancls
+          and crtnid = @crtnid
+	}
+	else
+	{
+	  /* Now, we can actually create the package using the SAL */
+        /* command.  Note that the names for the user fields are */
+        /* changed.  Parcel expects them to be named differently */
+        /* than we've named them.  Also note that we are passing
+        /* in the ship from ship date (sf_shpdte). */
+        ^create pm package
+            where ship_id = decode(@single_pkg_shp_flg, 1, null, @ship_id)
+              and shpdte = @sf_shpdte
+              and usrfd1 = @usrfld1
+              and usrfd2 = @usrfld2
+              and usrfd3 = @usrfld3
+              and usrfd4 = @usrfld4 
+              and crncy_code = nvl(@ol_crncy_code, @crncy_code)catch(@?)
+
+	}
+]]>
+</local-syntax>
+  <argument name="wrkref" datatype="">Work Reference</argument>
+  <argument name="wrkref_dtl" datatype="">Work Reference Detail</argument>
+  <argument name="mnlflg" alias="manual" datatype="">Manual Flag</argument>
+  <argument name="invtid" datatype="">Inventory Identifier</argument>
+  <argument name="ordnum" datatype="">Order Number</argument>
+  <argument name="traknm" datatype="">Tracking Number</argument>
+  <argument name="waybil" alias="pronum" datatype="">Way Bill</argument>
+  <argument name="consign_cd" datatype="">Consignment Code</argument>
+  <argument name="stname" datatype="">Ship To Address Name</argument>
+  <argument name="stadd1" datatype="">Ship To Address 1</argument>
+  <argument name="stadd2" datatype="">Ship To Address 2</argument>
+  <argument name="stadd3" datatype="">Ship To Address 3</argument>
+  <argument name="stcity" datatype="">Ship To City</argument>
+  <argument name="ststcd" datatype="">Ship To State</argument>
+  <argument name="stposc" datatype="">Ship To Zip Code</argument>
+  <argument name="stcnty" datatype="">Ship To Country</argument>
+  <argument name="strsaf" datatype="">Ship To Residential Address Flag</argument>
+  <argument name="stlnam" datatype="">Ship To Last Name</argument>
+  <argument name="stfnam" datatype="">Ship To First Name</argument>
+  <argument name="stphon" datatype="">Ship To Phone Number</argument>
+  <argument name="stemail" datatype="">Ship To Email Address</argument>
+  <argument name="carcod" datatype="">Carrier Code</argument>
+  <argument name="srvlvl" datatype="">Service Level</argument>
+  <argument name="ltlcls" datatype="">Freight Class</argument>
+  <argument name="sddflg" datatype="">Saturday Delivery Flag</argument>
+  <argument name="hldflg" alias="hold_flag" datatype="">Hold Flag</argument>
+  <argument name="shpdte" datatype="">Ship Date</argument>
+  <argument name="shterm" alias="ship_term" datatype="">Shipping Terms</argument>
+  <argument name="stacct" datatype="">Ship To Account</argument>
+  <argument name="stbill" datatype="" />
+  <argument name="btname" datatype="">Bill To Address Name</argument>
+  <argument name="btadd1" datatype="">Bill To Address 1</argument>
+  <argument name="btadd2" datatype="">Bill To Address 2</argument>
+  <argument name="btadd3" datatype="">Bill To Address 3</argument>
+  <argument name="btcity" datatype="">Bill To City</argument>
+  <argument name="btstcd" datatype="">Bill To State</argument>
+  <argument name="btposc" datatype="">Bill To Zip Code</argument>
+  <argument name="btcnty" datatype="">Bill To Country</argument>
+  <argument name="btrsaf" datatype="">Bill To Residential Address Flag</argument>
+  <argument name="pakdsc" alias="description" datatype="">Package Description</argument>
+  <argument name="height" datatype="">Package Height</argument>
+  <argument name="length" datatype="">Package Length</argument>
+  <argument name="width" datatype="">Package Width</argument>
+  <argument name="weight" datatype="">Package Weight</argument>
+  <argument name="items_weight" datatype="">items weight</argument>
+  <argument name="pakval" datatype="">Package Value</argument>
+  <argument name="proof" datatype="">Proof of Delivery</argument>
+  <argument name="req_sig_flg" alias="sig_req_flg" datatype="">Require Signature Flag</argument>
+  <argument name="req_sig_adt_flg" datatype="">Require Adult Signature Flag</argument>
+  <argument name="paytrm" datatype="">Payment Terms</argument>
+  <argument name="usrfld1" datatype="">User Field 1</argument>
+  <argument name="usrfld2" datatype="">User Field 2</argument>
+  <argument name="usrfld3" datatype="">User Field 3</argument>
+  <argument name="usrfld4" datatype="">User Field 4</argument>
+  <argument name="wh_id" datatype="">Warehouse ID</argument>
+  <argument name="cod_ind_type" datatype="">COD Indicator Type</argument>
+  <argument name="customs_clear_flg" datatype="">Customs Clearance Flag</argument>
+  <argument name="dry_ice_flg" datatype="">Dry Ice Flag</argument>
+  <argument name="dry_ice_wgt" datatype="">Dry Ice Weight</argument>
+  <argument name="srv_type" datatype="">Service Type</argument>
+  <argument name="pkgcod" datatype="">Package Code</argument>
+  <argument name="st_po_box_flg" datatype="">Ship To PO Box Flag</argument>
+  <argument name="carsrv_param_list" datatype="">Carrier Service Parameter List</argument>
+  <argument name="aesitn" datatype="">AES Number</argument>
+  <argument name="aes_typ" datatype="">AES Type</argument>
+  <argument name="aes_acpt_dte" datatype="">AES Accepted Date</argument>
+  <argument name="ftsrnum" datatype="">FTSR Number</argument>
+  <argument name="export_typ" datatype="">Export Type</argument>
+  <argument name="crtnid" datatype="">Carton ID</argument>
+  <argument name="remanifest" datatype="">Remanifest Flag</argument>
+  <argument name="cod_flg" datatype="">COD Flag</argument>
+  <argument name="bill_freight_flg" datatype="">Bill Freight Flag</argument>
+  <argument name="bco_flg" datatype="">Bill Consignee Flag</argument>
+  <argument name="cod_payment_type" datatype="">COD Payment Terms</argument>
+  <argument name="fdx_booking_num" datatype="">FedEx Booking Number</argument>
+<documentation>
+<remarks>
+<![CDATA[
+    This is an overrriden version of the DCS command create pm package, this command calls 
+	a customized command create lc pm package with the required arguments instead of calling the SAL version of create pm package 
+]]>
+</remarks>
+
+</documentation>
+</command>

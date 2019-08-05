@@ -1,0 +1,70 @@
+<command>
+<name>process lc label request</name>
+<description>Process LC Label Request</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+	if(@srcsub or @subnum)
+	{
+	   [select distinct shipment_line.ordnum,
+			shipment_line.client_id,
+			ord.ordtyp,
+			inventory_view.subnum inv_id
+	   from inventory_view
+	   join shipment_line
+		 on shipment_line.ship_line_id = inventory_view.ship_line_id
+		and shipment_line.wh_id = inventory_view.wh_id
+		and inventory_view.prtnum = shipment_line.prtnum
+		and inventory_view.prt_client_id = shipment_line.prt_client_id
+		and inventory_view.prt_client_id = shipment_line.client_id
+	   join ord
+		 on ord.ordnum = shipment_line.ordnum
+		and ord.client_id = shipment_line.client_id
+		and ord.wh_id = shipment_line.wh_id
+	  where inventory_view.subnum = nvl(@subnum, @srcsub)	  
+		and inventory_view.wh_id = nvl(@wh_id,@@wh_id)]catch(-1403)
+	}
+	else if(@srclod or @lodnum)
+	{
+		[select distinct shipment_line.ordnum,
+			shipment_line.client_id,
+			ord.ordtyp,
+			inventory_view.lodnum inv_id
+	   from inventory_view
+	   join shipment_line
+		 on shipment_line.ship_line_id = inventory_view.ship_line_id
+		and shipment_line.wh_id = inventory_view.wh_id
+		and inventory_view.prtnum = shipment_line.prtnum
+		and inventory_view.prt_client_id = shipment_line.prt_client_id
+		and inventory_view.prt_client_id = shipment_line.client_id
+	   join ord
+		 on ord.ordnum = shipment_line.ordnum
+		and ord.client_id = shipment_line.client_id
+		and ord.wh_id = shipment_line.wh_id
+	  where inventory_view.lodnum = nvl(@lodnum, @srclod)	  
+		and inventory_view.wh_id = nvl(@wh_id,@@wh_id)]catch(-1403)
+		
+	}
+	|
+	if(@?= 0)
+	{
+		[select 1
+		  from poldat_view
+		 where polcod = 'LC_PCIP'
+		   and polvar = 'LABEL_REQUEST'
+		   and polval = 'ENABLED'
+		   and wh_id = @wh_id
+		   and rtstr1 = @ordtyp] catch(-1403)
+
+		|
+		if (@? = 0)
+		{
+			create pm package 
+			 where invtid = @inv_id
+			   and wh_id =@wh_id catch(@?)
+		}
+	}
+]]>
+</local-syntax>
+</command>
+

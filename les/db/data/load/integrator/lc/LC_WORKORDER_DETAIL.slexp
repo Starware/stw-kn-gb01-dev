@@ -1,0 +1,377 @@
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_WO_LINE_DTL_PROC','SL_IFD_SEG_PROC','MOCA','Processes a work order line','F','F','F','F','F','F','F','create record where table = ''usr_lc_workorder_line_inb''
+    and wh_id = :i_c_wh_id
+    and wkonum = :i_c_wkonum
+    and wkolin = :i_c_wkolin
+    and prtnum = :i_c_prtnum
+    and ordqty = :i_n_ordqty
+','199'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_WO_LINE_NOTE_PROC','SL_IFD_SEG_PROC','MOCA','Stages a WO Line note','F','F','F','F','F','F','F','create record where table = ''usr_lc_workorder_note_inb''
+    and wh_id = :i_c_wh_id
+    and wkonum = :i_c_wkonum
+    and wkolin = :i_c_wkolin
+    and notlin = :i_c_notlin
+    and nottxt = :i_c_nottxt','198'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_WO_LINE_DTL_PROC','I_C_PRTNUM',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_WO_LINE_DTL_PROC','I_C_WH_ID',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_WO_LINE_DTL_PROC','I_C_WKOLIN',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_WO_LINE_DTL_PROC','I_C_WKONUM',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_WO_LINE_DTL_PROC','I_N_ORDQTY',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_WO_LINE_NOTE_PROC','I_C_NOTLIN',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_WO_LINE_NOTE_PROC','I_C_NOTTXT',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_WO_LINE_NOTE_PROC','I_C_WH_ID',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_WO_LINE_NOTE_PROC','I_C_WKOLIN',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_WO_LINE_NOTE_PROC','I_C_WKONUM',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def_grp
+SL_VERSION,sys_grp_id,sys_grp_descr
+2018.1,'LS','Group - LES'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def_grp
+SL_VERSION,sys_grp_id,sys_grp_descr
+2018.1,'LEGACY','Legacy Systems'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def
+SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_commit_ctxt_defn_cd,pre_async_alg_id,post_async_alg_id,pre_dwnld_alg_id,post_dwnld_alg_id,fail_evt_id,prsrv_evt_seq_flg,snd_err_stat_flg,rcv_fail_evt_id,rcv_succ_evt_id,null_ind_char,nochg_ind_char,absent_ind_char,eol_delim,mailbox_nam,host_port,host_nam,service,sys_user_id,sys_password,sys_conn_data,moca_sys_flg,xml_tag_data_inst,xml_tag_ifd,xml_tag_data,max_grp_siz
+2018.1,'DCS','DCS Warehouse Management System','DCS','LS','T','T','COMM','','','','','','F','T','','','','*','+','','','','','','','','','T','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def
+SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_commit_ctxt_defn_cd,pre_async_alg_id,post_async_alg_id,pre_dwnld_alg_id,post_dwnld_alg_id,fail_evt_id,prsrv_evt_seq_flg,snd_err_stat_flg,rcv_fail_evt_id,rcv_succ_evt_id,null_ind_char,nochg_ind_char,absent_ind_char,eol_delim,mailbox_nam,host_port,host_nam,service,sys_user_id,sys_password,sys_conn_data,moca_sys_flg,xml_tag_data_inst,xml_tag_ifd,xml_tag_data,max_grp_siz
+2018.1,'HOST','Generic Host System','HOST','LEGACY','T','F','SIFD','','','','','','F','T','','','','*','+','<10>','','','','','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def_grp
+SL_VERSION,ifd_grp_id,ifd_grp_descr
+2018.1,'EXT TRANSACTION IFD','External System IFD'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_def
+SL_VERSION,retr_mthd_id,retr_mthd_descr
+2018.1,'LC_WO_LINE_NOTE_RM','Work order line note RM'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_def
+SL_VERSION,retr_mthd_id,retr_mthd_descr
+2018.1,'LC_WO_LINE_LINE_RM','Work order line detail RM'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_def
+SL_VERSION,retr_mthd_id,retr_mthd_descr
+2018.1,'LC_WO_LINE_CTRL_RM','Work order line control seg RM'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def
+SL_VERSION,ifd_id,ifd_ver,ifd_descr,ifd_typ_cd,data_lay_id,ifd_grp_id,eo_id,eo_ver,root_seg_rpt_brk_flg,recursive_flg,post_alg_id,pre_alg_id,ifd_tag,post_proc_flg
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','Work order line inbound IFD','I','CSV','EXT TRANSACTION IFD','','','F','T','','','WO_LINE_INB_IFD',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','CTRL_SEG','','Control segment','1','','','','','','','','','','','','','CTRL_SEG','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','','Work order Lin segment','1','','','','','','LC_WORK_ORDER_LINE_IFD','1.0','CTRL_SEG','','','','','LINE_SEG','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','','Work order line note','3','','','','','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','','','','','WO_LINE_NOTE_SEG','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','CTRL_SEG','TRNNAM','Transaction name','10','trnnam','','','','','','','','','','C','','','','','','','','N','','N','','','80','','F','','','WO_TRAN','T','Currently, no English translation is available.','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','CTRL_SEG','TRNVER','Transaction version','20','trnver','','','','','','','','','','C','','','','','','','','N','','N','','','20','','F','','','2017.1','T','Currently, no English translation is available.','10'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','CTRL_SEG','WHSE_ID','Warehiuse ID','30','whse_id','','','','','','','','','','C','','','','','','','','N','','N','','','120','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','ORDQTY','Order quantity','50','ordqty','','','','','','','','','','N','','','','','','','','N','','N','','','','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','PRTNUM','Part number','40','prtnum','','','','','','','','','','C','','','','','','','','N','','N','','','200','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','50'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','SEGNAM','Segment name','10','segnam','','','','','','','','','','C','','','','','','','','N','','N','','','80','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','20'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','WKOLIN','Work order line number','30','wkolin','','','','','','','','','','C','','','','','','','','N','','N','','','20','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','5'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','WKONUM','Work order ref number','20','wkonum','','','','','','','','','','C','','','','','','','','N','','N','','','80','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','20'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','NOTLIN','Work order note line number','30','notlin','','','','','','','','','','C','','','','','','','','N','','N','','','20','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','5'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','NOTTXT','Note Text','40','nottxt','','','','','','','','','','C','','','','','','','','N','','N','','','160','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.','40'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','SEGNAM','Segment name','10','segnam','','','','','','','','','','C','','','','','','','','N','','N','','','40','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','10'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','WKOLIN','Work order line','20','wkolin','','','','','','','','','','C','','','','','','','','N','','N','','','20','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.','5'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_impl_def
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,retr_mthd_impl_cd,alg_id
+2018.1,'LC_WO_LINE_CTRL_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _CTRL_SEG','','LC_WORK_ORDER_LINE_IFD','1.0','CTRL_SEG','SI',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_impl_def
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,retr_mthd_impl_cd,alg_id
+2018.1,'LC_WO_LINE_LINE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','SI',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_impl_def
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,retr_mthd_impl_cd,alg_id
+2018.1,'LC_WO_LINE_NOTE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE_NOTE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','SI',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sql_crsr_component
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,component_ordr,sql_set_oper,sql_code,sql_code_len
+2018.1,'LC_WO_LINE_CTRL_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _CTRL_SEG','','LC_WORK_ORDER_LINE_IFD','1.0','CTRL_SEG','0','0','','where sl_data_fk = :sl_data_pk','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sql_crsr_component
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,component_ordr,sql_set_oper,sql_code,sql_code_len
+2018.1,'LC_WO_LINE_LINE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','0','0','','where sl_data_fk = :sl_data_pk','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sql_crsr_component
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,component_ordr,sql_set_oper,sql_code,sql_code_len
+2018.1,'LC_WO_LINE_NOTE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE_NOTE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','0','0','','where sl_data_fk = :sl_data_pk','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_def_grp
+SL_VERSION,evt_grp_id,evt_grp_descr
+2018.1,'EXT TRANSACTION EVENTS','External Transaction Events'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_def
+SL_VERSION,evt_id,evt_descr,log_evt_flg,evt_grp_id
+2018.1,'LC_WORK_ORDER_LINE_EV','Work order line event','T','EXT TRANSACTION EVENTS'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_def
+SL_VERSION,eo_id,eo_ver,eo_descr,evt_id,always_create_flg
+2018.1,'LC_WO_LINE_EO','1.0','Output from work order line event','LC_WORK_ORDER_LINE_EV',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_seg
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_seg_descr,parent_eo_id,parent_eo_ver,parent_eo_seg_id,blk_alg_id,blk_alg_eval_cd,retr_mthd_id,eo_seg_ordr
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_CTRL_SEG_EO','Work order line control segment EO','','','','','','LC_WO_LINE_CTRL_RM','1'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_seg
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_seg_descr,parent_eo_id,parent_eo_ver,parent_eo_seg_id,blk_alg_id,blk_alg_eval_cd,retr_mthd_id,eo_seg_ordr
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','WO line detail segment EO','LC_WO_LINE_EO','1.0','WO_LINE_CTRL_SEG_EO','','','LC_WO_LINE_LINE_RM',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_seg
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_seg_descr,parent_eo_id,parent_eo_ver,parent_eo_seg_id,blk_alg_id,blk_alg_eval_cd,retr_mthd_id,eo_seg_ordr
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','Work order line note segment EO','LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','','','LC_WO_LINE_NOTE_RM',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_CTRL_SEG_EO','TRNNAM','Transaction name','C','10','','80','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_CTRL_SEG_EO','TRNVER','Transaction version','C','20','','20','10'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_CTRL_SEG_EO','WHSE_ID','Warehiuse ID','C','30','','120','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','ORDQTY','Order quantity','N','50','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','PRTNUM','Part number','C','40','','200','50'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','SEGNAM','Segment name','C','10','','80','20'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','WKOLIN','Work order line number','C','30','','20','5'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','WKONUM','Work order ref number','C','20','','80','20'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','NOTLIN','Work order note line number','C','30','','20','5'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','NOTTXT','Note Text','C','40','','160','40'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','SEGNAM','Segment name','C','10','','40','10'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','WKOLIN','Work order line','C','20','','20','5'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_CTRL_SEG_EO','TRNNAM','LC_WO_LINE_CTRL_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _CTRL_SEG','','LC_WORK_ORDER_LINE_IFD','1.0','CTRL_SEG','0','trnnam','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_CTRL_SEG_EO','TRNVER','LC_WO_LINE_CTRL_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _CTRL_SEG','','LC_WORK_ORDER_LINE_IFD','1.0','CTRL_SEG','0','trnver','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_CTRL_SEG_EO','WHSE_ID','LC_WO_LINE_CTRL_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _CTRL_SEG','','LC_WORK_ORDER_LINE_IFD','1.0','CTRL_SEG','0','whse_id','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','ORDQTY','LC_WO_LINE_LINE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','0','ordqty','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','PRTNUM','LC_WO_LINE_LINE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','0','prtnum','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','SEGNAM','LC_WO_LINE_LINE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','0','segnam','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','WKOLIN','LC_WO_LINE_LINE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','0','wkolin','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','WKONUM','LC_WO_LINE_LINE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE','0','wkonum','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','NOTLIN','LC_WO_LINE_NOTE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE_NOTE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','0','notlin','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','NOTTXT','LC_WO_LINE_NOTE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE_NOTE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','0','nottxt','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','SEGNAM','LC_WO_LINE_NOTE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE_NOTE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','0','segnam','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','WKOLIN','LC_WO_LINE_NOTE_RM','SEG_LC_WORK_ORDER_LINE_IFD        _1.0            _WO_LINE_NOTE','','LC_WORK_ORDER_LINE_IFD','1.0','WO_LINE_NOTE','0','wkolin','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def
+SL_VERSION,ifd_id,ifd_ver,ifd_descr,ifd_typ_cd,data_lay_id,ifd_grp_id,eo_id,eo_ver,root_seg_rpt_brk_flg,recursive_flg,post_alg_id,pre_alg_id,ifd_tag,post_proc_flg
+2018.1,'LC_WO_LINE_RES_IFD','1.0','WWork order line result IFD','O','CSV','EXT TRANSACTION IFD','LC_WO_LINE_EO','1.0','F','T','','','lc_wo_line_res_ifd','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_RES_IFD','','Work order line result IFD','','LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','','','','','','','','LC_WO_LINE_DTL_PROC','','lc_wo_line_res_ifd','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_NOTE_RES_IFD','','WO Line Note IFD','','LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','','','LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_RES_IFD','','','LC_WO_LINE_NOTE_PROC','','lc_wo_line_note_res_ifd','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_RES_IFD','ORDQTY','order quantity','50','','LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','ORDQTY','','','','','EO','N','','','','','','','','N','','N','','','','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_RES_IFD','PRTNUM','Part number','40','','LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','PRTNUM','','','','','EO','C','','','','','','','','N','','N','','','200','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','50'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_RES_IFD','WH_ID','WMS warehouse ID','10','','LC_WO_LINE_EO','1.0','WO_LINE_CTRL_SEG_EO','WHSE_ID','','','','','EO','C','','','','','','','','N','','N','','','128','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_RES_IFD','WKOLIN','Work order line','30','','LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','WKOLIN','','','','','EO','C','','','','','','','','N','','N','','','20','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','5'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_RES_IFD','WKONUM','Work order number','20','','LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','WKONUM','','','','','EO','C','','','','','','','','N','','N','','','80','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','20'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_NOTE_RES_IFD','NOTLIN','Note text number','40','','LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','NOTLIN','','','','','EO','C','','','','','','','','N','','N','','','20','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','5'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_NOTE_RES_IFD','NOTTXT','Note text','50','','LC_WO_LINE_EO','1.0','WO_LINE_NOTE_EO','NOTTXT','','','','','EO','C','','','','','','','','N','','N','','','160','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','40'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_NOTE_RES_IFD','WH_ID','Warehouse ID','10','','LC_WO_LINE_EO','1.0','WO_LINE_CTRL_SEG_EO','WHSE_ID','','','','','EO','C','','','','','','','','N','','N','','','128','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_NOTE_RES_IFD','WKOLIN','Work order line','30','','LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','WKOLIN','','','','','EO','C','','','','','','','','N','','N','','','20','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','5'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_LINE_RES_IFD','1.0','LC_WO_LINE_NOTE_RES_IFD','WKONUM','Work order number','20','','LC_WO_LINE_EO','1.0','WO_LINE_LINE_SEG_EO','WKONUM','','','','','EO','C','','','','','','','','N','','N','','','80','','F','','','Currently, no English translation is available.','T','Currently, no English translation is available.','20'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_i_sys_ifd_id
+SL_VERSION,sys_id,ifd_id,ifd_ver,id_seg_alg_id,ord_ind,ena_flg
+2018.1,'HOST','LC_WORK_ORDER_LINE_IFD','1.0','','5','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_i_sys_ifd_seg_id
+SL_VERSION,ifd_id,ifd_ver,sys_id,ifd_seg_id,ifd_fld_id,fld_val
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','HOST','CTRL_SEG','TRNNAM','WO_TRAN'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_i_sys_ifd_seg_id
+SL_VERSION,ifd_id,ifd_ver,sys_id,ifd_seg_id,ifd_fld_id,fld_val
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','HOST','WO_LINE','SEGNAM','LINE_SEG'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_i_sys_ifd_seg_id
+SL_VERSION,ifd_id,ifd_ver,sys_id,ifd_seg_id,ifd_fld_id,fld_val
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','HOST','WO_LINE_NOTE','SEGNAM','WO_LINE_NOTE_SEG'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_i_ifd_evt_map
+SL_VERSION,ifd_id,ifd_ver,ifd_action,sys_id,ifd_action_alg_id,evt_id,ena_flg
+2018.1,'LC_WORK_ORDER_LINE_IFD','1.0','[ALL]','HOST','','LC_WORK_ORDER_LINE_EV','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
+SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
+2018.1,'LC_WO_LINE_RES_IFD','1.0','DCS','','','SYNCD','','T','T','T','','','','','',''
+
+CSV__TAG__KLUDGE___COMMIT

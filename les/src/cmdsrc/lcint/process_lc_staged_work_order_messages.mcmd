@@ -1,0 +1,126 @@
+<command>
+  <name>process lc staged work order messages</name>
+  <description>Processes work order downloads</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+[select wh_id,
+        wkonum
+   from usr_lc_workorder_header_inb
+  where hdr_sts = 'COMPLETED'
+    and duedte < to_char(sysdate - 7, 'YYYYMMDD')] catch(-1403)
+|
+if (@? = 0)
+{
+    remove record
+     where table = 'usr_lc_workorder_header_inb'
+       and wh_id = @wh_id
+       and wkonum = @wkonum catch(-1403)
+    |
+    remove record
+     where table = 'usr_lc_workorder_line_inb'
+       and wh_id = @wh_id
+       and wkonum = @wkonum catch(-1403)
+    |
+    [delete usr_lc_workorder_note_inb
+      where wh_id = @wh_id
+        and wkonum = @wkonum] catch(-1403)
+}
+;
+publish data
+ where wkorev = '001'
+|
+[select hdr.wh_id,
+        hdr.wkonum,
+        hdr.trntyp,
+        to_date(hdr.duedte, 'YYYYMMDD') as duedte,
+        hdr.prcpri,
+        hdr.prtnum,
+        hdr.prt_client_id,
+        hdr.invsts,
+        hdr.prdqty as wkoqty,
+        hdr.prcare,
+        hdr.prcloc
+   from usr_lc_workorder_header_inb hdr,
+        usr_lc_workorder_line_inb lne
+  where hdr.hdr_sts = 'NEW'
+    and lne.wh_id = hdr.wh_id
+    and lne.wkonum = hdr.wkonum
+    and rownum = 1] catch(-1403)
+|
+if (@? = 0 and @trntyp = 'A')
+{
+    [update usr_lc_workorder_header_inb
+        set hdr_sts = 'INPROGRESS'
+      where wh_id = @wh_id
+        and wkonum = @wkonum
+        and hdr_sts = 'NEW'] catch(-1403)
+    |
+    if (@? = 0)
+    {
+        [commit]
+        |
+        create work order
+         where wh_id = @wh_id
+           and prtnum = @prtnum
+           and prt_client_id = @prt_client_id
+           and duedte = @duedte
+           and wkonum = @wkonum
+           and wkorev = @wkorev
+           and client_id = @prt_client_id
+           and prcpri = @prcpri
+           and invsts = @invsts
+           and wkoqty = @wkoqty
+           and prcare = @prcare
+           and wko_typ = 'ASMBLE'
+        |
+        [select lne.wkolin,
+                lne.prtnum,
+                lne.ordqty
+           from usr_lc_workorder_line_inb lne
+          where lne.wh_id = @wh_id
+            and lne.wh_id = @wh_id
+            and lne.wkonum = @wkonum]
+        |
+        create work order detail
+         where wh_id = @wh_id
+           and client_id = @prt_client_id
+           and wkonum = @wkonum
+           and wkorev = @wkorev
+           and wkolin = @wkolin
+           and prtnum = @prtnum
+           and prt_client_id = @prt_client_id
+           and prcloc = @prcloc
+           and pckqty = @ordqty
+           and linqty = @ordqty
+           and invsts_prg = @invsts
+           and bom_cnsqty = 0
+        |
+        [select nte.notlin,
+                nte.nottxt
+           from usr_lc_workorder_note_inb nte
+          where nte.wh_id = @wh_id
+            and nte.wkonum = @wkonum
+            and nte.wkolin = @wkolin] catch(-1403)
+        |
+        if (@? = 0)
+        {
+            create work order detail note
+             where wkonum = @wkonum
+               and wkorev = @wkorev
+               and wkolin = @wkolin
+               and notlin = @notlin
+               and nottxt = @nottxt
+        }
+    }
+    |
+    [update usr_lc_workorder_header_inb
+        set hdr_sts = 'COMPLETED'
+      where wh_id = @wh_id
+        and wkonum = @wkonum
+        and hdr_sts = 'INPROGRESS'] catch(-1403)
+}
+
+]]>
+</local-syntax>
+</command>
