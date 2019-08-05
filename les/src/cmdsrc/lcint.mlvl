@@ -1,7 +1,7 @@
 <component-level>
 <name>LCint</name>
 <description>Local Code Intrinsic Server Functions</description>
-<library></library>
-<sort-sequence>12000</sort-sequence>
+<package>com.redprairie.les.lc</package>
+<sort-sequence>19000</sort-sequence>
 <editable>true</editable>
 </component-level>
