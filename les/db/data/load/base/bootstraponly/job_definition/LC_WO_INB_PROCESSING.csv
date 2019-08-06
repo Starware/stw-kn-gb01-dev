@@ -1,2 +1,2 @@
-﻿xx,job_id,role_id,name,enabled,type,command,log_file,trace_level,overlap,schedule,start_delay,timer,grp_nam
-xx,LC_WO_INB_PROCESSING,,Processes staged inbound work orders,1,cron,process lc staged work order messages,$LESDIR/log/lc_WorkOrderCreation.log,,0,0 * * * * ?,,,dcs_data
+﻿Table_name,job_id,role_id,name,enabled,type,command,log_file,trace_level,overlap,schedule,start_delay,timer,grp_nam
+job_definition,LC_WO_INB_PROCESSING,,Processes staged inbound work orders,1,cron,process lc staged work order messages,$LESDIR/log/lc_WorkOrderCreation.log,,0,0 * * * * ?,,,dcs_data

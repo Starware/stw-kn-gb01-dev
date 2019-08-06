@@ -1,7 +1,7 @@
 <component-level>
 <name>LCint</name>
 <description>Local Code Intrinsic Server Functions</description>
-<package>com.redprairie.les.lc</package>
+<package>kn.swift.lc</package>
 <sort-sequence>19000</sort-sequence>
 <editable>true</editable>
 </component-level>
