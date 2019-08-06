@@ -1,0 +1,26 @@
+<command>
+  <name>list pm destination carriers</name>
+  <description>List PM Destination Carriers</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+/* Overriding the command to remove carxfr config */ 
+/* to allow both LTL Loading and PCIP commuinication  */
+/* for carriers                                     */
+
+[select rtstr1
+    from poldat_view
+   where polcod = 'LC_PCIP'
+     and polvar = 'PCIP_SYSTEM'
+     and wh_id = nvl(@wh_id, @@wh_id)
+     and rtnum1 = 1] catch(-1403)
+ |
+ publish data
+  where dstnam = nvl(@dstnam, @rtstr1)
+    and dstcar = @carcod
+    and dstlvl = @srvlvl
+    and carcod = @carcod
+    and srvlvl = @srvlvl
+]]>
+</local-syntax>
+</command>

@@ -1,0 +1,491 @@
+<command>
+  <name>get pm parameter data</name>
+  <description>get pm parameter data</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+/* The following select is necessary due to the following: */ 
+    /*  - Dstcar is the dstcar for FedEx */
+    /*  - Dstlvl is the dstlvl for FedEx */
+    /*  - Dstlvl may be NULL, for example close fedex manifest */
+    /*  - Create pm package converts dstcar and dstlvl to send to */
+    /*    Connectship */
+    /*  - Create pm package does not convert fedex values */
+    /*  - Since we want to access the carxrf table, we must convert back to */
+    /*    what exists in carxrf */
+    /* For example: */
+    /* In DataBase=>After Pm Package Conversion=>After Conversion Below */
+    /* dstcar=TANDATA_UPS.UPS=>TANDATA_UPS=>TANDATA_UPS.UPS */
+    /* dstlvl 2DA=>UPS.2DA=>2DA */ 
+    if (@invtid = 'MANUAL-PACKAGE')
+    {
+        publish data where cod_flg = nvl(@cod_flg,0) 
+                   and bco_flg = nvl(@bco_flg,0) 
+                   and dstnam = @dstnam
+                   and tax_id = @tax_id 
+                   and meter_num = @meter_num 
+                   and sig_req_flg = nvl(@sig_req_flg,0) 
+                   and prcl_pkgtyp = @prcl_pkgtyp 
+                   and ground_flg = nvl(@ground_flg,0) 
+                   and intl_flg = nvl(@intl_flg,0)
+                   and spr_adr_id = @spr_adr_id
+                   and cod_adr_id = @cod_adr_id
+                   and cod_ret_name = @cod_ret_name
+                   and cod_ret_adrln1 = @cod_ret_adrln1
+                   and cod_ret_adrln2 = @cod_ret_adrln2
+                   and cod_ret_adrcty = @cod_ret_adrcty
+                   and cod_ret_adrstc = @cod_ret_adrstc
+                   and cod_ret_adrpsz = @cod_ret_adrpsz
+                   and cod_ret_ctry_name = @cod_ret_ctry_name
+                   and cod_ret_phnnum = @cod_ret_phnnum
+                   and cod_ret_faxnum = @cod_ret_faxnum
+                   and cod_ret_email_adr = @cod_ret_email_adr
+                   and cod_ret_attn_name = @cod_ret_attn_name
+                   and serv_prnt_lblflg = @srv_prnt_lblflg 
+                   and prcl_host = @prcl_host 
+                   and prcl_port = @prcl_port 
+                   and bill_freight_flg = nvl(@bill_freight_flg,0) 
+                   and cod_payment_type = @cod_payment_type
+                   and paytrm = nvl(@paytrm,6) 
+                   and field_sep = @field_sep
+                   and printer_type = @printer_type
+                   and trackno_start = @trackno_start
+                   and trackno_len = @trackno_len
+                   and ack_timeout = @ack_timeout
+                   and ship_request_tranid = @ship_request_tranid
+                   and ship_reply_tranid = @ship_reply_tranid
+                   and delete_request_tranid = @delete_request_tranid
+                   and delete_reply_tranid = @delete_reply_tranid
+                   and close_request_tranid = @close_request_tranid
+                   and close_reply_tranid = @close_reply_tranid
+                   and lblfmt = @lblfmt
+                   and manrpt = @manrpt
+                   and NEXT_TRACKING_REPLY_TRANID = @NEXT_TRACKING_REPLY_TRANID
+                   and NEXT_TRACKING_REQUEST_TRANID = @NEXT_TRACKING_REQUEST_TRANID
+                   and cad = @cad
+                   and traknm_type = @traknm_type
+                   and service_type = @service_type
+                   and srv_prnt_lblfg = @srv_prnt_lblfg
+                   and stacct = @stacct
+                   and shterm = @shterm
+                   and btacct = @btacct
+                   and btname = @btname
+                   and btadd1 = @btadd1
+                   and btadd2 = @btadd2
+                   and btadd3 = @btadd3
+                   and btattn_name = @btattn_name 
+                   and btcity = @btcity
+                   and btcont_name = @btcont_name
+                   and btstcd = @btstcd
+                   and btposc = @btposc
+                   and btcnty = @btcnty
+                   and btphon = @btphon
+                   and btfnam = @btfnam
+                   and btlnam = @btlnam
+                   and aesitn = @aesitn
+                   and aes_typ = @aes_typ
+                   and aes_acpt_dte = @aes_acpt_dte
+                   and ftsrnum = @ftsrnum
+                   and export_typ = @export_typ
+    }
+    else
+    {
+        publish data
+         where idx = instr(@dstnam, '.')
+           and new_dstcar = @dstcar || '.' || @dstlvl
+           and new_dstlvl = substr(@dstnam, 0, @idx - 1) catch (@?)
+        |
+        if (@wrkref != '')
+        {
+            /* Get Parameters using WRKREF */
+            [select o.ordnum,
+                    o.client_id,
+                    pw.ordlin,
+                    pw.ordsln,
+                    s.aesitn,
+                    s.aes_typ,
+                    s.aes_acpt_dte,
+                    s.ftsrnum,
+                    decode(@export_typ, NULL, s.export_typ, @export_typ) export_typ,
+                    decode(o.cod_payment_type, NULL, 0, 1) cod_flg,
+                    o.bco_flg,
+                    o.sig_req_flg,
+                    o.bill_freight_flg,
+                    o.cod_payment_type,
+                    ol.paytrm,
+                    o.wh_id,
+                    nvl(s.late_dlvdte, ol.late_dlvdte) dlvdte
+               from ord o,
+                    ord_line ol,
+                    pckwrk_view pw,
+                    shipment s
+              where o.ordnum = pw.ordnum
+                and o.client_id = pw.client_id
+                and o.wh_id = pw.wh_id
+                and pw.ship_id = s.ship_id
+                and pw.wrkref = @wrkref
+                and o.ordnum = ol.ordnum
+                and o.client_id = ol.client_id
+                and pw.ordlin = ol.ordlin
+                and pw.ordsln = ol.ordsln
+                and o.wh_id = ol.wh_id] catch(-1403)
+        }
+       |
+       if (@wrkref = '' or @? = -1403) 
+        {
+            /* Get Parameters using SUBNUM */
+            /* The reason we pass rownum < 2 */
+            /* is because we want be sure this */
+            /* statement returns only 1 row */
+            [select o.ordnum,
+                    o.client_id,
+                    pw.ordlin,
+                    pw.ordsln,
+                    s.aesitn,
+                    s.aes_typ,
+                    s.aes_acpt_dte,
+                    s.ftsrnum,
+                    decode(@export_typ, NULL, s.export_typ, @export_typ) export_typ,
+                    decode(o.cod_payment_type, NULL, 0, 1) cod_flg,
+                    o.bco_flg,
+                    o.sig_req_flg,
+                    o.bill_freight_flg,
+                    o.cod_payment_type,
+                    ol.paytrm,
+                    o.wh_id,
+                    nvl(s.late_dlvdte,ol.late_dlvdte) dlvdte
+               from ord o,
+                    ord_line ol,
+                    pckwrk_view pw,
+                    invdtl id,
+                    shipment s
+              where o.ordnum = pw.ordnum
+                and o.client_id = pw.client_id
+                and o.wh_id = pw.wh_id
+                and pw.ship_id = s.ship_id
+                and pw.wrkref = id.wrkref
+                and id.subnum = nvl(@subnum, @invtid)
+                and o.ordnum = ol.ordnum
+                and o.client_id = ol.client_id
+                and pw.ordlin = ol.ordlin
+                and pw.ordsln = ol.ordsln
+                and o.wh_id = ol.wh_id
+                and rownum <2] catch(-1403)
+        }
+        |
+        if (@? = -1403)
+        {
+            /* We should assume we have a KIT */
+            [select o.ordnum,
+                    o.client_id,
+                    pw.ordlin,
+                    pw.ordsln,
+                    s.aesitn,
+                    s.aes_typ,
+                    s.aes_acpt_dte,
+                    s.ftsrnum,
+                    decode(@export_typ, NULL, s.export_typ, @export_typ) export_typ,
+                    decode(o.cod_payment_type, NULL, 0, 1) cod_flg,
+                    o.bco_flg,
+                    o.sig_req_flg,
+                    o.bill_freight_flg,
+                    o.cod_payment_type,
+                    ol.paytrm,
+                    o.wh_id,
+                    nvl(s.late_dlvdte,ol.late_dlvdte) dlvdte
+               from ord o,
+                    ord_line ol,
+                    pckwrk_view pw,
+                    shipment s
+              where o.ordnum = pw.ordnum
+                and o.client_id = pw.client_id
+                and o.wh_id = pw.wh_id
+                and pw.ship_id = s.ship_id
+                and pw.subnum = @invtid
+                and o.ordnum = ol.ordnum
+                and o.client_id = ol.client_id
+                and pw.ordlin = ol.ordlin
+                and pw.ordsln = ol.ordsln
+                and o.wh_id = ol.wh_id] catch(-1403)
+        }
+        |
+        if (@? = -1403)
+        {
+            /* Check to see if it's a bunlded load. Using rownum < 2 to
+             * be sure this statement returns only 1 row
+             */
+            [select o.ordnum,
+                    o.client_id,
+                    pw.ordlin,
+                    pw.ordsln,
+                    shp.aesitn,
+                    shp.aes_typ,
+                    shp.aes_acpt_dte,
+                    shp.ftsrnum,
+                    decode(@export_typ, NULL, shp.export_typ, @export_typ) export_typ,
+                    decode(o.cod_payment_type, NULL, 0, 1) cod_flg,
+                    o.bco_flg,
+                    o.sig_req_flg,
+                    o.bill_freight_flg,
+                    o.cod_payment_type,
+                    ol.paytrm,
+                    o.wh_id,
+                    nvl(shp.late_dlvdte,ol.late_dlvdte) dlvdte
+               from ord o,
+                    ord_line ol,
+                    pckwrk_view pw,
+                    invdtl id,
+                    invsub s,
+                    shipment shp
+              where o.ordnum = pw.ordnum
+                and o.client_id = pw.client_id
+                and o.wh_id = pw.wh_id
+                and pw.ship_id = shp.ship_id
+                and pw.wrkref = id.wrkref
+                and id.subnum = s.subnum
+                and s.lodnum = nvl(@lodnum, @invtid)
+                and o.ordnum = ol.ordnum
+                and o.client_id = ol.client_id
+                and pw.ordlin = ol.ordlin
+                and pw.ordsln = ol.ordsln
+                and o.wh_id = ol.wh_id
+                and rownum <2]
+        }
+        |
+        /* Retrieve FedEx specific parameters */
+        if (@dstnam = 'FEDEX')
+        {
+            get fedex parameters
+                where srvnam = @dstcar catch (@?)
+        }
+        |
+        /* if this shipment is COD and there is a COD Address id,
+         * we need to get the values for the manifest call
+         */
+        if (@cod_flg = 1 and @cod_adr_id != '')
+        {
+            [ select nvl(a.first_name,rtrim(' ')) ||' '||
+                     nvl(a.last_name,rtrim(' ')) cod_ret_name,
+                     a.adrln1 cod_ret_adrln1,
+                     a.adrln2 cod_ret_adrln2,
+                     a.adrcty cod_ret_adrcty,
+                     a.adrstc cod_ret_adrstc,
+                     a.adrpsz cod_ret_adrpsz,
+                     a.ctry_name cod_ret_ctry_name,
+                     a.phnnum cod_ret_phnnum,
+                     a.faxnum cod_ret_faxnum,
+                     a.email_adr cod_ret_email_adr,
+                     a.attn_name cod_ret_attn_name
+                from adrmst a
+               where a.adr_id = @cod_adr_id ]
+        }
+        |
+        /* Need catch in case ctry_name is null */
+        [select decode(c.iso_2_ctry_name, 'US', 0, 1) intl_flg
+           from ord o, 
+                adrmst a, 
+                ctry_mst c 
+          where o.st_adr_id = a.adr_id 
+            and a.ctry_name = c.ctry_name
+            and o.wh_id = @wh_id
+            and o.ordnum = @ordnum
+            and o.client_id = @client_id] catch(-1403)
+        |
+        if (@paytrm)
+        {
+            /*
+             * It is possible that we are using the paycod from Parcel directly.
+             * In this case, we will catch this error cause we don't need
+             * to use the payval as the paytrm, it only necessary when we
+             * are using a local paytrm.
+             */
+            [select payval paytrm
+               from paytrm
+              where paycod = @paytrm
+                and dstnam = @dstnam]catch(-1403)
+        }
+        |
+        /* Get service options such as broker information for international
+         * shipments. */
+        get pm service options 
+          where ordnum = @ordnum
+            and client_id = @client_id
+            and wh_id = @wh_id
+        |
+        /* COD Payment Type should be a service option now, so we need to
+         * translate it to payval from paycod after the service options are on
+         * the stack. 
+         * If there is a cod_payment_type, we will also want to make sure the
+         * cod_flg is set to 1 for the manifesting system. 
+         */
+        if (@cod_payment_type)
+        {
+            [select payval cod_payment_type
+               from paytrm
+              where paycod = @cod_payment_type ]
+            |
+            publish data 
+              where cod_payment_type = @cod_payment_type
+                and cod_flg = 1
+        }   
+        |
+        /* We need to get bill to information for 3rd Party billing and 
+         * Freight Collect */
+        [ select a.adrnam btname,
+                 a.adrln1 btadd1,
+                 a.adrln2 btadd2,
+                 a.adrln3 btadd3,
+                 a.attn_name btattn_name,
+                 a.adrcty btcity,
+                 a.adrstc btstcd,
+                 a.adrpsz btposc,
+                 a.cont_name btcont_name,
+                 a.ctry_name btcnty,
+                 a.phnnum btphon,
+                 a.first_name btfnam,
+                 a.last_name btlnam
+            from adrmst a,
+                 ord o
+           where o.client_id = nvl(@client_id,'----')
+             and o.wh_id = @wh_id
+             and o.ordnum = @ordnum
+             and a.adr_id = o.bt_adr_id ] catch(-1403)
+        |
+        /* Lets take care of bill consignee here */
+        if (@bco_flg = 1)
+        {
+            /* When this flag is set, we want to bill the customer
+             * receiving the package (AKA - the consignee).  This
+             * means setting the btacct for the stcust on the order.
+             */
+            [select accnum btacct
+               from cst_billto_acct, ord
+              where ord.ordnum = @ordnum
+                and ord.client_id = @client_id
+                and ord.wh_id = @wh_id
+                and ord.stcust = cst_billto_acct.cstnum
+                and ord.client_id = cst_billto_acct.client_id
+                and cst_billto_acct.carcod = @carcod] catch (-1403)
+        }
+        else
+        {
+            /* Otherwise, use the btacct for the bill-to customer
+             * on the order.
+             */
+            [select accnum btacct
+               from cst_billto_acct, ord
+              where ord.ordnum = @ordnum
+                and ord.client_id = @client_id
+                and ord.wh_id = @wh_id
+                and ord.btcust = cst_billto_acct.cstnum
+                and ord.client_id = cst_billto_acct.client_id
+                and cst_billto_acct.carcod = @carcod] catch (-1403)
+        }
+        |
+        /* 
+         * Check if the Configuration for not sending delivery date 
+         * is enabled or not.If enabled then we will send delivery date.
+         */
+        [select rtnum1 send_dlvdte
+           from poldat_view
+          where polcod = 'PARCEL-MANIFEST'
+            and polvar = 'CONFIGURATION'
+            and polval = 'DELIVERY-DATES-FOR-MANIFEST'
+            and wh_id = nvl(@wh_id ,@@wh_id) ] catch(-1403 )
+        |
+        if ((@? = -1403) or (@send_dlvdte = 0))
+        {
+            publish data
+               where dlvdte = ''
+        }
+        |
+        publish data where cod_flg = @cod_flg
+                       and bco_flg = @bco_flg
+                       and dstnam = @dstnam
+                       and tax_id = @tax_id
+                       and meter_num = @meter_num
+                       and sig_req_flg = @sig_req_flg
+                       and prcl_pkgtyp = @prcl_pkgtyp
+                       and ground_flg = @ground_flg
+                       and intl_flg = nvl(@intl_flg,0)
+                       and spr_adr_id = @spr_adr_id
+                       and cod_adr_id = @cod_adr_id
+                       and cod_ret_name = @cod_ret_name
+                       and cod_ret_adrln1 = @cod_ret_adrln1
+                       and cod_ret_adrln2 = @cod_ret_adrln2
+                       and cod_ret_adrcty = @cod_ret_adrcty
+                       and cod_ret_adrstc = @cod_ret_adrstc
+                       and cod_ret_adrpsz = @cod_ret_adrpsz
+                       and cod_ret_ctry_name = @cod_ret_ctry_name
+                       and cod_ret_phnnum = @cod_ret_phnnum
+                       and cod_ret_faxnum = @cod_ret_faxnum
+                       and cod_ret_email_adr = @cod_ret_email_adr
+                       and cod_ret_attn_name = @cod_ret_attn_name
+                       and serv_prnt_lblflg = @srv_prnt_lblflg
+                       and prcl_host = @prcl_host
+                       and prcl_port = @prcl_port
+                       and bill_freight_flg = @bill_freight_flg
+                       and cod_payment_type = @cod_payment_type
+                       and paytrm = @paytrm
+                       and field_sep = @field_sep
+                       and printer_type = @printer_type
+                       and trackno_start = @trackno_start
+                       and trackno_len = @trackno_len
+                       and ack_timeout = @ack_timeout
+                       and ship_request_tranid = @ship_request_tranid
+                       and ship_reply_tranid = @ship_reply_tranid
+                       and delete_request_tranid = @delete_request_tranid
+                       and delete_reply_tranid = @delete_reply_tranid
+                       and close_request_tranid = @close_request_tranid
+                       and close_reply_tranid = @close_reply_tranid
+                       and lblfmt = @lblfmt
+                       and manrpt = @manrpt
+                       and NEXT_TRACKING_REPLY_TRANID = @NEXT_TRACKING_REPLY_TRANID
+                       and NEXT_TRACKING_REQUEST_TRANID = @NEXT_TRACKING_REQUEST_TRANID
+                       and cad = @cad
+                       and traknm_type = @traknm_type
+                       and service_type = @service_type
+                       and srv_prnt_lblfg = @srv_prnt_lblfg
+                       and stacct = @stacct
+                       and shterm = @shterm
+                       and btacct = @btacct
+                       and imp_name = @imp_name
+                       and imp_attn_name = @imp_attn_name
+                       and imp_adrln1 = @imp_adrln1
+                       and imp_adrln2 = @imp_adrln2
+                       and imp_city = @imp_city
+                       and imp_cont_name = @imp_cont_name
+                       and imp_state = @imp_state
+                       and imp_zip = @imp_zip
+                       and imp_country = @imp_country
+                       and imp_phone = @imp_phone
+                       and imp_fax = @imp_fax
+                       and ordnum = @ordnum
+                       and ordlin = @ordlin
+                       and ordsln = @ordsln
+                       and client_id = @client_id
+                       and wh_id = @wh_id
+                       /* Added for 3rd party billing and Freight Collect */
+                       and btname = @btname
+                       and btadd1 = @btadd1
+                       and btadd2 = @btadd2
+                       and btadd3 = @btadd3
+                       and btattn_name = @btattn_name
+                       and btcity = @btcity
+                       and btcont_name = @btcont_name
+                       and btstcd = @btstcd
+                       and btposc = @btposc
+                       and btcnty = @btcnty
+                       and btphon = @btphon
+                       and btfnam = @btfnam
+                       and btlnam = @btlnam
+                       and aesitn = @aesitn
+                       and aes_typ = @aes_typ
+                       and aes_acpt_dte = @aes_acpt_dte
+                       and ftsrnum = @ftsrnum
+                       and dlvdte = @dlvdte
+                       and export_typ = @export_typ
+    }
+]]>
+</local-syntax>
+</command>
