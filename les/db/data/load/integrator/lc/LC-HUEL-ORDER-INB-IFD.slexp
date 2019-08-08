@@ -123,6 +123,14 @@ publish data where <<OVERSTACKED_ARGS>>
 |
 [select cponum from ord where @+ordnum]
 |
+[select ctry_name
+   from adrmst
+  where adr_id = (select adr_id
+                    from cstmst
+                   where cstnum = (select stcust
+                                     from ord
+                                    where @+ordnum))]
+|
 sl_log event where evt_id = ''LC-HUEL-ORDER-INB-ACK''
 and sys_id = ''DCS''
 ','339'
