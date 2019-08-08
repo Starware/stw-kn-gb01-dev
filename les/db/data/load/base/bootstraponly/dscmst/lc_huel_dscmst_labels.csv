@@ -1,0 +1,9 @@
+colnam,colval,locale_id,lngdsc,short_dsc,grp_nam
+doc_typ,Lc-CartonLabel,EN-GB,"Pick Carton Label","",les_doc_typ
+doc_typ,Lc-CartonLabel,US_ENGLISH,"Pick Carton Label","",les_doc_typ
+doc_typ,Lc-PalletLabel,EN-GB,"Pick Pallet Label","",les_doc_typ
+doc_typ,Lc-PalletLabel,US_ENGLISH,"Pick Pallet Label","",les_doc_typ
+lblfmt,Lc-CartonLabel,EN-GB,"Pick Carton Label","",les_doc_typ
+lblfmt,Lc-CartonLabel,US_ENGLISH,"Pick Carton Label","",les_doc_typ
+lblfmt,Lc-PalletLabel,EN-GB,"Pick Pallet Label","",les_doc_typ
+lblfmt,Lc-PalletLabel,US_ENGLISH,"Pick Pallet Label","",les_doc_typ
