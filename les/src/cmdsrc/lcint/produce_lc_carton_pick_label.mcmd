@@ -4,6 +4,10 @@
 <type>Local Syntax</type>
 <local-syntax>
 <![CDATA[
+[select def_printer prtadr
+   from lblfmt
+  where lblfmt = 'Lc-CartonLabel'] catch(-1403)
+|
 get label format where format = "Lc-CartonLabel" | produce label
 |
 if (@outfile_name <> '' and @outfile_name is not null)
