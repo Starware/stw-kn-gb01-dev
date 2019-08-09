@@ -1,0 +1,32 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://xlogics.eu/blackbox" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="PrintParcelResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ExitStatus">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:string" name="Status"/>
+                            <xs:element name="StatusDetails">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="StatusDetail" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element type="xs:string" name="Status"/>
+                                                    <xs:element type="xs:short" name="Code"/>
+                                                    <xs:element type="xs:string" name="Message"/>
+                                                    <xs:element type="xs:string" name="Details"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element type="xs:string" name="OutputParameters"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
