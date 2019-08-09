@@ -112,12 +112,21 @@
         and polval = 'GOODS_CONTENT'
         and wh_id = @wh_id] catch(-1403)
     |	
-	[select rtstr1 output_queue
-       from poldat_view
-      where polcod = 'LC_PCIP'
-        and polvar = 'CONFIG'
-        and polval = 'OUTPUT_QUEUE'
-        and wh_id = @wh_id] catch(-1403)
+	[select devmst.lbl_prtadr
+       from devmst
+      where devmst.devcod = nvl(@devcod, @@devcod)
+        and devmst.wh_id = @wh_id
+		and devmst.lbl_prtadr is not NULL ] catch(-1403)
+	 |
+	if(@? = -1403) 
+	{
+		[select rtstr1 output_queue
+		   from poldat_view
+		  where polcod = 'LC_PCIP'
+			and polvar = 'CONFIG'
+			and polval = 'OUTPUT_QUEUE'
+			and wh_id = @wh_id] catch(-1403)
+	}
 	|
 	create lc pcip consignment 
 	 where url =@url
@@ -134,6 +143,7 @@
        and depot =  @wh_id
        and client_id = @client_id
        and carcod = @carcod
+	   and srvlvl = @srvlvl
        and cur_pkg = @cur_pkg
        and tot_pkg_count = @tot_pkg_count
        and weight = @weight
@@ -153,7 +163,7 @@
        and prtnum = @prtnum
        and dg_dsc = @dg_dscp
 	   and goods_content =@goods_content
-	   and output_queue = @output_queue
+	   and output_queue = nvl(@lbl_prtadr,@output_queue)
 	|
 	if(@? = 0)
 	{
