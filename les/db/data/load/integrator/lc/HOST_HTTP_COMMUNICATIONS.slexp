@@ -10,6 +10,19 @@ publish data
   where username = ''ws_swiftlog''
     and password = ''aY3DWnZn''
 |
+[select rtstr1, rtstr2        
+   from poldat_view
+  where polcod = ''USR_HTTP''
+    and polvar = ''ESB''
+    and polval = ''CREDENTIALS''
+    and wh_id = ''----''] catch(-1403, 510)
+|
+if (@? = 0) {
+	publish data
+		where username = @rtstr1
+		and password = @rtstr2
+	}
+|
 sl_generate doc filename from ifd data where <<OVERSTACKED_ARGS>> and fld_id = ''WH_ID'' catch (@?)
 |
 if (@? != 0) {
