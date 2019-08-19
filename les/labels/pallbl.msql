@@ -1,0 +1,137 @@
+# Standard Pallet Label with load #, fifo date, quantity and part #
+#
+#
+
+get mls text where mls_id    = 'lbl_mixed_part' 
+               and frm_id    = 'pallbl'
+               and locale_id = @@locale_id catch (-1403)
+|
+if (@? = 0)
+    publish data where lbl_mixed_part = @mls_text 
+else
+    publish data where lbl_mixed_part = 'Mixed Parts'
+
+|
+
+get mls text where mls_id    = 'lbl_mixed_cli' 
+               and frm_id    = 'pallbl'
+               and locale_id = @@locale_id catch (-1403)
+|
+if (@? = 0)
+    publish data where lbl_mixed_cli = @mls_text
+else
+    publish data where lbl_mixed_cli = 'Mixed Clients'
+
+|
+
+get mls text where mls_id    = 'lbl_mixed_fifo' 
+               and frm_id    = 'pallbl'
+               and locale_id = @@locale_id catch (-1403)
+|
+if (@? = 0)
+    publish data where lbl_mixed_fifo = @mls_text
+else
+    publish data where lbl_mixed_fifo = 'Mixed FIFO'
+
+|
+
+get mls text where mls_id    = 'lbl_mixed_lot' 
+               and frm_id    = 'pallbl'
+               and locale_id = @@locale_id catch (-1403)
+|
+if (@? = 0)
+    publish data where lbl_mixed_lot = @mls_text
+else
+    publish data where lbl_mixed_lot = 'Mixed Lots'
+
+|
+
+get mls text where mls_id    = 'lbl_mixed_org' 
+               and frm_id    = 'pallbl'
+               and locale_id = @@locale_id catch (-1403)
+|
+if (@? = 0)
+    publish data where lbl_mixed_org = @mls_text
+else
+    publish data where lbl_mixed_org = 'Mixed Origins'
+
+|
+
+get mls text where mls_id    = 'lbl_mixed_rev' 
+               and frm_id    = 'pallbl'
+               and locale_id = @@locale_id catch (-1403)
+|
+if (@? = 0)
+    publish data where lbl_mixed_rev = @mls_text
+else
+    publish data where lbl_mixed_rev = 'Mixed Revisions'
+
+|
+
+[select decode (count(distinct invdtl.prtnum), 0, '', 1, max(invdtl.prtnum), @lbl_mixed_part) prtnum, 
+        decode (count(distinct invdtl.prt_client_id), 0, '', 1, max(invdtl.prt_client_id), @lbl_mixed_cli) prt_client_id,
+        decode (count(distinct invdtl.prtnum), 0, '', 1, max(pmv.dsp_prtnum), @lbl_mixed_part) dsp_prtnum,
+        nvl(sum (untqty), 0) untqty, 
+        decode (count(distinct invsts), 1, max(invsts), '?') invsts, 
+        decode (count(distinct expire_dte), 0, '', 1, to_char (max(expire_dte), 'YYYYMMDDHH24MiSS'), @lbl_mixed_fifo) fifdte, 
+        decode (count(distinct lotnum), 0, '', 1, max(lotnum), @lbl_mixed_lot) lotnum, 
+        decode (count(distinct orgcod), 0, '', 1, max(orgcod), @lbl_mixed_org) orgcod, 
+        decode (count(distinct revlvl), 0, '', 1, max(revlvl), @lbl_mixed_rev) revlvl,
+        invlod.stoloc,
+        invlod.voc_chkdgt
+     from invlod 
+left join invsub
+       on invlod.lodnum = invsub.lodnum    
+left join invdtl 
+       on invsub.subnum = invdtl.subnum
+left join prtmst_view pmv
+       on invdtl.prtnum = pmv.prtnum
+      and invdtl.prt_client_id = pmv.prt_client_id
+      and invlod.wh_id = pmv.wh_id
+    where invlod.lodnum = @lodnum
+group by invlod.stoloc,
+         invlod.voc_chkdgt] 
+|
+if (@fifdte != '' and @fifdte != @lbl_mixed_fifo)
+{
+    format date time
+          where moca_dt = @fifdte
+            and locale_id = @@locale_id
+            and mode = 2
+    |
+    publish data where fifdte = @fmt_dat_tim
+}
+|
+[select lngdsc prt_desc
+   from prtdsc
+ where colval = @prtnum||'|'||@prt_client_id||'|'||@wh_id and locale_id = @@locale_id] catch (-1403)
+|
+[select nvl(min(stoloc), ' ') nxtloc 
+   from invmov 
+  where lodnum = @lodnum 
+    and lodlvl = 'L' 
+    and rownum = 1 
+    and seqnum = (select nvl(min(seqnum),0) 
+                    from invmov 
+                   where lodnum=@lodnum 
+                     and lodlvl = 'L' 
+                     and rownum=1)] catch (-1403)
+|
+if ((@? = -1403) or (@nxtloc = ' ')) 
+{
+    publish data where nxtloc = @stoloc
+}
+|
+publish data where lodnum = @lodnum 
+               and prtnum = @dsp_prtnum
+               and prt_client_id = @prt_client_id
+               and prt_desc = @prt_desc
+               and untqty = @untqty
+               and invsts = @invsts
+               and fifdte = @fifdte
+               and lotnum = @lotnum
+               and orgcod = @orgcod
+               and revlvl = @revlvl
+               and nxtloc = @nxtloc
+               and voc_chkdgt = @voc_chkdgt
+
