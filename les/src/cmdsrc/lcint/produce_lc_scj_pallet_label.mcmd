@@ -1,0 +1,60 @@
+<command>
+<name>produce lc scj pallet label</name>
+<description>Produce LC SCJ Pallet Label</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+validate stack variable not null
+ where name = 'lodnum'
+|
+[select distinct cstmst.cstnum
+    from all_inventory_view
+    join shipment_line
+      on shipment_line.ship_line_id = all_inventory_view.ship_line_id
+     and shipment_line.wh_id = all_inventory_view.wh_id
+     and all_inventory_view.prtnum = shipment_line.prtnum
+     and all_inventory_view.prt_client_id = shipment_line.prt_client_id
+     and all_inventory_view.prt_client_id = shipment_line.client_id
+    join ord
+      on ord.ordnum = shipment_line.ordnum
+     and ord.client_id = shipment_line.client_id
+     and ord.wh_id = shipment_line.wh_id
+    join cstmst
+      on cstmst.cstnum = ord.stcust
+     and cstmst.client_id = ord.client_id 
+   where all_inventory_view.lodnum = @lodnum
+     and all_inventory_view.wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+|
+if(@? = 0)
+{
+	[select 1
+	   from poldat_view
+	  where polcod = 'LC_PICKING'
+		and polvar = 'DUISBURG_LABEL'
+		and polval = 'ENABLED'
+		and wh_id = nvl(@wh_id, @@wh_id)
+		and rtstr1 = @cstnum] catch(-1403)
+	|
+	if (@? = 0)
+	{
+		[select devmst.lbl_prtadr
+           from devmst
+          where devmst.devcod = nvl(@devcod, @@devcod)
+            and devmst.wh_id = @wh_id
+		    and devmst.lbl_prtadr is not NULL] catch(-1403)
+		|
+		if(@? =0)
+		{
+		  generate label
+			 where locale_id = nvl(@locale_id, @@locale_id)
+			   and label_name = 'Lc-SCJPalletLabel' catch(@?)
+		  |
+		  print lbl label operations label 
+		   where filename = @outfile_name 
+		     and prtadr = @lbl_prtadr catch(@?)
+		}
+	}
+}
+]]>
+</local-syntax>
+</command>
