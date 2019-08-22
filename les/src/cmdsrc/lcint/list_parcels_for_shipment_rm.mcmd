@@ -1,0 +1,199 @@
+<command>
+<name>list parcels for shipment rm</name>
+<description>List Parcels for Shipment RM</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+
+    if (@client_id = '')
+    {
+        get installed configuration
+            where config = 'THIRD-PARTY-LOGISTICS'
+        |
+        if (@installed = 0)
+        {
+            publish data
+              where client_id = '----'
+        }
+    }
+    |
+    if (@ordnum != "")
+    {
+        [select mn.ship_id,
+                sl.client_id,
+                sl.ordnum,
+                mn.crtnid,
+                mn.mfstid,
+                mn.mstdte,
+                mn.traknm,
+                mn.frtrte,
+                mn.subnum,
+                mn.lodnum,
+                mn.weight,
+                mn.carcod,
+                mn.srvlvl,
+                mn.prtnum,
+                nvl(mn.prt_client_id, '----'),
+                mn.dstnam,
+                mn.usrfld1,
+                mn.usrfld2,
+                mn.usrfld3,
+                mn.usrfld4
+           from manfst mn,
+                invdtl ivd,
+                invsub ivs,
+                shipment_line sl
+          where (mn.subnum   = ivd.subnum
+             or  mn.lodnum   = ivs.lodnum)
+            and ivs.subnum   = ivd.subnum
+            and (mn.prtnum  is NULL
+             or  mn.prtnum   = ''
+             or  (mn.prtnum is not null
+            and   exists
+                  (select 1
+                     from prtmst_view pmv
+                    where mn.prtnum        = pmv.prtnum
+                      and mn.prt_client_id = pmv.prt_client_id
+                      and mn.wh_id         = pmv.wh_id
+                      and pmv.prdflg       = '1')))
+            and ivd.ship_line_id = sl.ship_line_id
+			and mn.ship_id = sl.ship_id 
+            and sl.ship_id       = @ship_id
+            and sl.ordnum        = @ordnum
+            and sl.client_id     = @client_id
+            and sl.wh_id         = @wh_id
+          group by mn.ship_id,
+                   sl.client_id,
+                   sl.ordnum,
+                   mn.crtnid,
+                   mn.mfstid,
+                   mn.mstdte,
+                   mn.traknm,
+                   mn.frtrte,
+                   mn.subnum,
+                   mn.lodnum,
+                   mn.weight,
+                   mn.carcod,
+                   mn.srvlvl,
+                   mn.prtnum,
+                   mn.prt_client_id,
+                   mn.dstnam,
+                   mn.usrfld1,
+                   mn.usrfld2,
+                   mn.usrfld3,
+                   mn.usrfld4] catch(-1403)
+    }
+    else
+    {
+        [select distinct mn.ship_id,
+                mn.client_id,
+                mn.ordnum,
+                mn.crtnid,
+                mn.mfstid,
+                mn.mstdte,
+                mn.traknm,
+                mn.frtrte,
+                mn.subnum,
+                mn.lodnum,
+                mn.weight,
+                mn.carcod,
+                mn.srvlvl,
+                mn.prtnum prtnum,
+                nvl(mn.prt_client_id, '----') prt_client_id,
+                mn.dstnam,
+                mn.usrfld1,
+                mn.usrfld2,
+                mn.usrfld3,
+                mn.usrfld4
+           from prtmst_view pmv,
+                manfst mn
+          where pmv.prtnum        = mn.prtnum
+            and pmv.prt_client_id = mn.prt_client_id
+            and pmv.wh_id         = mn.wh_id
+            and pmv.prdflg        = '1'
+            and @+ship_id
+            and @+client_id
+            and @+ordnum
+            and @+mn.wh_id
+          union
+         select distinct mn.ship_id,
+                mn.client_id,
+                mn.ordnum,
+                mn.crtnid,
+                mn.mfstid,
+                mn.mstdte,
+                mn.traknm,
+                mn.frtrte,
+                mn.subnum,
+                mn.lodnum,
+                mn.weight,
+                mn.carcod,
+                mn.srvlvl,
+                mn.prtnum prtnum,
+                nvl(mn.prt_client_id, '----') prt_client_id,
+                mn.dstnam,
+                mn.usrfld1,
+                mn.usrfld2,
+                mn.usrfld3,
+                mn.usrfld4
+           from manfst mn
+          where (mn.prtnum is null
+             or  mn.prtnum  = '')
+            and @+ship_id
+            and @+client_id
+            and @+ordnum
+            and @+mn.wh_id] catch(-1403)
+    }
+    |
+    if (@? = -1403)
+    {
+        set return status
+            where status = 0
+    }
+    else if (@? = 0)
+    {
+        publish data
+          where ship_id       = @ship_id
+            and client_id     = @client_id
+            and ordnum        = @ordnum
+            and crtnid        = @crtnid
+            and mfstid        = @mfstid
+            and mstdte        = @mstdte
+            and traknm        = @traknm
+            and frtrte        = @frtrte
+            and subnum        = @subnum
+            and lodnum        = @lodnum
+            and weight        = @weight
+            and carcod        = @carcod
+            and srvlvl        = @srvlvl
+            and prtnum        = @prtnum
+            and prt_client_id = @prt_client_id
+            and dstnam        = @dstnam
+            and usrfld1       = @usrfld1
+            and usrfld2       = @usrfld2
+            and usrfld3       = @usrfld3
+            and usrfld4       = @usrfld4
+    }
+
+]]>
+</local-syntax>
+
+<argument name="client_id" datatype="string">Client ID</argument>
+<argument name="ordnum" datatype="string">Order Number</argument>
+<argument name="ship_id" datatype="string">Shipment ID</argument>
+<argument name="wh_id" datatype="string">Warehouse ID</argument>
+
+<documentation>
+<remarks>
+<![CDATA[
+  <p>
+  This command is used by the SHIP_LOAD Integrator transaction to retrieve
+  inventory information about parcels shipped through the manifest system
+  for this shipment.
+  </p>
+]]>
+</remarks>
+<exception value="eOK">Normal Successful Completion</exception>
+<exception value="eDB_NO_ROWS_AFFECTED">Parcel Inventory Not Found</exception>
+</documentation>
+</command>
