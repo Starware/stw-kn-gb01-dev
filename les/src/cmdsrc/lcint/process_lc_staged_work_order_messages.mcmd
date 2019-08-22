@@ -4,6 +4,7 @@
   <type>Local Syntax</type>
   <local-syntax>
 <![CDATA[
+
 [select wh_id,
         wkonum
    from usr_lc_workorder_header_inb
@@ -17,10 +18,9 @@ if (@? = 0)
        and wh_id = @wh_id
        and wkonum = @wkonum catch(-1403)
     |
-    remove record
-     where table = 'usr_lc_workorder_line_inb'
-       and wh_id = @wh_id
-       and wkonum = @wkonum catch(-1403)
+    [delete usr_lc_workorder_component_inb
+      where wh_id = @wh_id
+        and wkonum = @wkonum] catch(-1403)
     |
     [delete usr_lc_workorder_note_inb
       where wh_id = @wh_id
@@ -33,16 +33,16 @@ publish data
 [select hdr.wh_id,
         hdr.wkonum,
         hdr.trntyp,
-        to_date(hdr.duedte, 'YYYYMMDD') as duedte,
+        hdr.duedte,
         hdr.prcpri,
         hdr.prtnum,
         hdr.prt_client_id,
         hdr.invsts,
         hdr.prdqty as wkoqty,
-        hdr.prcare,
-        hdr.prcloc
+        lne.prcare,
+        lne.prcloc
    from usr_lc_workorder_header_inb hdr,
-        usr_lc_workorder_line_inb lne
+        usr_lc_workorder_component_inb lne
   where hdr.hdr_sts = 'NEW'
     and lne.wh_id = hdr.wh_id
     and lne.wkonum = hdr.wkonum
@@ -60,6 +60,10 @@ if (@? = 0 and @trntyp = 'A')
     {
         [commit]
         |
+        list production stations
+         where prcloc = @prcloc
+           and wh_id = @wh_id
+        |
         create work order
          where wh_id = @wh_id
            and prtnum = @prtnum
@@ -71,13 +75,14 @@ if (@? = 0 and @trntyp = 'A')
            and prcpri = @prcpri
            and invsts = @invsts
            and wkoqty = @wkoqty
-           and prcare = @prcare
+           and prcare = @arecod
+           and prdlin = @prdlin
            and wko_typ = 'ASMBLE'
         |
         [select lne.wkolin,
                 lne.prtnum,
                 lne.ordqty
-           from usr_lc_workorder_line_inb lne
+           from usr_lc_workorder_component_inb lne
           where lne.wh_id = @wh_id
             and lne.wh_id = @wh_id
             and lne.wkonum = @wkonum]
@@ -93,8 +98,9 @@ if (@? = 0 and @trntyp = 'A')
            and prcloc = @prcloc
            and pckqty = @ordqty
            and linqty = @ordqty
+           and prdlin = @prdlin
            and invsts_prg = @invsts
-           and bom_cnsqty = 0
+           and bom_cnsqty = @ordqty / @wkoqty
         |
         [select nte.notlin,
                 nte.nottxt
@@ -112,13 +118,13 @@ if (@? = 0 and @trntyp = 'A')
                and notlin = @notlin
                and nottxt = @nottxt
         }
+        |
+        [update usr_lc_workorder_header_inb
+            set hdr_sts = 'COMPLETED'
+          where wh_id = @wh_id
+            and wkonum = @wkonum
+            and hdr_sts = 'INPROGRESS'] catch(-1403)
     }
-    |
-    [update usr_lc_workorder_header_inb
-        set hdr_sts = 'COMPLETED'
-      where wh_id = @wh_id
-        and wkonum = @wkonum
-        and hdr_sts = 'INPROGRESS'] catch(-1403)
 }
 
 ]]>

@@ -10,21 +10,28 @@
 
 mset command on
 
+[drop table usr_lc_workorder_line_inb] catch(-942)
+/
+
+[drop table usr_lc_workorder_component_inb] catch(-942)
+/
 [
-CREATE_TABLE(usr_lc_workorder_line_inb)
+CREATE_TABLE(usr_lc_workorder_component_inb)
 (
     wh_id             STRING_TY (WH_ID_LEN) not null,  /* PK */
     wkonum            STRING_TY (20) not null,  /* PK */
     wkolin            STRING_TY (10) not null,  /* PK */
     prtnum            STRING_TY (PRTNUM_LEN) not null,
     ordqty            INTEGER_TY not null,
+    prcare            STRING_TY (30) not null,
+    prcloc            STRING_TY (30) not null,
     ins_dt            date
 ) 
 ] catch (ERR_TABLE_ALREADY_EXISTS)
 RUN_DDL
 
 [
-  CREATE_PK_CONSTRAINT_BEGIN(usr_lc_workorder_line_inb, usr_lc_workorder_component_inb_pk)
+  CREATE_PK_CONSTRAINT_BEGIN(usr_lc_workorder_component_inb, usr_lc_workorder_component_inb_pk)
   (wh_id, wkonum, wkolin)
   CREATE_PK_CONSTRAINT_USING_INDEX
   CREATE_PK_CONSTRAINT_END
@@ -32,11 +39,13 @@ RUN_DDL
 RUN_DDL
 
 create db documentation
- where table = "usr_lc_workorder_line_inb"
+ where table = "usr_lc_workorder_component_inb"
    and wh_id = "Warehouse Id"
    and wkonum = "Works Order Number"
    and wkolin = "Works Order Line Number"
    and ins_dt = "Insert Date"
    and prtnum = "Component Product code"
    and ordqty = "Ordered quantity for Works Order"
+   and prcloc = "Processing Location"
+   and prcare = "Processing Area"
 /

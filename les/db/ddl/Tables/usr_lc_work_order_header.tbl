@@ -10,6 +10,9 @@
 
 mset command on
 
+[drop table usr_lc_workorder_header_inb] catch(-942)
+/
+
 [
 CREATE_TABLE(usr_lc_workorder_header_inb)(
     wh_id             STRING_TY (WH_ID_LEN) not null,  /* PK */
@@ -22,8 +25,6 @@ CREATE_TABLE(usr_lc_workorder_header_inb)(
     prt_client_id     STRING_TY (32) not null,
     invsts            STRING_TY (INVSTS_LEN),
     prdqty            INTEGER_TY not null,
-    prcare            STRING_TY (30),
-    prcloc            STRING_TY (30),
     hdr_sts           STRING_TY (10) not null
 ) 
 ] catch (ERR_TABLE_ALREADY_EXISTS)
@@ -49,7 +50,5 @@ create db documentation
    and invsts = "Work Order inventory status"
    and prdqty = "Ordered quantity for Works Order"
    and trntyp = "Transaction type"
-   and prcare = "Processing Area"
-   and prcloc = "Processing Location"
    and hdr_sts = "Header Staging status"
 /
