@@ -380,48 +380,4 @@ CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
 SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
 2018.1,'LC_WORK_ORDER_RES_IFD','1.0','DCS','','','SYNCD','','T','T','T','','','','','',''
 
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
-2018.1,'HOST','ASYNC','I','SL_INB_XML_FILES','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST','ASYNC','I','SL_INB_XML_FILES','DIR_PATH','${LESDIR}/hostin/','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST','ASYNC','I','SL_INB_XML_FILES','FAIL_DIR','${LESDIR}/hostin/error','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST','ASYNC','I','SL_INB_XML_FILES','FILE_PATTERN','*.xml','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST','ASYNC','I','SL_INB_XML_FILES','IGNORE_SEG_LIST','PSCAMA','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST','ASYNC','I','SL_INB_XML_FILES','MERGE_FROM_SIBLING_SEG','PSCAMA','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST','ASYNC','I','SL_INB_XML_FILES','RUN_TRAN_FLG','T','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST','ASYNC','I','SL_INB_XML_FILES','SUCC_DIR','${LESDIR}/hostin/processed','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST','ASYNC','I','SL_INB_XML_FILES','TRG_EXTENTION','trg','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST','ASYNC','I','SL_INB_XML_FILES','XML_FILE_FLG','T','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST','ASYNC','I','SL_INB_HTTP','PROVIDER_ENDPOINT','GBRPY01_SCJP_DEFAULT','',''
-
 CSV__TAG__KLUDGE___COMMIT
