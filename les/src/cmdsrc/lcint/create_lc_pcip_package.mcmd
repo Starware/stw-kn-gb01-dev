@@ -5,7 +5,7 @@
   <local-syntax>
 <![CDATA[
     [select 1
-	   from inventory_view
+	   from invlod
 	  where lodnum = @invtid
 	    and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
 	|	
