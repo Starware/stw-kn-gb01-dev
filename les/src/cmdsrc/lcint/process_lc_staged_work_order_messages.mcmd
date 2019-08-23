@@ -40,7 +40,7 @@ publish data
         hdr.invsts,
         hdr.prdqty as wkoqty,
         lne.prcare,
-        lne.prcloc
+        lne.prcloc as prdlin
    from usr_lc_workorder_header_inb hdr,
         usr_lc_workorder_component_inb lne
   where hdr.hdr_sts = 'NEW'
@@ -61,7 +61,7 @@ if (@? = 0 and @trntyp = 'A')
         [commit]
         |
         list production stations
-         where prcloc = @prcloc
+         where prdlin = @prdlin
            and wh_id = @wh_id
         |
         create work order
