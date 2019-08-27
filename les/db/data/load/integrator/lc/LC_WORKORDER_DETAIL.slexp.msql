@@ -19,3 +19,7 @@ sl_wipe eo_def where eo_id='LC_WO_LINE_EO' and eo_ver='1.0' catch (-1403)
 /
 sl_wipe ifd_def where ifd_id='LC_WO_LINE_RES_IFD' and ifd_ver='1.0' catch (-1403)
 /
+[delete sl_alg_def where alg_id = 'LC_WO_LINE_DTL_PROC'] catch (-1403)
+/
+[delete sl_alg_def where alg_id = 'LC_WO_LINE_NOTE_PROC'] catch (-1403)
+/
