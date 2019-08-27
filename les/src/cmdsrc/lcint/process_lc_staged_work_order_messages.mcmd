@@ -1,32 +1,7 @@
-<command>
-  <name>process lc staged work order messages</name>
-  <description>Processes work order downloads</description>
-  <type>Local Syntax</type>
-  <local-syntax>
-<![CDATA[
-
-[select wh_id,
-        wkonum
-   from usr_lc_workorder_header_inb
-  where hdr_sts = 'COMPLETED'
-    and duedte < to_char(sysdate - 7, 'YYYYMMDD')] catch(-1403)
+[update usr_lc_workorder_header_inb
+    set hdr_sts = 'NEW'
+	where wkonum = '279749EF']
 |
-if (@? = 0)
-{
-    remove record
-     where table = 'usr_lc_workorder_header_inb'
-       and wh_id = @wh_id
-       and wkonum = @wkonum catch(-1403)
-    |
-    [delete usr_lc_workorder_component_inb
-      where wh_id = @wh_id
-        and wkonum = @wkonum] catch(-1403)
-    |
-    [delete usr_lc_workorder_note_inb
-      where wh_id = @wh_id
-        and wkonum = @wkonum] catch(-1403)
-}
-;
 publish data
  where wkorev = '001'
 |
@@ -42,7 +17,7 @@ publish data
         lne.prcare,
         lne.prcloc as prdlin
    from usr_lc_workorder_header_inb hdr,
-        usr_lc_workorder_component_inb lne
+        usr_lc_workorder_components_inb lne
   where hdr.hdr_sts = 'NEW'
     and lne.wh_id = hdr.wh_id
     and lne.wkonum = hdr.wkonum
@@ -83,7 +58,7 @@ if (@? = 0 and @trntyp = 'A')
         [select lne.wkolin,
                 lne.prtnum,
                 lne.ordqty
-           from usr_lc_workorder_component_inb lne
+           from usr_lc_workorder_components_inb lne
           where lne.wh_id = @wh_id
             and lne.wh_id = @wh_id
             and lne.wkonum = @wkonum]
@@ -128,6 +103,3 @@ if (@? = 0 and @trntyp = 'A')
     }
 }
 
-]]>
-</local-syntax>
-</command>
