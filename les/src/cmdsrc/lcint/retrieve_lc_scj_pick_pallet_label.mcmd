@@ -8,30 +8,30 @@ if(@lodnum)
 {
 	[select distinct prtmst_view.prtnum,
 			 prtdsc.lngdsc,
-			 inventory_view.ftpcod,
-			 inventory_view.lodnum,
+			 all_inventory_view.ftpcod,
+			 all_inventory_view.lodnum,
 			 alt_prtmst.prtnum alt_prtnum,
-			 sysdate dte,
-			 sum(inventory_view.untqty) untqty
-		from inventory_view
+			 to_char(sysdate, 'YYYYMMDDHH24MiSS') dte,
+			 sum(all_inventory_view.untqty) untqty
+		from all_inventory_view
 		join prtmst_view
-		  on prtmst_view.prtnum = inventory_view.prtnum
-		 and prtmst_view.wh_id = inventory_view.wh_id
+		  on prtmst_view.prtnum = all_inventory_view.prtnum
+		 and prtmst_view.wh_id = all_inventory_view.wh_id
 		join prtdsc
-		  on prtdsc.colval = inventory_view.prtnum || '|' || inventory_view.prt_client_id || '|' || inventory_view.wh_id
+		  on prtdsc.colval = all_inventory_view.prtnum || '|' || all_inventory_view.prt_client_id || '|' || all_inventory_view.wh_id
 		 and prtdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
 		 and prtdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
 		join alt_prtmst
 		  on alt_prtmst.prtnum = prtmst_view.prtnum
 		 and alt_prtmst.prt_client_id = prtmst_view.prt_client_id
-	   where inventory_view.wrkref is not null
-		 and inventory_view.wh_id = nvl(@wh_id,@@wh_id)
-		 and inventory_view.lodnum = @lodnum
+	   where all_inventory_view.wrkref is not null
+		 and all_inventory_view.wh_id = nvl(@wh_id,@@wh_id)
+		 and all_inventory_view.lodnum = @lodnum
 	   group by prtmst_view.prtnum,
 			 prtdsc.lngdsc,
 			 alt_prtmst.prtnum,
-			 inventory_view.ftpcod,
-			 inventory_view.lodnum] catch(-1403)
+			 all_inventory_view.ftpcod,
+			 all_inventory_view.lodnum] catch(-1403)
 	|
 	publish data
 	  where ean = '02' || @alt_prtnum || '10' || @lodnum || '37' || @untqty
