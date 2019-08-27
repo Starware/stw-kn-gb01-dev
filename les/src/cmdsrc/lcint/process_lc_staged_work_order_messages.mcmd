@@ -100,6 +100,7 @@ if (@? = 0 and @trntyp = 'A')
            and pckqty = @ordqty
            and linqty = @ordqty
            and prdlin = @prdlin
+		   and invsts = @invsts_prg
            and invsts_prg = @invsts_prg
            and bom_cnsqty = @ordqty / @wkoqty
         |
