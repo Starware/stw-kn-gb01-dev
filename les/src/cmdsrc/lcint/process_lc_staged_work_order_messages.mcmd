@@ -1,7 +1,31 @@
-[update usr_lc_workorder_header_inb
-    set hdr_sts = 'NEW'
-	where wkonum = '279749EF']
+<command>
+  <name>process lc staged work order messages</name>
+  <description>Processes work order downloads</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+[select wh_id,
+        wkonum
+   from usr_lc_workorder_header_inb
+  where hdr_sts = 'COMPLETED'
+    and duedte < to_char(sysdate - 7, 'YYYYMMDD')] catch(-1403)
 |
+if (@? = 0)
+{
+    remove record
+     where table = 'usr_lc_workorder_header_inb'
+       and wh_id = @wh_id
+       and wkonum = @wkonum catch(-1403)
+    |
+    [delete usr_lc_workorder_components_inb
+      where wh_id = @wh_id
+        and wkonum = @wkonum] catch(-1403)
+    |
+    [delete usr_lc_workorder_note_inb
+      where wh_id = @wh_id
+        and wkonum = @wkonum] catch(-1403)
+}
+;
 publish data
  where wkorev = '001'
 |
@@ -57,7 +81,8 @@ if (@? = 0 and @trntyp = 'A')
         |
         [select lne.wkolin,
                 lne.prtnum,
-                lne.ordqty
+                lne.ordqty,
+				lne.invsts_prg
            from usr_lc_workorder_components_inb lne
           where lne.wh_id = @wh_id
             and lne.wh_id = @wh_id
@@ -75,7 +100,7 @@ if (@? = 0 and @trntyp = 'A')
            and pckqty = @ordqty
            and linqty = @ordqty
            and prdlin = @prdlin
-           and invsts_prg = @invsts
+           and invsts_prg = @invsts_prg
            and bom_cnsqty = @ordqty / @wkoqty
         |
         [select nte.notlin,
@@ -103,3 +128,7 @@ if (@? = 0 and @trntyp = 'A')
     }
 }
 
+
+]]>
+</local-syntax>
+</command>
