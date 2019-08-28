@@ -1,0 +1,119 @@
+<command>
+
+<name>get lc user defined inventory attributes variable configuration</name>
+
+<description>Get LC User Defined Inventory Attributes For Variable Configuration</description>
+
+<type>Local Syntax</type>
+
+<local-syntax>
+<![CDATA[
+
+   if(@varlist = "")
+   {
+       publish data where varlist = "'inv_attr_str1',
+                                     'inv_attr_str2',
+                                     'inv_attr_str3',
+                                     'inv_attr_str4',
+                                     'inv_attr_str5',
+                                     'inv_attr_str6',
+                                     'inv_attr_str7',
+                                     'inv_attr_str8',
+                                     'inv_attr_str9',
+                                     'inv_attr_str10',
+                                     'inv_attr_str11',
+                                     'inv_attr_str12',
+                                     'inv_attr_str13',
+                                     'inv_attr_str14',
+                                     'inv_attr_str15',
+                                     'inv_attr_str16',
+                                     'inv_attr_str17',
+                                     'inv_attr_str18',
+                                     'inv_attr_int1',
+                                     'inv_attr_int2',
+                                     'inv_attr_int3',
+                                     'inv_attr_int4',
+                                     'inv_attr_int5',
+                                     'inv_attr_flt1',
+                                     'inv_attr_flt2',
+                                     'inv_attr_flt3',
+                                     'inv_attr_dte1',
+                                     'inv_attr_dte2'"
+  }
+  |
+   /* This command returns the addon configured under system configuration */
+  get addon_id
+  |
+   /* Appending 'LES' addon because above command returns only
+    * system configured addon ids
+    */
+  publish data 
+      where addon_id = @addon_id  || ",LES"
+  |
+   /* Addon id parameter is passed to return records for all the addon exist */
+  get les variable
+      where varlist = @varlist
+        and addon_id = @addon_id 
+  |
+  choose data 
+      where columns = 'var_nam,vis_flg,ena_flg,fld_typ' >> res
+  |
+  
+  [[
+      import com.redprairie.moca.*;
+      import com.redprairie.moca.util.*;
+      if(enabled == 1)
+      {
+          while(res.next())
+          {
+              if (res.getValue("vis_flg") == 0 ||
+                  res.getValue("ena_flg") == 0)
+              {
+                  res.removeRow();
+              }
+          }
+       }
+       else if(enabled == 0)
+       {
+          while(res.next())
+          {
+              if (res.getValue("vis_flg") == 1 &&
+                  res.getValue("ena_flg") == 1 || (res.getValue("var_nam")== "inv_attr_str2" ))
+              {
+                  res.removeRow();
+              }
+          }
+       }
+       return res;
+   ]]
+]]>
+
+</local-syntax>
+
+<argument name="varlist"  datatype="string">
+Comma separated var_nam list eg 'inv_attr_str1','inv_attr_str2'
+</argument>
+<argument name="enabled"  datatype="integer"> </argument>
+
+<documentation>
+
+<remarks>
+<![CDATA[
+    <p>
+    This command will list the UDIA column names depending
+    on the passed in Enable flag.If the Passed in ena_flg is 1
+    then it will retrieve all the UDIA fields which are enabled
+    in the system(vis_flg & ena_flg set to true in les_var_config).
+    If the passed in enable flag(enabled) is 0 return only the disabled
+    UDIA fields. Else retrieve all the UDIA fields
+    irrespective of enable/visible flag set in les_var_config.
+	Customized the command to exclude inv_attr_str2 value.
+    </p>
+]]>
+</remarks>
+
+<exception value="eOK">Normal successful completion</exception>
+
+</documentation>
+
+</command>

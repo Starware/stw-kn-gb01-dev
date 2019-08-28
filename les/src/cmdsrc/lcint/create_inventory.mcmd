@@ -1,0 +1,37 @@
+<command>
+  <name>create inventory</name>
+  <description>Create Inventory</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[  
+	[select 1
+	   from poldat_view
+	  where polcod = 'LC_RECEIVING'
+	    and polvar = 'SCJ_ATTR_SCAN'
+	    and polval = 'ENABLED'
+		and wh_id = nvl(@wh_id,@@wh_id)
+	    and rtnum1 = 1] catch(-1403)
+	|
+	if(@? = 0 and @lodnum and (!@inv_attr_str2 or @inv_attr_str2 = ''))
+	{  
+		publish data
+		  where inv_attr_str2 = @lodnum
+	    |
+		^create inventory where @*
+	}
+	else
+	{
+	 ^create inventory where @*
+	}
+]]>
+</local-syntax>
+<documentation>
+<remarks>
+<![CDATA[
+    This is a customized wrapper  to updtae the inv_attr_str2 with the same value as lodnum,
+	to allow the original LPN be retained always.
+]]>
+</remarks>
+
+</documentation>
+</command>
