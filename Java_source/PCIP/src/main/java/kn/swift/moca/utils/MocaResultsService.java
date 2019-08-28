@@ -32,6 +32,9 @@ public class MocaResultsService {
         if(status.equals("Success")){
             Logger.log("status is Success, building print success message");
             results = printUtils.buildPrintSuccess(response);
+        }else if(status.equals("Warning")){
+            Logger.log("status is Warning, building print success message");
+            results = printUtils.buildPrintSuccess(response);
         }else if(status.equals("Error")){
             Logger.log("status is Error, building print fail message");
             results = printUtils.buildPrintFail(response);
