@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="kn/swift/ms/pcip/" kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/java/kn/swift/ms/pcip"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="lib" path="gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="out/production/resources/libs/moca-core.jar"/>
+	<classpathentry kind="lib" path="out/production/resources/libs/moca-native.jar"/>
+	<classpathentry kind="lib" path="out/production/resources/libs/moca-server.jar"/>
+	<classpathentry kind="lib" path="out/production/resources/libs/moca-web.jar"/>
+	<classpathentry kind="lib" path="repo/moca-core-2018.1.2.4-RELEASE.jar"/>
+	<classpathentry kind="lib" path="repo/moca-server-2018.1.2.4-RELEASE.jar"/>
+	<classpathentry kind="output" path="build/classes/java/main"/>
+</classpath>

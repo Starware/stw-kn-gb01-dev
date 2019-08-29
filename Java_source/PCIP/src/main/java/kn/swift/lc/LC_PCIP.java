@@ -57,7 +57,8 @@ public class LC_PCIP {
                                              String dg_dsc,
                                              String goods_content,
                                              String output_queue,
-											 String srvlvl) throws MocaException {
+											 String srvlvl,
+											 String stemail) throws MocaException {
 
 
 
@@ -101,7 +102,8 @@ public class LC_PCIP {
                 dg_dsc,
                 goods_content,
                 output_queue,
-				srvlvl);
+				srvlvl,
+				stemail);
 
         PrintUtils utils = new PrintUtils();
         Logger.log("creating request");

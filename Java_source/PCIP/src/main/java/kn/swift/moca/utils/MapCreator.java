@@ -22,6 +22,7 @@ public class MapCreator {
     public static final String RECEIVER_POST_CODE = "Receiver.PostCode";
     public static final String RECEIVER_COUNTRY = "Receiver.Country";
     public static final String RECEIVER_TELEPHONE = "Receiver.Telephone";
+    public static final String RECEIVER_EMAIL = "KN.Email";
     public static final String KN_TOTAL_PARCEL_NO = "KN.TotalParcelNo";
     public static final String PARCEL_WIDTH = "Parcel.Width";
     public static final String PARCEL_HEIGHT = "Parcel.Height";
@@ -98,7 +99,8 @@ public class MapCreator {
                                                          String dg_dsc,
                                                          String goods_content,
                                                          String output_queue,
-														 String srvlvl){
+														 String srvlvl,
+														 String stemail){
 
         HashMap<String,String> printRequestMap = new HashMap<String, String>();
 
@@ -113,6 +115,7 @@ public class MapCreator {
         printRequestMap.put(RECEIVER_POST_CODE,stposc);
         printRequestMap.put(RECEIVER_COUNTRY,stcnty);
         printRequestMap.put(RECEIVER_TELEPHONE,stphon);
+        printRequestMap.put(RECEIVER_EMAIL,stemail);
         printRequestMap.put(KN_CLIENT_ID,client_id);
         printRequestMap.put(KN_CARRIER_ID,carcod);
         printRequestMap.put(KN_TOTAL_PARCEL_NO,tot_pkg_count);
