@@ -39,6 +39,7 @@
   <argument name="goods_content" required="no" datatype="string" />
   <argument name="output_queue" required="no" datatype="string" />
   <argument name="srvlvl" required="no" datatype="string" />
+  <argument name="stemail" required="no" datatype="string" />
   <documentation>
 <remarks></remarks>
 <exception value="eOK">Normal successful completion</exception>
