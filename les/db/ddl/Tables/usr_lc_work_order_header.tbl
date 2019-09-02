@@ -10,8 +10,6 @@
 
 mset command on
 
-[drop table usr_lc_workorder_header_inb] catch(-942)
-/
 
 [
 CREATE_TABLE(usr_lc_workorder_header_inb)(

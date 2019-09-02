@@ -10,15 +10,6 @@
 
 mset command on
 
-[drop table usr_lc_workorder_line_inb] catch(-942)
-/
-
-[drop table usr_lc_workorder_component_inb] catch(-942)
-/
-
-[drop table usr_lc_workorder_components_inb] catch(-942)
-/
-
 [
 CREATE_TABLE(usr_lc_workorder_components_inb)
 (

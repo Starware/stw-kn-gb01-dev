@@ -6,7 +6,9 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
         cmpdtl.invsts,
         cmpdtl.lotnum,
         cmpdtl.cmpqty,
-        prtmst_view.prtstyle uom
+        prtmst_view.prtstyle uom,
+        prtmst_view.prtsize,
+        cmpdtl.inv_attr_str2
    from cmpdtl
    join prtmst_view
      on cmpdtl.wh_id = prtmst_view.wh_id
@@ -16,7 +18,7 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
                          from cmphdr
                         where cmphdr.wkonum = :i_c_wkonum
                           and cmphdr.wh_id = :i_c_wh_id
-                          and cmphdr.client_id = :i_c_client_id)]','586'
+                          and cmphdr.client_id = :i_c_client_id)]','645'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
 SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
@@ -29,7 +31,8 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
         cmphdr.invsts,
         cmphdr.lotnum,
         cmphdr.untqty,
-        prtmst_view.prtstyle uom
+        prtmst_view.prtstyle uom,
+       prtmst_view.prtsize
    from cmphdr
    join prtmst_view
      on cmphdr.wh_id = prtmst_view.wh_id
@@ -37,7 +40,7 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
     and cmphdr.prt_client_id = prtmst_view.prt_client_id
   where cmphdr.wkonum = :i_c_wkonum
     and cmphdr.wh_id = :i_c_wh_id
-    and cmphdr.client_id = :i_c_client_id]','523'
+    and cmphdr.client_id = :i_c_client_id]','551'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
@@ -77,7 +80,7 @@ SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_comm
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def
 SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_commit_ctxt_defn_cd,pre_async_alg_id,post_async_alg_id,pre_dwnld_alg_id,post_dwnld_alg_id,fail_evt_id,prsrv_evt_seq_flg,snd_err_stat_flg,rcv_fail_evt_id,rcv_succ_evt_id,null_ind_char,nochg_ind_char,absent_ind_char,eol_delim,mailbox_nam,host_port,host_nam,service,sys_user_id,sys_password,sys_conn_data,moca_sys_flg,xml_tag_data_inst,xml_tag_ifd,xml_tag_data,max_grp_siz
-2018.1,'HOST','Generic Host System','HOST','LEGACY','T','F','SIFD','','','','','','F','T','','','','*','+','<10>','','','','','','','','','','','',''
+2018.1,'HOST','Generic Host System','HOST','LEGACY','T','F','SIFD','','','','','','T','T','','','','*','+','<10>','','','','','','','','','','','',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def_grp
 SL_VERSION,ifd_grp_id,ifd_grp_descr
@@ -157,6 +160,10 @@ SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_HDR','PRTSIZE','SCJP UOM','C','100','','30',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
 2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_HDR','PRT_CLIENT_ID','Item Client ID','C','50','','32',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
@@ -197,6 +204,14 @@ SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','INV_ATTR_STR2','original LPN number','C','90','','100',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','PRTSIZE','part size','C','80','','30',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
 2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','PRT_CLIENT_ID','Item Client ID','C','20','','32',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
@@ -221,6 +236,14 @@ SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sy
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','INV_ATTR_STR2','LC_WO_CLOSE_DTL_RM','SYS_DCS','DCS','','','','0','inv_attr_str2','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','PRTSIZE','LC_WO_CLOSE_DTL_RM','SYS_DCS','DCS','','','','0','prtsize','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
 2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','PRT_CLIENT_ID','LC_WO_CLOSE_DTL_RM','SYS_DCS','DCS','','','','0','prt_client_id','F'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
@@ -238,6 +261,10 @@ SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sy
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
 2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_HDR','PRTNUM','LC_WO_CLOSE_HDR_RM','SYS_DCS','DCS','','','','0','PRTNUM','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_HDR','PRTSIZE','LC_WO_CLOSE_HDR_RM','SYS_DCS','DCS','','','','0','PRTSIZE','F'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
@@ -289,6 +316,10 @@ SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_f
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
 SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_CLOSE_IFD','2019.1','LC_WO_CLOSE_HDR','PRTSIZE','Currently, no English translation is available.','100','','LC-WO-CLOSE','2019.1','LC_WO_CLOSE_HDR','PRTSIZE','','','','','EO','C','','','','','','','','N','','N','','','30','','','','','Currently, no English translation is available.','','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
 2018.1,'LC_WO_CLOSE_IFD','2019.1','LC_WO_CLOSE_HDR','PRT_CLIENT_ID','Currently, no English translation is available.','50','','LC-WO-CLOSE','2019.1','LC_WO_CLOSE_HDR','PRT_CLIENT_ID','','','','','EO','C','','','','','','','','N','','N','','','32','','','','','Currently, no English translation is available.','','Currently, no English translation is available.',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
@@ -329,10 +360,18 @@ SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_f
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
 SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_CLOSE_IFD','2019.1','LC_WO_CLOSE_DTL','INV_ATTR_STR2','Currently, no English translation is available.','80','','LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','INV_ATTR_STR2','','','','','EO','C','','','','','','','','N','','N','','','100','','','','','Currently, no English translation is available.','','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_WO_CLOSE_IFD','2019.1','LC_WO_CLOSE_DTL','PRTSIZE','Currently, no English translation is available.','70','','LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','PRTSIZE','','','','','EO','C','','','','','','','','N','','N','','','30','','','','','Currently, no English translation is available.','','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
 2018.1,'LC_WO_CLOSE_IFD','2019.1','LC_WO_CLOSE_DTL','PRT_CLIENT_ID','Currently, no English translation is available.','20','','LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','PRT_CLIENT_ID','','','','','EO','C','','','','','','','','N','','N','','','32','','','','','Currently, no English translation is available.','','Currently, no English translation is available.',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
 SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
-2018.1,'LC_WO_CLOSE_IFD','2019.1','HOST','','','ASYNC','','T','T','T','','','','','',''
+2018.1,'LC_WO_CLOSE_IFD','2019.1','HOST','','','SYNCE','','T','T','T','','','','','',''
 
 CSV__TAG__KLUDGE___COMMIT
