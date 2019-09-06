@@ -7,3 +7,7 @@ lblfmt,Lc-CartonLabel,EN-GB,"Pick Carton Label","",les_doc_typ
 lblfmt,Lc-CartonLabel,US_ENGLISH,"Pick Carton Label","",les_doc_typ
 lblfmt,Lc-PalletLabel,EN-GB,"Pick Pallet Label","",les_doc_typ
 lblfmt,Lc-PalletLabel,US_ENGLISH,"Pick Pallet Label","",les_doc_typ
+doc_typ,lc-yamatolabel,EN-GB,"Yamato Carrier Label","",les_doc_typ
+doc_typ,lc-yamatolabel,US_ENGLISH,"Yamato Carrier Label","",les_doc_typ
+lblfmt,lc-yamatolabel,EN-GB,"Yamato Carrier Label","",les_doc_typ
+lblfmt,lc-yamatolabel,US_ENGLISH,"Yamato Carrier Label","",les_doc_typ

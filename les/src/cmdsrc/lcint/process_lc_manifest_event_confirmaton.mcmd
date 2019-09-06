@@ -1,0 +1,44 @@
+<command>
+  <name>process lc manifest event confirmaton</name>
+  <description>Process LC Manifest Event Confirmaton</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+[select distinct usr_lc_manfst.ordnum,
+        usr_lc_manfst.traknm,
+        usr_lc_manfst.mfsmsn,
+		usr_lc_manfst.wh_id
+   from usr_lc_manfst
+   join ord
+     on usr_lc_manfst.ordnum = ord.ordnum
+    and usr_lc_manfst.wh_id = ord.wh_id
+    and usr_lc_manfst.client_id = ord.client_id
+   join shipment
+     on usr_lc_manfst.ship_id = shipment.ship_id
+    and usr_lc_manfst.wh_id = shipment.wh_id
+   join all_inventory_view
+     on (all_inventory_view.subnum = usr_lc_manfst.subnum or all_inventory_view.lodnum = usr_lc_manfst.lodnum)
+    and all_inventory_view.wh_id = usr_lc_manfst.wh_id
+  where usr_lc_manfst.wh_id = nvl(@wh_id,@@wh_id)
+    and usr_lc_manfst.mansts = 'R'
+    and shipment.shpsts = 'C'
+    and usr_lc_manfst.mstdte is not null
+	and usr_lc_manfst.cfmdte is null
+  order by usr_lc_manfst.mfsmsn,
+        usr_lc_manfst.traknm] catch(-1403)
+|
+if (@? = 0)
+{
+    change record
+	 where table = 'usr_lc_manfst'
+	   and cfmdte = sysdate
+	   and mansts = 'M'
+	   and ordnum = @ordnum
+	   and wh_id = @wh_id
+	   and traknm = @traknm 
+	   and mfsmsn = @mfsmsn catch(@?)
+
+}
+]]>
+</local-syntax>
+</command>

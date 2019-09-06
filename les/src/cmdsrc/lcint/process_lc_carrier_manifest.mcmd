@@ -1,0 +1,130 @@
+<command>
+<name>process lc carrier manifest</name>
+<description>Process LC Carrier Manifest</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+	if(@srcsub or @subnum)
+	{
+	   [select distinct shipment_line.ordnum,
+			shipment_line.client_id,
+			adrmst.ctry_name,
+			inventory_view.subnum inv_id,
+			shipment_line.ship_id,
+			shipment.carcod,
+			shipment.srvlvl
+	   from inventory_view
+	   join shipment_line
+		 on shipment_line.ship_line_id = inventory_view.ship_line_id
+		and shipment_line.wh_id = inventory_view.wh_id
+		and inventory_view.prtnum = shipment_line.prtnum
+		and inventory_view.prt_client_id = shipment_line.prt_client_id
+		and inventory_view.prt_client_id = shipment_line.client_id
+	   join ord
+		 on ord.ordnum = shipment_line.ordnum
+		and ord.client_id = shipment_line.client_id
+		and ord.wh_id = shipment_line.wh_id
+	   join adrmst
+         on adrmst.adr_id = ord.st_adr_id
+	   join shipment
+	     on shipment_line.ship_id = shipment.ship_id
+		and shipment_line.wh_id = shipment.wh_id
+	  where inventory_view.subnum = nvl(@subnum, @srcsub)	  
+		and inventory_view.wh_id = nvl(@wh_id,@@wh_id)]catch(-1403)
+	}
+	else if(@srclod or @lodnum)
+	{
+		[select distinct shipment_line.ordnum,
+			shipment_line.client_id,
+			adrmst.ctry_name,
+			inventory_view.lodnum inv_id,
+			shipment_line.ship_id,
+			shipment.carcod,
+			shipment.srvlvl
+	   from inventory_view
+	   join shipment_line
+		 on shipment_line.ship_line_id = inventory_view.ship_line_id
+		and shipment_line.wh_id = inventory_view.wh_id
+		and inventory_view.prtnum = shipment_line.prtnum
+		and inventory_view.prt_client_id = shipment_line.prt_client_id
+		and inventory_view.prt_client_id = shipment_line.client_id
+	   join ord
+		 on ord.ordnum = shipment_line.ordnum
+		and ord.client_id = shipment_line.client_id
+		and ord.wh_id = shipment_line.wh_id
+	   join adrmst
+         on adrmst.adr_id = ord.st_adr_id
+	   join shipment
+	     on shipment_line.ship_id = shipment.ship_id
+		and shipment_line.wh_id = shipment.wh_id
+	  where inventory_view.lodnum = nvl(@lodnum, @srclod)	  
+		and inventory_view.wh_id = nvl(@wh_id,@@wh_id)]catch(-1403)
+		  
+	}
+	|
+	if(@?= 0)
+	{
+		[select 1
+		  from poldat_view
+		 where polcod = 'LC_PICKING'
+		   and polvar = 'YAMATO_MANIFEST'
+		   and polval = 'ENABLED'
+		   and wh_id = @wh_id
+		   and rtstr1 = @ctry_name] catch(-1403)
+
+		|
+		if (@? = 0)
+		{
+			create lc carrier manifest 
+			 where invtid = @inv_id
+			   and wh_id = nvl(@wh_id,@@wh_id) 
+			   and ordnum =@ordnum
+			   and ship_id = @ship_id
+               and client_id = @client_id
+               and carcod = @carcod
+			   and srvlvl = @srvlvl	catch(@?)
+		}
+		|
+		if(@? = 0)
+		{
+			[select devmst.lbl_prtadr
+			   from devmst
+			  where devmst.devcod = nvl(@devcod, @@devcod)
+				and devmst.wh_id = @wh_id
+				and devmst.lbl_prtadr is not NULL] catch(-1403)
+			|
+			if(@? =0)
+			{
+				[select distinct usr_lc_manfst.traknm
+				   from usr_lc_manfst
+				   join inventory_view
+					 on (inventory_view.subnum = usr_lc_manfst.subnum or inventory_view.lodnum = usr_lc_manfst.lodnum)
+					and inventory_view.wh_id = usr_lc_manfst.wh_id
+				  where usr_lc_manfst.wh_id = nvl(@wh_id, @@wh_id)
+					and usr_lc_manfst.mansts = 'R'
+					and usr_lc_manfst.mstdte is not null
+					and usr_lc_manfst.cfmdte is null
+					and (inventory_view.lodnum = @inv_id or inventory_view.subnum = @inv_id)
+					and usr_lc_manfst.ordnum = @ordnum
+					and usr_lc_manfst.ship_id = @ship_id
+					and usr_lc_manfst.client_id = @client_id
+					and usr_lc_manfst.carcod = @carcod
+					and usr_lc_manfst.srvlvl = @srvlvl
+				  order by usr_lc_manfst.traknm] catch(-1403)
+				|
+				if(@? = 0)
+				{
+					generate label
+				   	  where locale_id = nvl(@locale_id, @@locale_id)
+						and label_name = 'lc-yamatolabel' catch(@?)
+					|
+					print lbl label operations label 
+					 where filename = @outfile_name 
+					   and prtadr = @lbl_prtadr catch(@?)
+				}
+			}
+		}
+	}
+]]>
+</local-syntax>
+</command>

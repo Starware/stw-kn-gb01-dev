@@ -1,0 +1,117 @@
+<command>
+  <name>list lc yamato carrier summary rm</name>
+  <description>List LC Carrier Summary RM</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+[select distinct mf.ordnum,
+        sh.loddte,
+        am.adrnam,
+        am.adrln1,
+        am.adrln2,
+        am.adrcty,
+        am.adrln3,
+        am.adrpsz,
+        am.phnnum,
+        am.email_adr,
+        am.ship_attn_name,
+        round(mf.weight/1000, 2)wgt,
+        '' volume,
+        '2' payterm,
+        mf.traknm,
+        nvl(mf.subnum, mf.lodnum) package_id,
+        iv.prtnum,
+        iv.prt_client_id,
+        pdsc.lngdsc,
+        pm.untcst,
+        iv.untqty,
+        (pm.untcst*iv.untqty) ext_value,
+        'GB' orgcod,
+        '1' ad_typ,
+        '1' ad_flg,
+        '1' hnd_typ,
+        '' dlv_time,
+        '' shipper_nt1,
+        '' shipper_nt2,
+        'EA' uom,
+        'KGM' uow,
+        'JPY' currency,
+        'N' sh_typ,
+        'K' lbl_typ,
+        '540000' yamato_srt
+   from usr_lc_manfst mf
+   join ord o
+     on mf.ordnum = o.ordnum
+    and mf.wh_id = o.wh_id
+   join shipment sh
+     on mf.ship_id = sh.ship_id
+    and mf.wh_id = sh.wh_id
+   join adrmst am
+     on am.adr_id = o.st_adr_id
+   join all_inventory_view iv
+     on (iv.subnum = mf.subnum or iv.lodnum = mf.lodnum)
+    and iv.wh_id = mf.wh_id
+   join prtmst pm
+     on pm.prtnum = iv.prtnum
+    and pm.wh_id_tmpl = iv.wh_id
+   join prtdsc pdsc
+     on pdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
+    and pdsc.colval = pm.prtnum || '|' || pm.prt_client_id || '|' || pm.wh_id_tmpl
+  where mf.wh_id = @wh_id
+    and mf.mansts = 'R'
+    and sh.shpsts = 'C'
+	and mf.mstdte is not null
+	and mf.cfmdte is null
+  order by mf.traknm] catch(-1403)
+|
+if (@? = 0)
+{
+    [select count(traknm) tot_pkg
+       from usr_lc_manfst
+      where ordnum = @ordnum
+      group by ordnum] catch(-1403)
+    |
+    if (@? = 0)
+    {
+        publish data
+         where ordnum = @ordnum
+           and loddte = @loddte
+           and adrnam = @adrnam
+           and adrln1 = @adrln1
+           and adrln2 = @adrln2
+           and adrcty = @adrcty
+           and adrln3 = @adrln3
+           and phnnum = @phnnum
+           and adrpsz = @adrpsz
+           and email_adr = @email_adr
+           and ship_attn_name = @ship_attn_name
+           and tot_pkg = @tot_pkg
+           and weight = @wgt
+           and volume = @volume
+           and payterm = @payterm
+           and traknm = @traknm
+           and package_id = @package_id
+           and prtnum = @prtnum
+           and prt_client_id = @prt_client_id
+           and lngdsc = @lngdsc
+           and untcst = @untcst
+           and untqty = @untqty
+           and ext_value = @ext_value
+           and orgcod = @orgcod
+           and ad_typ = @ad_typ
+           and ad_flg = @ad_flg
+           and hnd_typ = @hnd_typ
+           and dlv_time = @dlv_time
+           and shipper_nt1 = @shipper_nt1
+           and shipper_nt2 = @shipper_nt2
+           and uom = @uom
+           and uow = @uow
+           and currency = @currency
+           and sh_typ = @sh_typ
+           and lbl_typ = @lbl_typ
+           and yamato_srt = @yamato_srt
+    }
+}
+]]>
+</local-syntax>
+</command>

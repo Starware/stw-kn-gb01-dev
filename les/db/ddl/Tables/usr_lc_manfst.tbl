@@ -1,0 +1,90 @@
+#use $MOCADIR/include
+#use $DCSDIR/include
+#use $SALDIR/include
+#use $MCSDIR/include
+
+#include <dcsddl.h>
+#include <sqlDataTypes.h>
+#include <dcscolwid.h>
+#include <dcstbldef.h>
+
+mset command on
+
+[
+CREATE_TABLE(usr_lc_manfst)
+(
+    wh_id             STRING_TY (WH_ID_LEN) not null, /* PK */
+    traknm            STRING_TY (30) not null,  /* PK */
+    mfsmsn            STRING_TY (10) not null,  /* PK */
+    ship_id           STRING_TY (30),
+    client_id         STRING_TY (32), 
+	ordnum			  STRING_TY (35),
+	wrkref			  STRING_TY (12),
+	wrkref_dtl        STRING_TY (15),
+	dtlnum            STRING_TY (30),
+	subnum			  STRING_TY (30),
+	prtnum            STRING_TY (50),
+	prt_client_id     STRING_TY (32),
+	carcod			  STRING_TY (10),
+	srvlvl            STRING_TY (10),
+	weight			  OLD_WEIGHT_TY,
+	mansts            STRING_TY (1),
+	shpdte            DATE_TY,
+	mstdte			  DATE_TY,
+	cfmdte            DATE_TY,
+	lodnum            STRING_TY (30)
+) 
+] catch (ERR_TABLE_ALREADY_EXISTS)
+RUN_DDL
+
+[
+  CREATE_PK_CONSTRAINT_BEGIN(usr_lc_manfst, usr_lc_manfst_pk)
+  (traknm, mfsmsn)
+  CREATE_PK_CONSTRAINT_USING_INDEX
+  CREATE_PK_CONSTRAINT_END
+] catch (ERR_PRIMARY_KEY_ALREADY_EXISTS)
+RUN_DDL
+
+create db documentation
+ where table = "usr_lc_manfst"
+   and wh_id = "Warehouse ID"
+   and traknm = "Tracking Number"
+   and mfsmsn = "Manifest Sequence Number"
+   and ship_id = "Shipment ID"
+   and client_id = "Client ID"
+   and ordnum = "Outbound Order Number"
+   and wrkref = "Work Task"
+   and wrkref_dtl = "Work Task Detail"
+   and dtlnum = "Detail LPN"
+   and subnum = "Sub-LPN"
+   and prtnum = "Item Number"
+   and prt_client_id = "Item Client ID"
+   and carcod = "Carrier"
+   and srvlvl = "Service Level"
+   and weight = "Weight"
+   and mansts = "Manifest Status"
+   and shpdte = "Shipped Date"
+   and mstdte = "Manifest Date"
+   and cfmdte = "Confirmation Date"
+   and lodnum = "LPN"
+/  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
