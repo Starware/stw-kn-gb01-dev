@@ -1,0 +1,24 @@
+<command>
+  <name>list lc tcl pallet summary rm</name>
+  <description>List LC Pallet Summary RM</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+	[select distinct invlod.lodnum,
+			invdtl.prtnum,
+			invlod.lc_tcl_trigger_lpn,
+			sum(invdtl.untqty) ordqty
+	   from invlod
+	   join invsub
+		 on invsub.lodnum = invlod.lodnum
+	   join invdtl
+		 on invdtl.subnum = invsub.subnum
+	  where invlod.stoloc = @stoloc
+	    and invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
+	    and invlod.wh_id = @wh_id
+	  group by invlod.lodnum,
+		  	   invdtl.prtnum,
+			   invlod.lc_tcl_trigger_lpn]catch(-1403)
+]]>
+</local-syntax>
+</command>

@@ -1,0 +1,66 @@
+<trigger>
+  <name>log_lc_tcl_inbound_pallet_event</name>
+  <on-command>move inventory</on-command>
+  <description>Log event sending details of inbound TCL pallets </description>
+  <fire-sequence>99000</fire-sequence>
+  <local-syntax>
+<![CDATA[
+[select rtstr1 event_id,
+        rtnum2 min_pallets
+   from poldat_view
+  where polcod = 'TCL-INTERFACE'
+    and polvar = 'WATCHED-LOCATION'
+    and polval = @dstloc
+    and wh_id = nvl(@wh_id,@@wh_id)
+    and rtnum1 = 1] catch(-1403)
+|
+if (@? = 0)
+{
+    change record
+     where table = 'invlod'
+       and lodnum = nvl(@srclod, @lodnum)
+       and lc_tcl_Trigger_LPN = 'NONE'
+	   and stoloc = @dstloc
+	   and wh_id = nvl(@wh_id,@@wh_id)
+    |
+    [select num_pallets
+       from (select count(*) num_pallets
+               from invlod
+              where stoloc = @dstloc
+                and wh_id = nvl(@wh_id,@@wh_id)
+                and lc_tcl_Trigger_LPN = 'NONE')
+      where num_pallets >= @min_pallets] catch(-1403)
+	|
+	if(@? =0)
+	{
+		change record
+			 where table = 'locmst'
+			   and wh_id = nvl(@wh_id,@@wh_id)
+			   and stoloc = @dstloc
+			   and usflg = false
+	    |
+		[update invlod
+			set lc_tcl_Trigger_LPN = nvl(@srclod, @lodnum)
+	      where stoloc = @dstloc
+		    and lc_tcl_Trigger_LPN = 'NONE'] catch(-1403)
+	    |
+		[select min(inventory_view.prt_client_id) client_id
+           from inventory_view
+          where lodnum = nvl(@srclod, @lodnum)]catch(-1403)
+		|
+	    get integrator system id
+				 where systyp = 'WMD'
+	    |
+	    sl_log event
+		 where evt_id = @event_id
+		   and wh_id = nvl(@wh_id,@@wh_id)
+		   and client_id = @client_id
+		   and lc_tcl_Trigger_LPN = nvl(@srclod, @lodnum)
+		   and stoloc = @dstloc
+				
+	}
+}
+]]>
+</local-syntax>
+  <enable>yes</enable>
+</trigger>

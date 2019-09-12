@@ -1,0 +1,7 @@
+opt_nam,opt_typ,pmsn_mask,ena_flg,exec_nam,exec_parm,btn_img_id,grp_nam,addon_id
+Lc-CarrierAddressDetails,C,-1,1,Lc-CarrierAddressDetails,,,dcs_data,
+Lc-RsInventoryDetails,C,-1,1,Lc-RsInventoryDetails,,,dcs_data,
+Lc-SfInventoryDetails,C,-1,1,Lc-SfInventoryDetails,,,dcs_data,
+Lc-WksInventoryDetails,C,-1,1,Lc-WksInventoryDetails,,,dcs_data,
+Lc-DgNotes,C,-1,1,Lc-DgNotes,,,dcs_data,
+Lc-InboundPallets,C,-1,1,Lc-InboundPallets,,,dcs_data,
