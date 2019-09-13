@@ -604,4 +604,17 @@ CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
 SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
 2018.1,'LC_YAMATO_MNFST_DTLS_IFD','2018.1','HOST_HTTP','','','SYNCD','','T','T','F','','','','','',''
 
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
+2018.1,'HOST','ASYNC','O','FILE','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
+2018.1,'HOST_HTTP','ASYNC','O','SL_XML_TO_HTTP_2','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm
+SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
+2018.1,'HOST_HTTP','SYNCD','O','SL_XML_TO_HTTP_2','',''
+
+
 CSV__TAG__KLUDGE___COMMIT
