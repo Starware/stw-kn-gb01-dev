@@ -5,20 +5,35 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
         cmpdtl.prt_client_id,
         cmpdtl.invsts,
         cmpdtl.lotnum,
-        cmpdtl.cmpqty,
         prtmst_view.prtstyle uom,
         prtmst_view.prtsize,
-        cmpdtl.inv_attr_str2
+        sum(wkodtl.tot_dlvqty) cmpqty,
+        wkodtl.inv_attr_str2
    from cmpdtl
    join prtmst_view
      on cmpdtl.wh_id = prtmst_view.wh_id
     and cmpdtl.prtnum = prtmst_view.prtnum
     and cmpdtl.prt_client_id = prtmst_view.prt_client_id
+   join wkodtl
+     on wkodtl.prtnum = cmpdtl.prtnum
+    and wkodtl.lotnum = cmpdtl.lotnum
+    and wkodtl.prt_client_id = cmpdtl.prt_client_id
+    and wkodtl.wh_id = cmpdtl.wh_id
+    and wkodtl.tot_dlvqty > 0
+    and wkodtl.wkonum = :i_c_wkonum
   where cmpdtl.cmpkey = (select cmpkey
                          from cmphdr
                         where cmphdr.wkonum = :i_c_wkonum
                           and cmphdr.wh_id = :i_c_wh_id
-                          and cmphdr.client_id = :i_c_client_id)]','645'
+                          and cmphdr.client_id = :i_c_client_id)]
+  group by cmpdtl.prtnum,
+        cmpdtl.prt_client_id,
+        cmpdtl.lotnum,
+        cmpdtl.cmpqty,
+        cmpdtl.invsts,
+        prtmst_view.prtstyle,
+        prtmst_view.prtsize,
+        wkodtl.inv_attr_str2]','1120'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
 SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
@@ -376,6 +391,6 @@ SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mt
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm
 SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
-2018.1,'HOST','ASYNC','O','SL_XML_TO_FTP','',''
+2018.1,'HOST','ASYNC','O','SL_XML_TO_FILE_2','',''
 
 CSV__TAG__KLUDGE___COMMIT
