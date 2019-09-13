@@ -1,0 +1,49 @@
+<command>
+  <name>list lc tcl inbound pallets</name>
+  <description>List LC Inbound Pallets</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+if(@stoloc)
+{
+    publish data
+	 where time_stamp = to_char(sysdate, 'DD/MM/YY') ||to_char(sysdate, '-HH:MM')|| ' :MANUAL'
+	|
+	[update invlod
+	    set lc_tcl_Trigger_LPN = @time_stamp
+	  where lc_tcl_Trigger_LPN = 'NONE'
+	    and invlod.wh_id = nvl(@wh_id,@@wh_id)
+		and invlod.stoloc = @stoloc]catch(-1403)
+	|
+	if(@? =0)
+	{
+	   [select min(inventory_view.prt_client_id) client_id
+           from inventory_view
+          where stoloc = @stoloc
+		    and wh_id = @wh_id]catch(-1403)
+		|
+	    get integrator system id
+				 where systyp = 'WMD'
+	    |
+	    sl_log event
+		 where evt_id = 'LC-PALLET-STORE-TCL'
+		   and wh_id = nvl(@wh_id,@@wh_id)
+		   and client_id = @client_id
+		   and lc_tcl_Trigger_LPN = @time_stamp
+		   and stoloc = @stoloc
+	}
+	|
+	if(@? =0)
+	{
+	    [select lodnum,
+		        decode(lc_tcl_trigger_lpn, 'NONE', 'No', 'Yes') evt_logged
+	       from invlod
+	      where invlod.stoloc = @stoloc
+		    and invlod.lc_tcl_trigger_lpn = @time_stamp
+	        and invlod.wh_id = @wh_id]catch(-1403)
+	}
+	
+}
+]]>
+</local-syntax>
+</command>

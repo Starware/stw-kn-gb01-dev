@@ -1,0 +1,7 @@
+opt_nam,ath_typ,ath_id,pmsn_mask,grp_nam
+Lc-CarrierAddressDetails,R,DCS_SUPER,-1,dcs_data
+Lc-RsInventoryDetails,R,DCS_SUPER,-1,dcs_data
+Lc-SfInventoryDetails,R,DCS_SUPER,-1,dcs_data
+Lc-WksInventoryDetails,R,DCS_SUPER,-1,dcs_data
+Lc-DgNotes,R,DCS_SUPER,-1,dcs_data
+Lc-InboundPallets,R,DCS_SUPER,-1,dcs_data

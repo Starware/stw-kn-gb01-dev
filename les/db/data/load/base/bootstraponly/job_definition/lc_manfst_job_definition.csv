@@ -1,0 +1,3 @@
+job_id,role_id,name,enabled,type,command,log_file,trace_level,overlap,schedule,start_delay,timer,grp_nam
+LC-YAMATO-MNFST,,Log Yamato Manifest Event,1,cron,"process lc manifest event",$LESDIR/log/yamato_manifest.log,,0,"0 0 23 * * ?",,,les_data
+

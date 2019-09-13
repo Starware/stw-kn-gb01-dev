@@ -9,3 +9,5 @@ rpt_id,Lc-RsInventoryDetails,US_ENGLISH,"RS Customer Report","RS Rep",dscmst_rpt
 rpt_id,Lc-SfInventoryDetails,US_ENGLISH,"Screwfix Customer Report","Screwfix Rep",dscmst_rpt_id
 rpt_id,Lc-WksInventoryDetails,US_ENGLISH,"Wickes Customer Report","Wickes Rep",dscmst_rpt_id
 rpt_id,Lc-DgNotes,US_ENGLISH,"Dangerous Goods Report","DG Rep",dscmst_rpt_id
+rpt_id,Lc-InboundPallets,US_ENGLISH,"TCL Inbound Pallets Report","TCL Inb Rep",dscmst_rpt_id
+rpt_id,Lc-InboundPallets,EN-GB,"TCL Inbound Pallets Report","TCL Inb Rep",dscmst_rpt_id

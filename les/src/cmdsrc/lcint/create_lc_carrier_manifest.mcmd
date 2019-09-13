@@ -1,0 +1,171 @@
+<command>
+<name>create lc carrier manifest</name>
+<description>Process LC Carrier Label</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+	if(@invtid)
+	{	   
+	   [select decode(count(distinct inventory_view.prtnum), 1, max(inventory_view.prtnum), 'MIXED') prtnum,
+	           decode(count(distinct inventory_view.prt_client_id), 1, max(inventory_view.prt_client_id), 'MIXED') prt_client_id,
+			   decode(count(distinct inventory_view.wrkref), 1, max(inventory_view.wrkref), 'MIXED') wrkref,
+			   decode(count(distinct inventory_view.wrkref_dtl), 1, max(inventory_view.wrkref_dtl), 'MIXED') wrkref_dtl
+		   from inventory_view
+		  where (inventory_view.lodnum = @invtid or inventory_view.subnum = @invtid)
+			and inventory_view.wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+		|
+		[select round(sum(wgt.net_wgt), 2) weight
+           from(select inventory_view.prtnum,
+                       sum(inventory_view.untqty / inventory_view.untcas) * min(prtftp_dtl.netwgt) net_wgt
+                  from inventory_view
+                  join prtftp
+                    on prtftp.prtnum = inventory_view.prtnum
+                   and prtftp.prt_client_id = inventory_view.prt_client_id
+                   and prtftp.wh_id = inventory_view.wh_id
+                   and prtftp.defftp_flg = 1
+                  join prtftp_dtl
+                    on prtftp_dtl.prtnum = prtftp.prtnum
+                   and prtftp_dtl.prt_client_id = prtftp.prt_client_id
+                   and prtftp_dtl.wh_id = prtftp.wh_id
+                   and prtftp_dtl.ftpcod = prtftp.ftpcod
+                 where (inventory_view.lodnum = @invtid or inventory_view.subnum = @invtid)
+                   and inventory_view.wh_id = nvl(@wh_id, @@wh_id)
+                  group by inventory_view.prtnum) wgt] catch(-1403)
+		 |
+		if(@? = 0)
+		{
+			[select invlod.lodnum
+			   from invlod
+			  where lodnum = @invtid]catch(-1403)
+			|
+			if (@? = -1403)
+			{ 
+			   [select invsub.subnum
+				  from invsub
+				 where subnum = @invtid]catch(-1403)
+				 |
+				 publish data 
+				    where inv_typ = 'subnum'
+		   
+			}
+			else if (@?= 0)
+			{ 
+			    publish data 
+				    where inv_typ = 'lodnum'
+			  
+			}
+			|
+            if(@inv_typ = 'subnum')
+            {
+			 [select count(1) mnfst_count
+			   from usr_lc_manfst
+			  where usr_lc_manfst.subnum = @subnum
+  			    and exists(select 'x'
+                            from shipment_line
+                            join inventory_view
+                              on inventory_view.ship_line_id = shipment_line.ship_line_id
+							 and inventory_view.wh_id = shipment_line.wh_id
+                           where inventory_view.subnum = usr_lc_manfst.subnum
+                             and shipment_line.ship_id = usr_lc_manfst.ship_id
+							 and shipment_line.wh_id = usr_lc_manfst.wh_id )] catch(-1403)
+			}
+			else if (@inv_typ = 'lodnum')
+			{
+			   [select count(1) mnfst_count
+			      from usr_lc_manfst
+			     where usr_lc_manfst.lodnum = @lodnum
+				   and usr_lc_manfst.wh_id = @wh_id
+  			       and exists(select 'x'
+                                from shipment_line
+                                join inventory_view
+                                  on inventory_view.ship_line_id = shipment_line.ship_line_id
+								 and inventory_view.wh_id = shipment_line.wh_id
+                               where inventory_view.lodnum = usr_lc_manfst.lodnum
+                                 and shipment_line.ship_id = usr_lc_manfst.ship_id
+								 and shipment_line.wh_id = usr_lc_manfst.wh_id )] catch(-1403)
+			}			
+			|
+			if (@mnfst_count = 0)
+			{
+				[select min(usr_lc_manfst.mfsmsn) mnfst_seq
+				   from usr_lc_manfst
+				  where usr_lc_manfst.ship_id is null
+					and usr_lc_manfst.ordnum is null
+					and usr_lc_manfst.mstdte is null
+					and usr_lc_manfst.traknm is not null
+					and usr_lc_manfst.mfsmsn is not null] catch(-1403)
+				|
+				if (@? = 0)
+				{
+					[select traknm
+					   from usr_lc_manfst
+					  where mfsmsn = @mnfst_seq] catch(-1403)
+					|
+					change record
+					 where table = 'usr_lc_manfst'
+					   and ordnum = @ordnum
+					   and ship_id = @ship_id
+					   and lodnum = @lodnum
+					   and subnum =@subnum
+					   and wh_id = @wh_id
+					   and client_id = @client_id
+					   and wrkref = @wrkref
+					   and wrkref_dtl = @wrkref_dtl
+					   and prtnum = @prtnum
+					   and prt_client_id = @prt_client_id
+					   and mstdte = sysdate
+					   and carcod = @carcod
+					   and srvlvl = @srvlvl
+					   and traknm = @traknm 
+					   and mansts = 'R'
+					   and weight = @weight
+					   and mfsmsn = @mnfst_seq catch(@?)
+				}
+				else
+				{
+				   [select min(usr_lc_manfst.mfsmsn) mnfst_seq
+					  from usr_lc_manfst
+					 where usr_lc_manfst.mstdte is not null
+					   and usr_lc_manfst.traknm is not null
+					   and usr_lc_manfst.mfsmsn is not null
+					   and usr_lc_manfst.cfmdte is not null  
+					   and mansts = 'M'
+					   and trunc(mstdte) <= trunc(sysdate) - 90] catch(-1403)
+					|
+					if(@? = 0)
+					{  
+						[select traknm
+						   from usr_lc_manfst
+						  where mfsmsn = @mnfst_seq] catch(-1403)
+						|
+						generate next number
+						where numcod = 'mfsmsn'
+						|
+						[update usr_lc_manfst
+							set ordnum = @ordnum,
+                                ship_id = @ship_id,
+                                lodnum = @lodnum,
+                                subnum = @subnum,
+		                        wh_id = @wh_id,
+		                        client_id = @client_id,					
+		                        wrkref = @wrkref,
+		                        wrkref_dtl = @wrkref_dtl,
+		                        prtnum = @prtnum,
+		                        prt_client_id =@prt_client_id,
+		                        mstdte = sysdate,
+			                    carcod = @carcod,
+						   	    srvlvl = @srvlvl,
+							    mfsmsn = @nxtnum
+								mansts = 'R'
+								weight = @weight
+						  where traknm = @traknm ] catch(-1403)
+					}
+				}
+			
+	        }
+		}
+	}
+	
+]]>
+</local-syntax>
+</command>

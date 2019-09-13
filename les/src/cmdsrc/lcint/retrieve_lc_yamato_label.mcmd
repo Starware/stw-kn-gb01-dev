@@ -1,0 +1,49 @@
+<command>
+<name>retrieve lc yamato label</name>
+<description>Retrieve data for Yamato label</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+if(@traknm)
+{
+
+	[select usr_lc_manfst.traknm,
+			usr_lc_manfst.ordnum,
+			wh_add.adrln1 shp_adrln1,
+			wh_add.adrln2 shp_adrln2,
+			wh_add.adrcty shp_adrcty,
+			wh_add.adrpsz shp_adrpsz,
+			wh_dsc.lngdsc shp_adrctry_name,
+			adrmst.adrnam,
+			adrmst.adrln1,
+			adrmst.adrln2,
+			adrmst.adrcty,
+			adrmst.adrpsz,
+			dscmst.lngdsc ctry_name
+	   from usr_lc_manfst
+	   join ord
+		 on ord.ordnum = usr_lc_manfst.ordnum
+		and ord.wh_id = usr_lc_manfst.wh_id
+		and ord.client_id = usr_lc_manfst.client_id
+	   join adrmst
+		 on adrmst.adr_id = ord.st_adr_id
+	   join wh
+		 on wh.wh_id = ord.wh_id
+	   left
+	   join adrmst wh_add
+		 on wh_add.adr_id = wh.adr_id
+	   join dscmst
+		 on dscmst.colnam = 'ctry_name'
+		and dscmst.colval = adrmst.ctry_name
+		and dscmst.locale_id = nvl(@locale_id, @@locale_id)
+	   left
+	   join dscmst wh_dsc
+		 on wh_dsc.colnam = 'ctry_name'
+		and wh_dsc.colval = wh_add.ctry_name
+		and wh_dsc.locale_id = nvl(@locale_id, @@locale_id)
+	  where usr_lc_manfst.wh_id = nvl(@wh_id, @@wh_id)
+		and usr_lc_manfst.traknm = @traknm] catch(-1403)
+}
+]]>
+</local-syntax>
+</command>

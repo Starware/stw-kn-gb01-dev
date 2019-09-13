@@ -48,12 +48,12 @@
    join prtdsc
      on prtdsc.colval = all_inventory_view.prtnum || '|' || all_inventory_view.prt_client_id || '|' || all_inventory_view.wh_id
     and prtdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
-    and prtdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
+    and prtdsc.locale_id = nvl(@locale_id, 'EN-GB')
    join usr_lc_dgdsc
      on usr_lc_dgdsc.prtnum = prtmst_view.prtnum
     and usr_lc_dgdsc.prt_client_id = prtmst_view.prt_client_id
     and usr_lc_dgdsc.wh_id = prtmst_view.wh_id
-    and usr_lc_dgdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
+    and usr_lc_dgdsc.locale_id = nvl(@locale_id, 'EN-GB')
    join adrmst
      on adrmst.adr_id = ord.st_adr_id
    join prtftp

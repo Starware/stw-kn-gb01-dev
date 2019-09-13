@@ -1,0 +1,25 @@
+
+#use $MOCADIR/include
+#use $DCSDIR/include
+#use $SALDIR/include
+#use $MCSDIR/include
+
+#include <dcsddl.h>
+#include <sqlDataTypes.h>
+#include <dcscolwid.h>
+#include <dcstbldef.h>
+
+
+#define SEQ lc_seqnum
+#define SEED 1
+#define INC 1
+#define MAX 9999999
+
+CREATE_SEQUENCE(SEQ, SEED, INC, MAX)
+RUN_DDL
+
+insert into sysctl (numcod, prefix, prelen, prlflg, seqlen,
+ 		suflen, btsflg, lstseq, seqflg)
+    values ('lc_seqnum','' , 0, 0, 7,
+             0, 0, 0, 0)
+RUN_DDL
