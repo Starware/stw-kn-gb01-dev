@@ -1,0 +1,28 @@
+<command>
+<name>process lc manifest event</name>
+<description>Process LC Manifest Event</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+       [select wh_id
+          from poldat_view 
+		 where polcod = 'LC_PICKING'
+		   and polvar = 'YAMATO_MANIFEST'
+		   and polval = 'ENABLED'
+		   and rtstr1 is not null
+		   and @+wh_id] catch(-1403)
+		|
+		if(@? = 0)
+		{
+			get integrator system id
+			 where systyp = 'WMD'
+			|
+			sl_log event
+			 where evt_id = 'LC-HUEL-YAMATO-MANIFEST-CLOSE'
+			   and wh_id = @wh_id
+
+		}
+		
+]]>
+</local-syntax>
+</command> 
