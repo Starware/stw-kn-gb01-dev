@@ -25,7 +25,7 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
                          from cmphdr
                         where cmphdr.wkonum = :i_c_wkonum
                           and cmphdr.wh_id = :i_c_wh_id
-                          and cmphdr.client_id = :i_c_client_id)]
+                          and cmphdr.client_id = :i_c_client_id)
   group by cmpdtl.prtnum,
         cmpdtl.prt_client_id,
         cmpdtl.lotnum,
