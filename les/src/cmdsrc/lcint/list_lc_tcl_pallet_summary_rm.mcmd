@@ -4,7 +4,7 @@
   <type>Local Syntax</type>
   <local-syntax>
 <![CDATA[
-	[select distinct invlod.lodnum,
+	[select invlod.lodnum,
 			invdtl.prtnum,
 			invlod.lc_tcl_trigger_lpn,
 			sum(invdtl.untqty) ordqty

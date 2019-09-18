@@ -7,7 +7,7 @@
 if(@stoloc)
 {
     publish data
-	 where time_stamp = to_char(sysdate, 'DD/MM/YY') ||to_char(sysdate, '-HH:MM')|| ' :MANUAL'
+	 where time_stamp = to_char(sysdate, 'DD/MM/YY') ||to_char(sysdate, '-HH24:MI')|| ' :MANUAL'
 	|
 	[update invlod
 	    set lc_tcl_Trigger_LPN = @time_stamp
