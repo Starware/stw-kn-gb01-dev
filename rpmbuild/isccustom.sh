@@ -69,6 +69,12 @@ slImp -f $LESDIR/db/data/load/integrator/lc/LC_WORKORDER_DETAIL.slexp -v 2>&1 >>
 echo "slImp -f LC-PALLET-STORE-TCL.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC-PALLET-STORE-TCL.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
+echo "slImp -f LC-PALLET-ALLOC-TCL.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/LC-PALLET-ALLOC-TCL.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
+
+echo "slImp -f LC-PACKAGE-DETAILS.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/LC-PACKAGE-DETAILS.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
+
 echo "slImp -f HOST_HTTP_COMMUNICATIONS.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/HOST_HTTP_COMMUNICATIONS.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
