@@ -11,3 +11,6 @@ rpt_id,Lc-WksInventoryDetails,US_ENGLISH,"Wickes Customer Report","Wickes Rep",d
 rpt_id,Lc-DgNotes,US_ENGLISH,"Dangerous Goods Report","DG Rep",dscmst_rpt_id
 rpt_id,Lc-InboundPallets,US_ENGLISH,"TCL Inbound Pallets Report","TCL Inb Rep",dscmst_rpt_id
 rpt_id,Lc-InboundPallets,EN-GB,"TCL Inbound Pallets Report","TCL Inb Rep",dscmst_rpt_id
+rpt_id,Lc-OverlandPallets,US_ENGLISH,"TCL Overland Pallets Report","TCL Ovr Rep",dscmst_rpt_id
+rpt_id,Lc-OverlandPallets,EN-GB,"TCL Overland Pallets Report","TCL Ovr Rep",dscmst_rpt_id
+

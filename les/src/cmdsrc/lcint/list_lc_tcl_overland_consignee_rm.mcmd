@@ -1,0 +1,29 @@
+<command>
+  <name>list lc tcl overland consignee rm</name>
+  <description>List LC Overland Consignee RM</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+if(@ship_id)
+{
+	[select distinct adrmst.adrnam,
+			adrmst.adrln1,
+			adrmst.adrln2,
+			adrmst.rgncod,
+			adrmst.adrpsz,
+			adrmst.adrcty,
+			adrmst.ctry_name,
+			adrmst.attn_name
+	   from adrmst
+	   join ord
+		 on adrmst.adr_id = ord.st_adr_id
+	   join shipment_line
+		 on shipment_line.ordnum = ord.ordnum
+		and shipment_line.wh_id = ord.wh_id
+		and shipment_line.client_id = ord.client_id
+	  where shipment_line.ship_id = @ship_id
+		and shipment_line.wh_id = @wh_id] catch(-1403)
+}
+]]>
+</local-syntax>
+</command>

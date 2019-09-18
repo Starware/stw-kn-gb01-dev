@@ -1,0 +1,71 @@
+<command>
+  <name>list lc tcl overland shipper rm</name>
+  <description>List LC Overland Shipper RM</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+if(@ship_id)
+{
+[select distinct shipment_line.ordnum
+   from invlod
+   join invsub
+     on invsub.lodnum = invlod.lodnum
+   join invdtl
+     on invdtl.subnum = invsub.subnum
+   join shipment_line
+     on shipment_line.ship_line_id = invdtl.ship_line_id
+    and shipment_line.wh_id = invlod.wh_id
+    and shipment_line.prtnum = invdtl.prtnum
+    and shipment_line.prt_client_id = invdtl.prt_client_id
+  where invlod.stoloc = @stoloc
+    and shipment_line.ship_id = @ship_id
+	and invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
+    and invlod.wh_id = @wh_id] catch(-1403) >> res
+|
+if (@? = 0)
+{
+    convert column results to string
+     where resultset = @res
+       and colnam = 'ordnum'
+       and separator = '+'
+    |
+    publish data
+     where ordnum_lst = @result_string
+}
+|
+[select distinct adrmst.attn_name shp_attn_name,
+        adrmst.adrln1 shp_adrln1,
+        adrmst.adrln2 shp_adrln2,
+        adrmst.rgncod shp_rgncod,
+        adrmst.adrpsz shp_adrpsz,
+        adrmst.adrcty shp_adrcty,
+        adrmst.ctry_name shp_ctry_name,
+        poldat_view.rtstr2 shp_adrnam,
+        adrmst.adrnam shp_adrnam_alt
+   from adrmst
+   join wh
+     on wh.adr_id = adrmst.adr_id
+   left
+   join poldat_view
+     on poldat_view.rtstr1 = adrmst.ctry_name
+    and poldat_view.polcod = 'TCL-INTERFACE'
+    and poldat_view.polvar = 'SHIPPER-ADDRESS'
+    and poldat_view.polvar = 'CONSIGNEE-COUNTRY'
+    and poldat_view.wh_id = wh.wh_id
+  where wh.wh_id = @wh_id]  catch(-1403)
+|
+publish data
+ where ref = @ordnum_lst
+   and shp_attn_name = @shp_attn_name
+   and shp_adrln1 = @shp_adrln1
+   and shp_adrln2 = @shp_adrln2
+   and shp_rgncod = @shp_rgncod
+   and shp_adrpsz = @shp_adrpsz
+   and shp_adrcty = @shp_adrcty
+   and shp_ctry_name = @shp_ctry_name
+   and shp_adrnam = nvl(@shp_adrnam, @shp_adrnam_alt)
+	
+}
+]]>
+</local-syntax>
+</command>

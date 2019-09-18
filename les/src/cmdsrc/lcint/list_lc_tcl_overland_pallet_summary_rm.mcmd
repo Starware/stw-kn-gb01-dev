@@ -1,0 +1,78 @@
+<command>
+  <name>list lc tcl overland pallet summary rm</name>
+  <description>List LC Overland Pallet Summary RM</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+if(@ship_id)
+{
+	[select (sum(pkg.grs_wgt)/1000)gross_weight,
+	        (sum(pkg.vol)/ (1000000)) volume
+	   from (select invdtl.prtnum,
+					(sum(invdtl.untqty / invdtl.untcas) * min(prtftp_dtl.grswgt)) grs_wgt,
+					(sum(invdtl.untqty / invdtl.untcas) * min(prtftp_dtl.len) *min(prtftp_dtl.hgt) *min(prtftp_dtl.wid)) vol
+			   from invlod
+			   join invsub
+				 on invsub.lodnum = invlod.lodnum
+			   join invdtl
+				 on invdtl.subnum = invsub.subnum
+			   join prtftp
+				 on prtftp.prtnum = invdtl.prtnum
+				and prtftp.prt_client_id = invdtl.prt_client_id
+				and prtftp.wh_id = invlod.wh_id
+				and prtftp.defftp_flg = 1
+			   join prtftp_dtl
+				 on prtftp_dtl.prtnum = prtftp.prtnum
+				and prtftp_dtl.prt_client_id = prtftp.prt_client_id
+				and prtftp_dtl.wh_id = prtftp.wh_id
+				and prtftp_dtl.ftpcod = prtftp.ftpcod
+				and prtftp_dtl.cas_flg = 1	
+			   join shipment_line
+				 on shipment_line.ship_line_id = invdtl.ship_line_id
+				and invdtl.prtnum = shipment_line.prtnum
+				and invdtl.prt_client_id = shipment_line.prt_client_id
+                and shipment_line.wh_id = invlod.wh_id				
+			  where invlod.stoloc = @stoloc
+				and invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
+				and shipment_line.ship_id = @ship_id
+				and invlod.wh_id = @wh_id
+			  group by invdtl.prtnum) pkg ]catch(-1403)
+	|
+	[select decode(count(distinct invdtl.prtnum), 1, 'N', 'Y') mixed_pallet,
+			decode(sum(prtmst_view.hazmat_flg), 0, 'N', 'Y') haz_cargo,
+			count(distinct invlod.lodnum) label_qty,
+			count(distinct invlod.lodnum) *(1.2) loading_len,
+			min(prtmst_view.prtfam) package_type
+	   from invlod
+	   join invsub
+		 on invsub.lodnum = invlod.lodnum
+	   join invdtl
+		 on invdtl.subnum = invsub.subnum
+	   join shipment_line
+		 on shipment_line.ship_line_id = invdtl.ship_line_id
+		and shipment_line.wh_id = invlod.wh_id
+		and invdtl.prtnum = shipment_line.prtnum
+		and invdtl.prt_client_id = shipment_line.prt_client_id
+	   join prtmst_view
+		 on prtmst_view.prtnum = shipment_line.prtnum
+		and prtmst_view.wh_id = shipment_line.wh_id
+		and prtmst_view.prt_client_id = shipment_line.prt_client_id
+	  where invlod.stoloc = @stoloc
+		and invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
+		and shipment_line.ship_id = @ship_id
+		and invlod.wh_id = @wh_id]	
+	|
+	publish data 
+	  where marks_numbers = @marks_numbers
+	    and label_qty =@label_qty
+		and package_type = @package_type
+		and gross_weight = @gross_weight
+		and volume =@volume
+		and loading_len = @loading_len
+		and delivery_remark = @delivery_remark
+		and mixed_pallet = @mixed_pallet
+		and haz_cargo = @haz_cargo
+}
+]]>
+</local-syntax>
+</command>
