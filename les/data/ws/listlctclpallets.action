@@ -1,0 +1,16 @@
+<action>
+	<id>listlctclpallets</id>
+	<name>listlctclpallets</name>
+	<description>Lists pallets to be returned from TCL</description>
+	<type>LIST</type>
+	<ws>
+		<method>GET</method>
+		<href>/listlctclpallets</href>
+	</ws>
+	<impl>
+		<command>list lc tcl inventory</command>
+	</impl>
+	<auth>
+		<opt>optOpen</opt>
+	</auth>
+</action>

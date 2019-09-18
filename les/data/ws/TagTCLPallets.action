@@ -1,0 +1,21 @@
+<action>
+	<id>TagTCLPallets</id>
+	<name>TagTCLPallets</name>
+	<description>Tags pallets for TCL return</description>
+	<type>action</type>
+	<ws>
+		<method>GET</method>
+		<href>/TagTCLPallets</href>
+	</ws>
+	<impl>
+		<command>tag lc tcl pallets</command>
+		<arguments>
+			<argument name="lodnum" type="string" required="true"/>
+			<argument name="trunk_name" type="string" required="true" description="Trunk number"/>
+		</arguments>
+	</impl>
+	<auth>
+		<opt>optOpen</opt>
+		<primary>true</primary>
+	</auth>
+</action>
