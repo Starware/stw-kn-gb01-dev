@@ -1,0 +1,23 @@
+<command>
+  <name>list lc tcl allocated pallet rm</name>
+  <description>List LC Allocate Pallet RM</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+	[select invlod.lodnum,
+			invdtl.prtnum,
+			invlod.lc_trunk,
+			sum(invdtl.untqty) ordqty
+	   from invlod
+	   join invsub
+		 on invsub.lodnum = invlod.lodnum
+	   join invdtl
+		 on invdtl.subnum = invsub.subnum
+	  where invlod.lc_tcl_evtseq = @lc_tcl_evtseq
+	    and invlod.wh_id = @wh_id
+	  group by invlod.lodnum,
+		  	   invdtl.prtnum,
+			   invlod.lc_trunk]catch(-1403)
+]]>
+</local-syntax>
+</command>

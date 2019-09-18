@@ -1,0 +1,36 @@
+<command>
+  <name>tag lc tcl pallets</name>
+  <description>tag lc tcl pallets</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+if (@lodnum and @trunk_name)
+{
+    [select rtstr2 trnsmt_seq
+       from poldat
+      where polcod = 'TCL-INTERFACE'
+        and polvar = 'PENDING-TRANSMIT'
+        and polval = 'KEY'
+        and wh_id_tmpl = nvl(@wh_id, @@wh_id)
+        and rtstr2 is not null] catch(-1403)
+    |
+    if (@? = 0)
+    {
+		[update invlod
+			set lc_tcl_evtseq = @trnsmt_seq,
+				lc_trunk = @trunk_name
+		  where lodnum = @lodnum
+			and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+		|
+	    [update poldat
+            set rtstr1 = @trnsmt_seq
+          where polcod = 'TCL-INTERFACE'
+            and polvar = 'PENDING-TRANSMIT'
+            and polval = 'KEY'
+            and wh_id_tmpl = nvl(@wh_id, @@wh_id)] catch(-1403)
+	}
+}
+]]>
+</local-syntax>
+  <argument name="lodnum" datatype="string" />
+</command>

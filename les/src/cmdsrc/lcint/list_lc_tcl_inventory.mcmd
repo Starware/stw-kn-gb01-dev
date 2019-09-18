@@ -1,0 +1,140 @@
+<command>
+  <name>list lc tcl inventory</name>
+  <description>List LC TCL Inventory</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+[select rtstr1 trnsmt_seq
+   from poldat
+  where polcod = 'TCL-INTERFACE'
+    and polvar = 'PENDING-TRANSMIT'
+	and polval = 'KEY'
+    and wh_id_tmpl = nvl(@wh_id,@@wh_id)
+	and rtstr1 is not null] catch(-1403)
+|	
+if(@? = 0)
+{
+	generate next number
+		where numcod = 'lc_seqnum'
+	|
+	[update poldat
+		  set rtstr2 = @nxtnum,
+			  rtstr1 = null
+		where polcod = 'TCL-INTERFACE'
+		  and polvar = 'PENDING-TRANSMIT'
+		  and polval = 'KEY'
+		  and rtstr1 is not null
+		  and wh_id_tmpl = nvl(@wh_id, @@wh_id)] catch(-1403)
+	|
+	if (@? = 0)
+	{
+		[commit]
+		|
+		[select min(inventory_view.prt_client_id) client_id
+		   from inventory_view
+		   join invlod
+			 on invlod.lodnum = inventory_view.lodnum
+			and invlod.wh_id = inventory_view.wh_id
+		  where inventory_view.wh_id = nvl(@wh_id,@@wh_id) 
+			and invlod.lc_tcl_evtseq = @trnsmt_seq ]catch(-1403)
+		|
+		if(@? = 0 and @client_id)
+		{
+			get integrator system id
+						 where systyp = 'WMD'
+			|
+			sl_log event
+			 where evt_id = 'LC-PALLET-ALLOC-TCL'
+			   and wh_id = nvl(@wh_id,@@wh_id)
+			   and client_id = nvl(@client_id,'NONE')
+			   and lc_tcl_evtseq= @trnsmt_seq
+		}
+	}
+}
+|
+[select rtstr2
+   from poldat
+  where polcod = 'TCL-INTERFACE'
+    and polvar = 'PENDING-TRANSMIT'
+	and polval = 'KEY'
+    and wh_id_tmpl = nvl(@wh_id,@@wh_id)
+	and rtstr2 is not null] catch(-1403)
+|
+if (@? = -1403)
+{
+	generate next number
+		where numcod = 'lc_seqnum'
+	|
+	[update poldat
+		  set rtstr2 = @nxtnum,
+			  rtstr1 = null
+		where polcod = 'TCL-INTERFACE'
+		  and polvar = 'PENDING-TRANSMIT'
+		  and polval = 'KEY'
+		  and wh_id_tmpl = nvl(@wh_id, @@wh_id)] catch(-1403)
+}
+|
+[select lpn_val.prtnum,
+		lpn_val.lodnum,
+		lpn_val.lpn_qty,
+		lpn_val.order_type,
+		lpn_val.order_number
+   from(select ROW_NUMBER() OVER(PARTITION BY inv.lodnum, inv.prtnum
+							   ORDER BY inv.date_val) AS seqnum,
+				inv.prtnum,
+				inv.lodnum,
+				inv.lpn_qty,
+				inv.order_type,
+				inv.order_number,
+				inv.date_val
+		   from(select inventory_view.prtnum,
+			           inventory_view.lodnum,
+			           inventory_view.stoloc,
+			sum(inventory_view.untqty) LPN_QTY,
+			decode(pckwrk_view.wkonum, NULL, 'Order', 'Work Order') Order_Type,
+			decode(pckwrk_view.wkonum, NULL, pckwrk_view.ordnum, pckwrk_view.wkonum) Order_Number,
+			decode(pckwrk_view.wkonum, NULL, trunc(ord_line.late_shpdte), trunc(wkohdr.duedte)) date_val
+	   from pckwrk_view
+	   join inventory_view
+		 on inventory_view.stoloc = pckwrk_view.srcloc
+		and inventory_view.wh_id = pckwrk_view.wh_id
+		and inventory_view.prtnum = pckwrk_view.prtnum
+		and inventory_view.prt_client_id = pckwrk_view.prt_client_id
+		and inventory_view.wrkref is null
+	   join invlod
+	     on invlod.lodnum = inventory_view.lodnum
+		and invlod.wh_id = inventory_view.wh_id
+		and invlod.stoloc = inventory_view.stoloc
+	   left
+	   join wkohdr
+		 on wkohdr.wkonum = pckwrk_view.wkonum
+		and wkohdr.client_id = pckwrk_view.client_id
+		and pckwrk_view.wh_id = wkohdr.wh_id
+		and pckwrk_view.wkorev = wkohdr.wkorev
+	   left
+	   join ord_line
+		 on ord_line.ordnum = pckwrk_view.ordnum
+		and ord_line.client_id = pckwrk_view.client_id
+		and ord_line.prtnum = pckwrk_view.prtnum
+		and ord_line.wh_id = pckwrk_view.wh_id
+	  where pckwrk_view.wh_id = nvl(@wh_id, @@wh_id)
+		and pckwrk_view.appqty = 0
+		and pckwrk_view.src_sto_zone_id = '10036'
+        and invlod.lc_tcl_evtseq is null		
+	  group by inventory_view.prtnum,
+			   inventory_view.stoloc,
+			   inventory_view.lodnum,
+			   pckwrk_view.wkonum,
+			   pckwrk_view.ordnum,
+			   ord_line.late_shpdte,
+			   wkohdr.duedte
+		 order by inventory_view.prtnum,
+				  inventory_view.lodnum,
+				  wkohdr.duedte,
+				  ord_line.late_shpdte) inv) lpn_val
+  where lpn_val.seqnum = 1
+  order by lpn_val.prtnum,
+		   lpn_val.lodnum] catch(-1403)
+]]>
+</local-syntax>
+</command>
