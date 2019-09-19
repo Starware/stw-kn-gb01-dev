@@ -32,6 +32,11 @@ cd $LESDIR/db/ddl/Tables
 echo "running installsql in " >> ${POSTINSTALL_LOG}
 installsql *.tbl 2>&1 >> ${POSTINSTALL_LOG} || false
 
+echo "cd $LESDIR/db/ddl/Sequences" >> ${POSTINSTALL_LOG}
+cd $LESDIR/db/ddl/Sequences
+echo "running installsql in " >> ${POSTINSTALL_LOG}
+installsql *.seq 2>&1 >> ${POSTINSTALL_LOG} || false
+
 # Remove some existing system setup by looping over all msql files
 for x in $LESDIR/db/data/unload/integrator/lc/*.msql; do
     echo "msql @ " $x >> ${POSTINSTALL_LOG}
