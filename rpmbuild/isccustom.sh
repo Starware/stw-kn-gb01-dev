@@ -17,15 +17,7 @@ cd $LESDIR
 echo "running mbuild" >> ${POSTINSTALL_LOG}
 mbuild 2>&1 >> ${POSTINSTALL_LOG}
 
-echo "cd $LESDIR/db/data/load/base/bootstraponly" >> ${POSTINSTALL_LOG}
-cd $LESDIR/db/data/load/base/bootstraponly
-echo "running mload_all" >> ${POSTINSTALL_LOG}
-mload_all 2>&1 >> ${POSTINSTALL_LOG}
 
-echo "cd $LESDIR/db/data/load/base/safetoload" >> ${POSTINSTALL_LOG}
-cd $LESDIR/db/data/load/base/safetoload
-echo "running mload_all" >> ${POSTINSTALL_LOG}
-mload_all 2>&1 >> ${POSTINSTALL_LOG}
 
 echo "cd $LESDIR/db/ddl/Tables" >> ${POSTINSTALL_LOG}
 cd $LESDIR/db/ddl/Tables
@@ -36,6 +28,17 @@ echo "cd $LESDIR/db/ddl/Sequences" >> ${POSTINSTALL_LOG}
 cd $LESDIR/db/ddl/Sequences
 echo "running installsql in " >> ${POSTINSTALL_LOG}
 installsql *.seq 2>&1 >> ${POSTINSTALL_LOG} || false
+
+echo "cd $LESDIR/db/data/load/base/bootstraponly" >> ${POSTINSTALL_LOG}
+cd $LESDIR/db/data/load/base/bootstraponly
+echo "running mload_all" >> ${POSTINSTALL_LOG}
+mload_all 2>&1 >> ${POSTINSTALL_LOG}
+
+echo "cd $LESDIR/db/data/load/base/safetoload" >> ${POSTINSTALL_LOG}
+cd $LESDIR/db/data/load/base/safetoload
+echo "running mload_all" >> ${POSTINSTALL_LOG}
+mload_all 2>&1 >> ${POSTINSTALL_LOG}
+
 
 # Remove some existing system setup by looping over all msql files
 for x in $LESDIR/db/data/unload/integrator/lc/*.msql; do
