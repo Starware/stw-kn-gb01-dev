@@ -3,9 +3,6 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="stoloc" class="java.lang.String">
-		<property name="prompt" value="^stoloc^"/>
-	</parameter>
 	<parameter name="wh_id" class="java.lang.String">
 		<property name="prompt" value="^wh_id^"/>
 	</parameter>
@@ -19,7 +16,7 @@
 	</parameter>
 	<parameter name="MOCA_REPORT_CONNECTION" class="com.redprairie.moca.jrds.JRMocaConnection" isForPrompting="false">
 		<property name="MOCA" value="true"/>
-		<defaultValueExpression><![CDATA[new com.redprairie.moca.jrds.JRMocaConnection("http://localhost:4500/service", "super", "super")]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new com.redprairie.moca.jrds.JRMocaConnection("https://sgb01d1.int.kn:8010/service", "sneha.hegde", "Repl2019")]]></defaultValueExpression>
 	</parameter>
 	<parameter name="MOCA_REPORT_DATE" class="java.lang.String" isForPrompting="false">
 		<property name="MOCA" value="true"/>
@@ -41,8 +38,20 @@
 		<property name="MOCA" value="true"/>
 		<defaultValueExpression><![CDATA["HH:mm:ss"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="qty_uk_pallets" class="java.lang.Integer">
+		<property name="prompt" value="^qty_uk_pallets^"/>
+	</parameter>
+	<parameter name="qty_half_uk_pallets" class="java.lang.Integer">
+		<property name="prompt" value="^qty_half_uk_pallets^"/>
+	</parameter>
+	<parameter name="qty_euro_pallets" class="java.lang.Integer">
+		<property name="prompt" value="^qty_euro_pallets^"/>
+	</parameter>
+	<parameter name="qty_half_euro_pallets" class="java.lang.Integer">
+		<property name="prompt" value="^qty_half_euro_pallets^"/>
+	</parameter>
 	<queryString language="MOCA">
-		<![CDATA[list lc tcl overland pallets where wh_id = @wh_id and stoloc =@stoloc]]>
+		<![CDATA[list lc tcl overland pallets where wh_id = @wh_id  and qty_uk_pallets=@qty_uk_pallets and qty_half_uk_pallets = @qty_half_uk_pallets and qty_euro_pallets = @qty_euro_pallets and qty_half_euro_pallets = @qty_half_euro_pallets]]>
 	</queryString>
 	<field name="lodnum" class="java.lang.String"/>
 	<field name="evt_logged" class="java.lang.String"/>
@@ -64,20 +73,6 @@
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Event Logged]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="60" y="10" width="100" height="20" uuid="5d8c0538-f6ae-48b7-9e07-12bbbb3b72cf"/>
-				<textElement verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{stoloc}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="10" width="60" height="20" uuid="2a865a14-3941-4750-8636-377e0d599344"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Location :]]></text>
 			</staticText>
 		</band>
 	</columnHeader>

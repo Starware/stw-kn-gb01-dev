@@ -4,58 +4,74 @@
   <type>Local Syntax</type>
   <local-syntax>
 <![CDATA[
-if(@stoloc)
-{
-    publish data
-	 where time_stamp = to_char(sysdate, 'DD/MM/YY') ||to_char(sysdate, '-HH24:MI')|| ' :OVRLND'
+
+    [select polval stoloc
+	   from poldat_view
+	  where polcod = 'TCL-INTERFACE'
+		and polvar = 'WATCHED-LOCATION'
+		and rtstr1 = 'LC-PACKAGE-DETAILS'
+		and wh_id = nvl(@wh_id,@@wh_id)
+		and rtnum1 = 1]catch(-1403)
 	|
-	[update invlod
-	    set lc_tcl_Trigger_LPN = @time_stamp
-	  where lc_tcl_Trigger_LPN = 'NONE'
-	    and invlod.wh_id = nvl(@wh_id,@@wh_id)
-		and invlod.stoloc = @stoloc]catch(-1403)
-	|
-	if(@? =0)
+	if(@? = 0)
 	{
-	   [select distinct shipment_line.ship_id,
-               invdtl.prt_client_id client_id
-		  from invlod
-		  join invsub
-		    on invsub.lodnum = invlod.lodnum
-		  join invdtl
-			on invdtl.subnum = invsub.subnum
-		  join shipment_line
-			on shipment_line.ship_line_id = invdtl.ship_line_id
-		   and shipment_line.wh_id = invlod.wh_id
-		   and shipment_line.prtnum = invdtl.prtnum
-		   and shipment_line.prt_client_id = invdtl.prt_client_id
-		 where invlod.stoloc = @stoloc
-		   and invlod.wh_id = @wh_id
-		   and invlod.lc_tcl_Trigger_LPN = @time_stamp]catch(-1403)
+		publish data
+		 where time_stamp = to_char(sysdate, 'DD/MM/YY') ||to_char(sysdate, '-HH24:MI')|| ' :OVRLND'
 		|
-	    get integrator system id
-				 where systyp = 'WMD'
-	    |
-	    sl_log event
-		 where evt_id = 'LC-PACKAGE-DETAILS'
-		   and wh_id = nvl(@wh_id,@@wh_id)
-		   and client_id = @client_id
-		   and ship_id = @ship_id
-		   and lc_tcl_Trigger_LPN = @time_stamp
-		   and stoloc = @stoloc
-	}
-	|
-	if(@? =0)
-	{
-	    [select lodnum,
-		        decode(lc_tcl_trigger_lpn, 'NONE', 'No', 'Yes') evt_logged
-	       from invlod
-	      where invlod.stoloc = @stoloc
-		    and invlod.lc_tcl_trigger_lpn = @time_stamp
-	        and invlod.wh_id = @wh_id]catch(-1403)
+		[update invlod
+			set lc_tcl_Trigger_LPN = @time_stamp
+		  where lc_tcl_Trigger_LPN = 'NONE'
+			and invlod.wh_id = nvl(@wh_id,@@wh_id)
+			and invlod.stoloc = @stoloc]catch(-1403)
+		|
+		if(@? =0)
+		{
+		   [select distinct shipment_line.ship_id,
+				   invdtl.prt_client_id client_id
+			  from invlod
+			  join invsub
+				on invsub.lodnum = invlod.lodnum
+			  join invdtl
+				on invdtl.subnum = invsub.subnum
+			  join shipment_line
+				on shipment_line.ship_line_id = invdtl.ship_line_id
+			   and shipment_line.wh_id = invlod.wh_id
+			   and shipment_line.prtnum = invdtl.prtnum
+			   and shipment_line.prt_client_id = invdtl.prt_client_id
+			 where invlod.stoloc = @stoloc
+			   and invlod.wh_id = @wh_id
+			   and invlod.lc_tcl_Trigger_LPN = @time_stamp]catch(-1403)
+			|
+			if(@? = 0)
+			{
+				get integrator system id
+						 where systyp = 'WMD'
+				|
+				sl_log event 
+				 where evt_id = 'LC-PACKAGE-DETAILS'
+				   and wh_id = nvl(@wh_id,@@wh_id)
+				   and client_id = @client_id
+				   and ship_id = @ship_id
+				   and lc_tcl_Trigger_LPN = @time_stamp
+				   and stoloc = @stoloc
+				   and qty_uk_pallets =@qty_uk_pallets
+				   and qty_half_uk_pallets = @qty_half_uk_pallets
+				   and qty_euro_pallets = @qty_euro_pallets
+				   and qty_half_euro_pallets = @qty_half_euro_pallets
+			}   
+		} >> res
+		|
+		[select lodnum,
+				stoloc,
+				decode(lc_tcl_trigger_lpn, 'NONE', 'No', 'Yes') evt_logged
+		   from invlod
+		  where invlod.stoloc = @stoloc
+			and invlod.lc_tcl_trigger_lpn = @time_stamp
+			and invlod.wh_id = @wh_id]catch(-1403)
+
 	}
 	
-}
+	
 ]]>
 </local-syntax>
 </command>
