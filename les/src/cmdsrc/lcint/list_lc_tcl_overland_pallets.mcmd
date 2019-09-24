@@ -11,7 +11,52 @@
 		and polvar = 'WATCHED-LOCATION'
 		and rtstr1 = 'LC-PACKAGE-DETAILS'
 		and wh_id = nvl(@wh_id,@@wh_id)
-		and rtnum1 = 1]catch(-1403)
+		and rtnum1 = 1]catch(-1403) >> res
+	|
+	if (@? = 0)
+	{
+		convert column results to string
+		 where resultset = @res
+		   and colnam = 'stoloc'
+		   and separator = "','"
+		|
+		publish data
+		 where loc_lst = @result_string
+	}
+	|
+	publish data
+      where loc_clause = "invlod.stoloc in ('" || @loc_lst || "') "
+    |
+    [select distinct invlod.lodnum
+	   from invlod
+	   join invsub
+		 on invsub.lodnum = invlod.lodnum
+	   join invdtl
+		 on invdtl.subnum = invsub.subnum
+	   join shipment_line
+		 on shipment_line.ship_line_id = invdtl.ship_line_id
+		and shipment_line.wh_id = invlod.wh_id
+		and shipment_line.prtnum = invdtl.prtnum
+		and shipment_line.prt_client_id = invdtl.prt_client_id
+	  where invlod.wh_id = @wh_id
+		and @loc_clause:raw
+		and invlod.lc_tcl_trigger_lpn = 'NONE'
+		and substr(shipment_line.ordnum, 0, 1) in ('Y', 'D', 'N')]catch(-1403) >> lpnres	
+    |
+	if (@? = 0)
+	{
+		convert column results to string
+		 where resultset = @lpnres
+		   and colnam = 'lodnum'
+		   and separator = "','"
+		|
+		publish data
+		 where load_lst = @result_string
+	}
+	|
+	publish data
+      where load_clause = "invlod.lodnum in ('" || @load_lst || "') "
+	    and loc_clause =@loc_clause
 	|
 	if(@? = 0)
 	{
@@ -22,7 +67,7 @@
 			set lc_tcl_Trigger_LPN = @time_stamp
 		  where lc_tcl_Trigger_LPN = 'NONE'
 			and invlod.wh_id = nvl(@wh_id,@@wh_id)
-			and invlod.stoloc = @stoloc]catch(-1403)
+			and @load_clause:raw   ]catch(-1403)
 		|
 		if(@? =0)
 		{
@@ -38,8 +83,10 @@
 			   and shipment_line.wh_id = invlod.wh_id
 			   and shipment_line.prtnum = invdtl.prtnum
 			   and shipment_line.prt_client_id = invdtl.prt_client_id
-			 where invlod.stoloc = @stoloc
-			   and invlod.wh_id = @wh_id
+			 where invlod.wh_id = @wh_id
+			   and @loc_clause:raw
+			   and @load_clause:raw
+			   and substr(shipment_line.ordnum, 0, 1) in ('Y', 'D', 'N')
 			   and invlod.lc_tcl_Trigger_LPN = @time_stamp]catch(-1403)
 			|
 			if(@? = 0)
@@ -53,21 +100,20 @@
 				   and client_id = @client_id
 				   and ship_id = @ship_id
 				   and lc_tcl_Trigger_LPN = @time_stamp
-				   and stoloc = @stoloc
-				   and qty_uk_pallets =@qty_uk_pallets
-				   and qty_half_uk_pallets = @qty_half_uk_pallets
-				   and qty_euro_pallets = @qty_euro_pallets
-				   and qty_half_euro_pallets = @qty_half_euro_pallets
+				   and stoloc_lst = @loc_lst
+				   and sleeve_qty =@sleeve_qty
+				   and carton_qty = @carton_qty
+				   and box_qty = @box_qty
+				   
 			}   
 		} >> res
 		|
-		[select lodnum,
-				stoloc,
-				decode(lc_tcl_trigger_lpn, 'NONE', 'No', 'Yes') evt_logged
+		[select distinct invlod.lodnum,
+				invlod.stoloc,
+				decode(invlod.lc_tcl_trigger_lpn, 'NONE', 'No', 'Yes') evt_logged
 		   from invlod
-		  where invlod.stoloc = @stoloc
-			and invlod.lc_tcl_trigger_lpn = @time_stamp
-			and invlod.wh_id = @wh_id]catch(-1403)
+		  where invlod.wh_id = @wh_id
+		    and @load_clause:raw]catch(-1403)
 
 	}
 	

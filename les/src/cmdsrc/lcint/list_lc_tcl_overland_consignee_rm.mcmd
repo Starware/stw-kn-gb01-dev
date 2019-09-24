@@ -21,6 +21,7 @@ if(@ship_id)
 		 on shipment_line.ordnum = ord.ordnum
 		and shipment_line.wh_id = ord.wh_id
 		and shipment_line.client_id = ord.client_id
+		and substr(shipment_line.ordnum, 0, 1) in ('Y', 'D', 'N')
 	  where shipment_line.ship_id = @ship_id
 		and shipment_line.wh_id = @wh_id] catch(-1403)
 }

@@ -1,15 +1,15 @@
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
 SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
-2018.1,'LC_GET_TCL_CONSIGNEE_ADD','SL_RETR_MTHD_IMPL','MOCA','Retrieve Consignee address','F','F','F','F','F','F','F','list lc tcl overland consignee rm where wh_id = :i_c_wh_id and lc_tcl_trigger_lpn =:i_c_lc_tcl_trigger_lpn and stoloc = :i_c_stoloc and ship_id = :i_c_ship_id','158'
+2018.1,'LC_GET_TCL_CONSIGNEE_ADD','SL_RETR_MTHD_IMPL','MOCA','Retrieve Consignee address','F','F','F','F','F','F','F','list lc tcl overland consignee rm where wh_id = :i_c_wh_id and lc_tcl_trigger_lpn =:i_c_lc_tcl_trigger_lpn  and ship_id = :i_c_ship_id','134'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
 SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
-2018.1,'LC_GET_TCL_SHIPPER_ADD','SL_RETR_MTHD_IMPL','MOCA','Retrieve Shipper Address','F','F','F','F','F','F','F','list lc tcl overland shipper rm where wh_id = :i_c_wh_id and lc_tcl_trigger_lpn =:i_c_lc_tcl_trigger_lpn and stoloc = :i_c_stoloc and ship_id = :i_c_ship_id','156'
+2018.1,'LC_GET_TCL_SHIPPER_ADD','SL_RETR_MTHD_IMPL','MOCA','Retrieve Shipper Address','F','F','F','F','F','F','F','list lc tcl overland shipper rm where wh_id = :i_c_wh_id and lc_tcl_trigger_lpn =:i_c_lc_tcl_trigger_lpn and stoloc_lst = :i_c_stoloc_lst and ship_id = :i_c_ship_id','164'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
 SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
-2018.1,'LC_GET_TCL_OVRLND_PALLETS','SL_RETR_MTHD_IMPL','MOCA','Retrieve the pallets for oveland transaction','F','F','F','F','F','F','F','list lc tcl overland pallet summary rm where wh_id = :i_c_wh_id and lc_tcl_trigger_lpn =:i_c_lc_tcl_trigger_lpn and stoloc = :i_c_stoloc and ship_id = :i_c_ship_id','163'
+2018.1,'LC_GET_TCL_OVRLND_PALLETS','SL_RETR_MTHD_IMPL','MOCA','Retrieve the pallets for oveland transaction','F','F','F','F','F','F','F','list lc tcl overland pallet summary rm where wh_id = :i_c_wh_id and lc_tcl_trigger_lpn =:i_c_lc_tcl_trigger_lpn and stoloc_lst = :i_c_stoloc_lst and ship_id = :i_c_ship_id','171'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
@@ -18,10 +18,6 @@ SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
 2018.1,'LC_GET_TCL_CONSIGNEE_ADD','I_C_SHIP_ID',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
-SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'LC_GET_TCL_CONSIGNEE_ADD','I_C_STOLOC',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
@@ -37,7 +33,7 @@ SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'LC_GET_TCL_SHIPPER_ADD','I_C_STOLOC',''
+2018.1,'LC_GET_TCL_SHIPPER_ADD','I_C_STOLOC_LST',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
@@ -53,7 +49,7 @@ SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'LC_GET_TCL_OVRLND_PALLETS','I_C_STOLOC',''
+2018.1,'LC_GET_TCL_OVRLND_PALLETS','I_C_STOLOC_LST',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
@@ -125,6 +121,14 @@ SL_VERSION,evt_id,evt_descr,log_evt_flg,evt_grp_id
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
 SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-PACKAGE-DETAILS','BOX_QTY','Box Quantity','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-PACKAGE-DETAILS','CARTON_QTY','Carton Quantity','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
 2018.1,'LC-PACKAGE-DETAILS','CLIENT_ID','Client Id','C','T'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
@@ -133,27 +137,15 @@ SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
 SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
-2018.1,'LC-PACKAGE-DETAILS','QTY_EURO_PALLETS','Quantity of Euro Pallets','N','F'
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
-SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
-2018.1,'LC-PACKAGE-DETAILS','QTY_HALF_EURO_PALLETS','Quantity of Half Euro Pallets','N','F'
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
-SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
-2018.1,'LC-PACKAGE-DETAILS','QTY_HALF_UK_PALLETS','Quantity of Half UK Pallets','N','F'
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
-SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
-2018.1,'LC-PACKAGE-DETAILS','QTY_UK_PALLETS','Quantity of UK Pallets','N','F'
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
-SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
 2018.1,'LC-PACKAGE-DETAILS','SHIP_ID','Shipment Id','C','T'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
 SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
-2018.1,'LC-PACKAGE-DETAILS','STOLOC','Storage Location','C','T'
+2018.1,'LC-PACKAGE-DETAILS','SLEEVE_QTY','Sleeve Quantity','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-PACKAGE-DETAILS','STOLOC_LST','Storage location','C','T'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
 SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
@@ -433,6 +425,14 @@ SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_f
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
 SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_SHIPPER_DETAILS_IFD','2018.1','LC_PACKAGE_INFO_HDR','BOX_QTY','Box Qty','120','','','','','','LC-PACKAGE-DETAILS','BOX_QTY','','','EA','C','','','','','','','','N','','N','','','','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_SHIPPER_DETAILS_IFD','2018.1','LC_PACKAGE_INFO_HDR','CARTON_QTY','Carton Qty','110','','','','','','LC-PACKAGE-DETAILS','CARTON_QTY','','','EA','C','','','','','','','','N','','N','','','','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
 2018.1,'LC_SHIPPER_DETAILS_IFD','2018.1','LC_PACKAGE_INFO_HDR','DELIVERY_REMARK','Delivery Remark','70','','LC-PACKAGE-DETAILS','2018.1','LC-PACKAGE-INFO-SEG','DELIVERY_REMARK','','','','','EO','C','','','','','','','','N','','N','','','','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
@@ -465,19 +465,7 @@ SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_f
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
 SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
-2018.1,'LC_SHIPPER_DETAILS_IFD','2018.1','LC_PACKAGE_INFO_HDR','QTY_EURO_PALLETS','Quantity of Euro Pallets','120','','','','','','LC-PACKAGE-DETAILS','QTY_EURO_PALLETS','','','EA','N','','','','','','','','N','','N','','','','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
-SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
-2018.1,'LC_SHIPPER_DETAILS_IFD','2018.1','LC_PACKAGE_INFO_HDR','QTY_HALF_EURO_PALLETS','Quantity of Half Euro Pallets','130','','','','','','LC-PACKAGE-DETAILS','QTY_HALF_EURO_PALLETS','','','EA','N','','','','','','','','N','','N','','','','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
-SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
-2018.1,'LC_SHIPPER_DETAILS_IFD','2018.1','LC_PACKAGE_INFO_HDR','QTY_HALF_UK_PALLETS','Quantity of Half UK Pallets','110','','','','','','LC-PACKAGE-DETAILS','QTY_HALF_UK_PALLETS','','','EA','N','','','','','','','','N','','N','','','','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
-SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
-2018.1,'LC_SHIPPER_DETAILS_IFD','2018.1','LC_PACKAGE_INFO_HDR','QTY_UK_PALLETS','Quantity of Half UK Pallets','100','','','','','','LC-PACKAGE-DETAILS','QTY_UK_PALLETS','','','EA','N','','','','','','','','N','','N','','','','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+2018.1,'LC_SHIPPER_DETAILS_IFD','2018.1','LC_PACKAGE_INFO_HDR','SLEEVE_QTY','Sleeve Qty','100','','','','','','LC-PACKAGE-DETAILS','SLEEVE_QTY','','','EA','N','','','','','','','','N','','N','','','','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
 SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
@@ -534,9 +522,5 @@ SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_f
 CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
 SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
 2018.1,'LC_SHIPPER_DETAILS_IFD','2018.1','HOST','','','SYNCE','','T','T','T','','','','','',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm
-SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,head_evt_id,tail_evt_id
-2018.1,'HOST','ASYNC','O','SL_XML_TO_FILE_2','',''
 
 CSV__TAG__KLUDGE___COMMIT

@@ -38,22 +38,20 @@
 		<property name="MOCA" value="true"/>
 		<defaultValueExpression><![CDATA["HH:mm:ss"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="qty_uk_pallets" class="java.lang.Integer">
+	<parameter name="sleeve_qty" class="java.lang.Integer">
 		<property name="prompt" value="^qty_uk_pallets^"/>
 	</parameter>
-	<parameter name="qty_half_uk_pallets" class="java.lang.Integer">
+	<parameter name="carton_qty" class="java.lang.Integer">
 		<property name="prompt" value="^qty_half_uk_pallets^"/>
 	</parameter>
-	<parameter name="qty_euro_pallets" class="java.lang.Integer">
+	<parameter name="box_qty" class="java.lang.Integer">
 		<property name="prompt" value="^qty_euro_pallets^"/>
 	</parameter>
-	<parameter name="qty_half_euro_pallets" class="java.lang.Integer">
-		<property name="prompt" value="^qty_half_euro_pallets^"/>
-	</parameter>
 	<queryString language="MOCA">
-		<![CDATA[list lc tcl overland pallets where wh_id = @wh_id  and qty_uk_pallets=@qty_uk_pallets and qty_half_uk_pallets = @qty_half_uk_pallets and qty_euro_pallets = @qty_euro_pallets and qty_half_euro_pallets = @qty_half_euro_pallets]]>
+		<![CDATA[list lc tcl overland pallets where wh_id = @wh_id  and sleeve_qty=@sleeve_qty and carton_qty = @carton_qty and box_qty = @box_qty]]>
 	</queryString>
 	<field name="lodnum" class="java.lang.String"/>
+	<field name="stoloc" class="java.lang.String"/>
 	<field name="evt_logged" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>

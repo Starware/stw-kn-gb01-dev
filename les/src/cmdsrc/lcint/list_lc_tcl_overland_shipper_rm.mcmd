@@ -6,6 +6,9 @@
 <![CDATA[
 if(@ship_id)
 {
+publish data
+      where loc_clause = "invlod.stoloc in ('" || @stoloc_lst || "') "
+|
 [select distinct shipment_line.ordnum
    from invlod
    join invsub
@@ -17,9 +20,10 @@ if(@ship_id)
     and shipment_line.wh_id = invlod.wh_id
     and shipment_line.prtnum = invdtl.prtnum
     and shipment_line.prt_client_id = invdtl.prt_client_id
-  where invlod.stoloc = @stoloc
-    and shipment_line.ship_id = @ship_id
+  where shipment_line.ship_id = @ship_id
+    and @loc_clause:raw
 	and invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
+	and substr(shipment_line.ordnum, 0, 1) in ('Y', 'D', 'N')
     and invlod.wh_id = @wh_id] catch(-1403) >> res
 |
 if (@? = 0)

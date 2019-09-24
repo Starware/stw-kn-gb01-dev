@@ -6,6 +6,9 @@
 <![CDATA[
 if(@ship_id)
 {
+    publish data
+      where loc_clause = "invlod.stoloc in ('" || @stoloc_lst || "') "
+	 | 
 	[select (sum(pkg.grs_wgt)/1000)gross_weight,
 	        (sum(pkg.vol)/ (1000000)) volume
 	   from (select invdtl.prtnum,
@@ -32,9 +35,10 @@ if(@ship_id)
 				and invdtl.prtnum = shipment_line.prtnum
 				and invdtl.prt_client_id = shipment_line.prt_client_id
                 and shipment_line.wh_id = invlod.wh_id				
-			  where invlod.stoloc = @stoloc
-				and invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
+			  where invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
 				and shipment_line.ship_id = @ship_id
+				and substr(shipment_line.ordnum, 0, 1) in ('Y', 'D', 'N')
+				and @loc_clause:raw
 				and invlod.wh_id = @wh_id
 			  group by invdtl.prtnum) pkg ]catch(-1403)
 	|
@@ -57,9 +61,9 @@ if(@ship_id)
 		 on prtmst_view.prtnum = shipment_line.prtnum
 		and prtmst_view.wh_id = shipment_line.wh_id
 		and prtmst_view.prt_client_id = shipment_line.prt_client_id
-	  where invlod.stoloc = @stoloc
-		and invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
+	  where invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
 		and shipment_line.ship_id = @ship_id
+		and @loc_clause:raw
 		and invlod.wh_id = @wh_id]	
 	|
 	publish data 
