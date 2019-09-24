@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="kn.swift.moca.utils.MapCreatorTest" tests="1" skipped="1" failures="0" errors="0" timestamp="2019-08-29T11:12:54" hostname="REPL-1144217" time="0.0">
+<testsuite name="kn.swift.moca.utils.MapCreatorTest" tests="1" skipped="1" failures="0" errors="0" timestamp="2019-09-23T11:16:05" hostname="REPL-1144217" time="0.0">
   <properties/>
   <testcase name="createReprintRequestMapSize" classname="kn.swift.moca.utils.MapCreatorTest" time="0.0">
     <skipped/>

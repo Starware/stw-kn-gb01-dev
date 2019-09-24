@@ -20,8 +20,10 @@ public class Logger {
         MocaContext moca = MocaUtils.currentContext();
         
 		try {
-			File OutFile = new File("log/PCIP_comms.log");
-			String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+			
+			String timeStamp = new SimpleDateFormat("YYYY.MM.DD.HH.mm.ss").format(new Date());
+			String Filename = "log/PCIP_comms_" + timeStamp.substring(0,10) + ".log";
+			File OutFile = new File(Filename);
 			
 			if (!OutFile.exists()) {
 				moca.trace("Creating new log file: " + OutFile.getAbsolutePath());
