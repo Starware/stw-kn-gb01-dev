@@ -8,6 +8,7 @@
         tot_cas_cnt,
         subnum,
         ordnum,
+        schbat,
         ctnmst.ctncod,
         dscmst.lngdsc
    from pckwrk_view
@@ -20,7 +21,7 @@
     and dscmst.locale_id = nvl(@locale_id, @@locale_id)
   where pckwrk_view.wh_id = @wh_id
     and wrktyp = 'K'
-	and pckwrk_view.wrkref = @wrkref
+    and pckwrk_view.wrkref = @wrkref
   order by cur_cas] catch(-1403)
 |
 publish data
@@ -28,7 +29,8 @@ publish data
    and subnum = @subnum
    and ctncod = @lngdsc
    and cur_cas = @cur_cas
-   and tot_cas_cnt = @tot_cas_cnt;
+   and tot_cas_cnt = @tot_cas_cnt
+   and schbat = @schbat;
 ]]>
 </local-syntax>
 </command>
