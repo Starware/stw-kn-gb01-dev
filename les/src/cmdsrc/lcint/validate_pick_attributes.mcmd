@@ -1,0 +1,300 @@
+<command>
+<name>validate pick attributes</name>
+<description>Validate Pick Attributes</description>
+<type>Local Syntax</type>
+
+<argument name="stoloc" datatype="string"></argument>
+<argument name="wh_id" datatype="string"></argument>
+<argument name="lodnum" datatype="string"></argument>
+<argument name="subnum" datatype="string"></argument>
+<argument name="dtlnum" datatype="string"></argument>
+<argument name="prtnum" datatype="string"></argument>
+<argument name="prt_client_id" datatype="string"></argument>
+<argument name="invsts" datatype="string"></argument>
+<argument name="invsts_prg" datatype="string"></argument>
+<argument name="supnum" datatype="string"></argument>
+<argument name="lotnum" datatype="string"></argument>
+<argument name="orgcod" datatype="string"></argument>
+<argument name="revlvl" datatype="string"></argument>
+<argument name="mandte" datatype="string"></argument>
+<argument name="expire_dte" datatype="string"></argument>
+<argument name="inv_attr_str2" datatype="string"></argument>
+<argument name="inv_attr_str3" datatype="string"></argument>
+<argument name="inv_attr_str4" datatype="string"></argument>
+<argument name="inv_attr_str5" datatype="string"></argument>
+<argument name="inv_attr_str6" datatype="string"></argument>
+<argument name="inv_attr_str7" datatype="string"></argument>
+<argument name="inv_attr_str8" datatype="string"></argument>
+<argument name="inv_attr_str9" datatype="string"></argument>
+<argument name="inv_attr_str10" datatype="string"></argument>
+<argument name="inv_attr_str11" datatype="string"></argument>
+<argument name="inv_attr_str12" datatype="string"></argument>
+<argument name="inv_attr_str13" datatype="string"></argument>
+<argument name="inv_attr_str14" datatype="string"></argument>
+<argument name="inv_attr_str15" datatype="string"></argument>
+<argument name="inv_attr_str16" datatype="string"></argument>
+<argument name="inv_attr_str17" datatype="string"></argument>
+<argument name="inv_attr_str18" datatype="string"></argument>
+<argument name="inv_attr_int1" datatype="integer"></argument>
+<argument name="inv_attr_int2" datatype="integer"></argument>
+<argument name="inv_attr_int3" datatype="integer"></argument>
+<argument name="inv_attr_int4" datatype="integer"></argument>
+<argument name="inv_attr_int5" datatype="integer"></argument>
+<argument name="inv_attr_flt1" datatype="float"></argument>
+<argument name="inv_attr_flt2" datatype="float"></argument>
+<argument name="inv_attr_flt3" datatype="float"></argument>
+<argument name="inv_attr_dte1" datatype="string"></argument>
+<argument name="inv_attr_dte2" datatype="string"></argument>
+<argument name="rttn_id" datatype="string"></argument>
+<argument name="cstms_typ" datatype="string"></argument>
+
+<local-syntax>
+<![CDATA[
+    validate stack variable not null
+        where name = 'stoloc'
+    |
+    if (@prt_client_id is not null and @prt_client_id != '')
+    {
+        /* Validate the user has authorization for the Client ID */
+        get client for user
+            where client_id = @prt_client_id catch(@?)
+        |
+        if (@? != 0)
+        {
+            set return status
+              where status = 2003 /* eAPP_INVALID_ARG */
+                and errnum = 2003
+                and argdsc = 'prt_client_id'
+                and argval = @prt_client_id
+                and lookup_argdsc = 'prt_client_id'
+        }
+        |
+        publish data
+            where prt_client_id = @client_id
+    }
+    |
+    if (@invsts_prg != '')
+    {
+        /* If an inventory status progession was passed in, we ensure that the
+         * inventory status for the inventory being picked is valid for the
+         * specified inventory status progession.
+         */
+        publish data
+            where invsts_chk = 'invdtl.invsts in'            ||
+                               '    (select invsts'          ||
+                               '       from prgmst'          ||
+                               '      where invsts_prg = ''' ||
+                               @invsts_prg ||
+                               ''')'
+    }
+    else if(@invsts != '')
+    {
+        publish data
+            where invsts_chk = 'invdtl.invsts = ''' || @invsts || ''''
+    }
+    else
+    {
+        publish data
+            where invsts_chk = '1=1'
+    }
+    |
+    /*
+     * If the user set a custom format date, we ensure every date field
+     * from the database using in the query below will have the same
+     * custom format date.
+     * Otherwise set the standard format date YYYYMMDDHH24MISS.
+     */
+    if (@mandte) {
+        list variable configuration
+          where var_nam = 'mandte'
+            and fld_typ = 'CUST_DATE' catch(@?)
+        |
+        if (@? = 0) {
+            publish data
+              where frmt_mandte = "'" || substr(@ctrl_prop,6) || "'"
+                and mandte_clause = "to_char(invdtl.mandte," ||
+                                       @frmt_mandte || ") = " ||
+                                         "'" || @mandte || "'"
+        }
+        else {
+            publish data
+              where mandte_clause = "invdtl.mandte = to_date('" ||
+                                       @mandte || "', 'YYYYMMDDHH24MISS')"
+        }
+    }
+    else {
+        publish data
+          where mandte_clause = '1 = 1'
+    }
+    |
+    if (@expire_dte) {
+	    [select 1
+		   from poldat_view
+		  where polcod = 'LC_DATE_FORMAT'
+			and polvar = 'EXPIRATION_DATE'
+			and polval = 'ENABLED'
+			and wh_id = nvl(@wh_id,@@wh_id)
+			and rtnum1 =1]catch(-1403)
+		|
+		if(@? =0)
+		{
+		   publish data
+				  where expire_dte_clause = "to_char(invdtl.expire_dte, 'YYYYMMDD') = to_date('" ||
+										   @expire_dte || "', 'YYYYMMDD')"
+		}
+		else
+		{
+			list variable configuration
+			  where var_nam = 'expire_dte'
+				and fld_typ = 'CUST_DATE' catch(@?)
+			|
+			if (@? = 0) {
+				publish data
+				  where frmt_expire_dte = "'" || substr(@ctrl_prop,6) || "'"
+					and expire_dte_clause = "to_char(invdtl.expire_dte," ||
+										   @frmt_expire_dte || ") = " ||
+											 "'" || @expire_dte || "'"
+			}
+			else {
+				publish data
+				  where expire_dte_clause = "invdtl.expire_dte = to_date('" ||
+										   @expire_dte || "', 'YYYYMMDDHH24MISS')"
+			}
+		}
+    }
+    else {
+        publish data
+          where expire_dte_clause = '1 = 1'
+    }
+    |
+    if (@inv_attr_dte1) {
+        list variable configuration
+          where var_nam = 'inv_attr_dte1'
+            and fld_typ = 'CUST_DATE' catch(@?)
+        |
+        if (@? = 0) {
+            publish data
+              where frmt_inv_attr_dte1 = "'" || substr(@ctrl_prop,6) || "'"
+                and inv_attr_dte1_clause = "to_char(invdtl.inv_attr_dte1," ||
+                                       @frmt_inv_attr_dte1 || ") = " ||
+                                         "'" || @inv_attr_dte1 || "'"
+        }
+        else {
+            publish data
+              where inv_attr_dte1_clause = "invdtl.inv_attr_dte1 = to_date('"
+                                  || @inv_attr_dte1 || "', 'YYYYMMDDHH24MISS')"
+        }
+    }
+    else {
+        publish data
+          where inv_attr_dte1_clause = '1 = 1'
+    }
+    |
+    if (@inv_attr_dte2) {
+        list variable configuration
+          where var_nam = 'inv_attr_dte2'
+            and fld_typ = 'CUST_DATE' catch(@?)
+        |
+        if (@? = 0) {
+            publish data
+              where frmt_inv_attr_dte2 = "'" || substr(@ctrl_prop,6) || "'"
+                and inv_attr_dte2_clause = "to_char(invdtl.inv_attr_dte2," ||
+                                       @frmt_inv_attr_dte2 || ") = " ||
+                                         "'" || @inv_attr_dte2 || "'"
+        }
+        else {
+            publish data
+              where inv_attr_dte2_clause = "invdtl.inv_attr_dte2 = to_date('"
+                                  || @inv_attr_dte2 || "', 'YYYYMMDDHH24MISS')"
+        }
+    }
+    else {
+        publish data
+          where inv_attr_dte2_clause = '1 = 1'
+    }
+    |
+    /* Validate that user input points to some inventory at location */
+    [select 1
+       from invdtl
+       join invsub
+         on invsub.subnum = invdtl.subnum
+       join invlod
+         on invlod.lodnum = invsub.lodnum
+      where invlod.stoloc = @stoloc
+        and @+invlod.wh_id
+        and @+invlod.lodnum
+        and @+invsub.subnum
+        and @+invdtl.dtlnum
+        and @+invdtl.prtnum
+        and @+invdtl.prt_client_id
+        and @+invdtl.lotnum
+        and @+invdtl.orgcod
+        and @+invdtl.revlvl
+        and @mandte_clause:raw
+        and @expire_dte_clause:raw
+        and @+invdtl.supnum
+        and @+invdtl.inv_attr_str1
+        and @+invdtl.inv_attr_str2
+        and @+invdtl.inv_attr_str3
+        and @+invdtl.inv_attr_str4
+        and @+invdtl.inv_attr_str5
+        and @+invdtl.inv_attr_str6
+        and @+invdtl.inv_attr_str7
+        and @+invdtl.inv_attr_str8
+        and @+invdtl.inv_attr_str9
+        and @+invdtl.inv_attr_str10
+        and @+invdtl.inv_attr_str11
+        and @+invdtl.inv_attr_str12
+        and @+invdtl.inv_attr_str13
+        and @+invdtl.inv_attr_str14
+        and @+invdtl.inv_attr_str15
+        and @+invdtl.inv_attr_str16
+        and @+invdtl.inv_attr_str17
+        and @+invdtl.inv_attr_str18
+        and @+invdtl.inv_attr_int1
+        and @+invdtl.inv_attr_int2
+        and @+invdtl.inv_attr_int3
+        and @+invdtl.inv_attr_int4
+        and @+invdtl.inv_attr_int5
+        and @+invdtl.inv_attr_flt1
+        and @+invdtl.inv_attr_flt2
+        and @+invdtl.inv_attr_flt3
+        and @inv_attr_dte1_clause:raw
+        and @inv_attr_dte2_clause:raw
+        and @+invdtl.rttn_id
+        and @+invdtl.cstms_typ
+        and @invsts_chk:raw
+        and rownum < 2] >> res
+    |
+    if (@? = 0 and @wrkref != null and @lotnum != null)
+    {
+        check restricted inventory
+            where wh_id = @wh_id
+              and prtnum = @prtnum
+              and prt_client_id = @prt_client_id
+              and lotnum = @lotnum
+              and stoloc = @stoloc
+              and wrkref = @wrkref
+    }
+    else if (@? = 0)
+    {
+        publish top rows
+          where res = @res
+            and rows = 1
+    }
+]]>
+</local-syntax>
+
+<documentation>
+<remarks>
+<![CDATA[
+  <p>
+  This command is used to verify that parts being picked have
+  required attributes. </p>
+
+]]>
+</remarks>
+<exception value="eOK">Normal successful completion</exception>
+<exception value="eDB_NO_ROWS_AFFECTED">Specified inventory not found</exception>
+</documentation>
+</command>
