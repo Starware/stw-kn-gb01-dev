@@ -74,6 +74,14 @@ if (@? = -1403)
 		  and wh_id_tmpl = nvl(@wh_id, @@wh_id)] catch(-1403)
 }
 |
+[select rtstr1 sto_zone_val
+   from poldat
+  where polcod = 'TCL-INTERFACE'
+    and polvar = 'TCL-STORAGE-ZONE'
+	and polval = 'VALUE'
+    and wh_id_tmpl = nvl(@wh_id,@@wh_id)
+	and rtstr1 is not null] catch(-1403)
+|
 [select lpn_val.prtnum,
 		lpn_val.lodnum,
 		lpn_val.lpn_qty,
@@ -105,6 +113,9 @@ if (@? = -1403)
 	     on invlod.lodnum = inventory_view.lodnum
 		and invlod.wh_id = inventory_view.wh_id
 		and invlod.stoloc = inventory_view.stoloc
+	   join sto_zone
+         on sto_zone.sto_zone_id = pckwrk_view.src_sto_zone_id
+        and sto_zone.wh_id = pckwrk_view.wh_id
 	   left
 	   join wkohdr
 		 on wkohdr.wkonum = pckwrk_view.wkonum
@@ -119,7 +130,7 @@ if (@? = -1403)
 		and ord_line.wh_id = pckwrk_view.wh_id
 	  where pckwrk_view.wh_id = nvl(@wh_id, @@wh_id)
 		and pckwrk_view.appqty = 0
-		and pckwrk_view.src_sto_zone_id = '10036'
+		and sto_zone.sto_zone_cod = @sto_zone_val
         and invlod.lc_tcl_evtseq is null		
 	  group by inventory_view.prtnum,
 			   inventory_view.stoloc,
