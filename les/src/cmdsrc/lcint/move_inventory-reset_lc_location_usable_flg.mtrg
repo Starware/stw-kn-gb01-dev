@@ -1,0 +1,41 @@
+<trigger>
+  <name>reset_lc_location_usable_flg</name>
+  <on-command>move inventory</on-command>
+  <description>Reset LC Location Usable Flag</description>
+  <fire-sequence>99001</fire-sequence>
+  <local-syntax>
+<![CDATA[
+[select 1
+   from poldat_view
+  where polcod = 'TCL-INTERFACE'
+    and polvar = 'WATCHED-LOCATION'
+    and polval = @srcloc
+    and wh_id = nvl(@wh_id, @@wh_id)
+    and rtnum1 = 1] catch(-1403)
+|
+if (@? = 0)
+{
+    [select 1
+       from invlod
+      where stoloc = @srcloc
+        and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+    |
+    if (@? = -1403)
+    {
+        [select 1
+           from locmst
+          where useflg = 0
+            and locsts = 'E'
+            and stoloc = @srcloc
+            and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+        |
+        [update locmst
+            set useflg = 1
+          where stoloc = @srcloc
+            and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+    }
+}
+]]>
+</local-syntax>
+  <enable>yes</enable>
+</trigger>
