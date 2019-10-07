@@ -37,7 +37,7 @@ if (@? = 0)
 			 where table = 'locmst'
 			   and wh_id = nvl(@wh_id,@@wh_id)
 			   and stoloc = @dstloc
-			   and usflg = false
+			   and useflg = false
 	    |
 		[update invlod
 			set lc_tcl_Trigger_LPN = nvl(@srclod, @lodnum)
