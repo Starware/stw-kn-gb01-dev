@@ -4,6 +4,16 @@ SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_comm
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
 SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_GET_HTTP_URL','SL_COMM_ARG','MOCA','Create HTTP headers','F','F','F','F','F','F','T','[select rtstr1 as value
+from poldat_view
+where polcod = ''USR_HTTP''
+and polvar = ''ESB''
+and polval = ''ENDPOINT''
+and wh_id = ''----'']
+','131'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
 2018.1,'LC_GEN_HTTP_HEADERS','SL_COMM_ARG','MOCA','Create HTTP headers','F','F','F','F','F','T','T','publish data where <<overstacked_args>>
 |
 publish data
@@ -113,7 +123,7 @@ SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
 SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST_HTTP','ASYNC','O','SL_XML_TO_HTTP_2','URL','http://noop','',''
+2018.1,'HOST_HTTP','ASYNC','O','SL_XML_TO_HTTP_2','URL','','LC_GET_HTTP_URL',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
 SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
@@ -133,7 +143,7 @@ SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
 SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
-2018.1,'HOST_HTTP','SYNCD','O','SL_XML_TO_HTTP_2','URL','http://noop','',''
+2018.1,'HOST_HTTP','SYNCD','O','SL_XML_TO_HTTP_2','URL','','LC_GET_HTTP_URL',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_sys_comm_val
 SL_VERSION,sys_id,comm_mode_cd,comm_dir_cd,comm_mthd_id,comm_mthd_attr,comm_mthd_attr_val,alg_id,kw_id
