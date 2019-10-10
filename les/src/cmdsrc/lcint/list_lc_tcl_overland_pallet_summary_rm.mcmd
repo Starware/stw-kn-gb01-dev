@@ -9,11 +9,9 @@ if(@ship_id)
     publish data
       where loc_clause = "invlod.stoloc in ('" || @stoloc_lst || "') "
 	 | 
-	[select (sum(pkg.grs_wgt)/1000)gross_weight,
-	        (sum(pkg.vol)/ (1000000)) volume
+	[select (sum(pkg.grs_wgt)/1000)gross_weight
 	   from (select invdtl.prtnum,
-					(sum(invdtl.untqty / invdtl.untcas) * min(prtftp_dtl.grswgt)) grs_wgt,
-					(sum(invdtl.untqty / invdtl.untcas) * min(prtftp_dtl.len) *min(prtftp_dtl.hgt) *min(prtftp_dtl.wid)) vol
+					(sum(invdtl.untqty / invdtl.untcas) * min(prtftp_dtl.grswgt)) grs_wgt
 			   from invlod
 			   join invsub
 				 on invsub.lodnum = invlod.lodnum
@@ -46,7 +44,9 @@ if(@ship_id)
 			decode(sum(prtmst_view.hazmat_flg), 0, 'N', 'Y') haz_cargo,
 			count(distinct invlod.lodnum) label_qty,
 			count(distinct invlod.lodnum) *(1.2) loading_len,
-			min(prtmst_view.prtfam) package_type
+			(sum(invlod.lodhgt)/100)load_hgt,
+			min(prtmst_view.prtfam) package_type,
+			decode(count(distinct prtmst_view.dept_cod), 1, max(prtmst_view.dept_cod), 0, NULL, 'II+III') marks_numbers
 	   from invlod
 	   join invsub
 		 on invsub.lodnum = invlod.lodnum
@@ -71,7 +71,7 @@ if(@ship_id)
 	    and label_qty =@label_qty
 		and package_type = @package_type
 		and gross_weight = @gross_weight
-		and volume =@volume
+		and volume =@load_hgt
 		and loading_len = @loading_len
 		and delivery_remark = @delivery_remark
 		and mixed_pallet = @mixed_pallet

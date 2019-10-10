@@ -49,7 +49,7 @@
    join adrmst am
      on am.adr_id = o.st_adr_id
    join all_inventory_view iv
-     on iv.subnum = mf.subnum
+     on (iv.subnum = mf.subnum or (iv.lodnum = mf.lodnum and mf.subnum is null))
     and iv.wh_id = mf.wh_id
    join shipment_line sl
      on sl.ship_line_id = iv.ship_line_id
@@ -71,7 +71,7 @@
     and sh.shpsts = 'C'
     and mf.mstdte is not null
     and mf.cfmdte is null
-  order by mf.traknm] catch(-1403)
+  order by mf.traknm]  catch(-1403)
 |
 if (@? = 0)
 {
