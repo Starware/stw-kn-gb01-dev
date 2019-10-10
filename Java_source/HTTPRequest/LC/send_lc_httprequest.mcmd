@@ -1,0 +1,14 @@
+<command>
+  <name>send lc httprequest</name>
+  <description>sends an http request</description>
+  <type>Java Method</type>
+  <class>LC_HTTPRequest</class>
+  <method>sendhttpRequest</method>
+  <argument name="url" required="yes" datatype="string" />
+  <argument name="xmldata" required="yes" datatype="string" />
+  <documentation>
+<remarks></remarks>
+<exception value="eOK">Normal successful completion</exception>
+
+</documentation>
+</command>

@@ -1,0 +1,16 @@
+<command>
+  <name>get lc all namevalue data</name>
+  <description>gets name/value pairs from repeating segments</description>
+  <type>Java Method</type>
+  <class>LC_HTTPRequest</class>
+  <method>getAllXMLDataParemeters</method>
+  <argument name="XML_DataString" required="yes" datatype="string" />
+  <argument name="repeating_segment_name" required="yes" datatype="string" />
+  <argument name="col_name_tag" required="yes" datatype="string" />
+  <argument name="value_tag" required="yes" datatype="string" />
+  <documentation>
+<remarks></remarks>
+<exception value="eOK">Normal successful completion</exception>
+
+</documentation>
+</command>

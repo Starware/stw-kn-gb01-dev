@@ -1,0 +1,14 @@
+<command>
+  <name>create lc xml data string</name>
+  <description>creates a new XML data string</description>
+  <type>Java Method</type>
+  <class>LC_HTTPRequest</class>
+  <method>createLcXMLData</method>
+  <argument name="prolog" required="no" datatype="string" />
+  <argument name="root_node" required="yes" datatype="string" />
+  <documentation>
+<remarks></remarks>
+<exception value="eOK">Normal successful completion</exception>
+
+</documentation>
+</command>

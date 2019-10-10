@@ -1,0 +1,16 @@
+<command>
+  <name>rename lc xml data segment</name>
+  <description>renames an existing XML data segment</description>
+  <type>Java Method</type>
+  <class>LC_HTTPRequest</class>
+  <method>renameXMLSegment</method>
+  <argument name="XML_DataString" required="yes" datatype="string" />
+  <argument name="segment_name" required="yes" datatype="string" />
+  <argument name="new_segment_name" required="yes" datatype="string" />
+  <argument name="new_segment_close_name" required="no" datatype="string" />
+  <documentation>
+<remarks></remarks>
+<exception value="eOK">Normal successful completion</exception>
+
+</documentation>
+</command>
