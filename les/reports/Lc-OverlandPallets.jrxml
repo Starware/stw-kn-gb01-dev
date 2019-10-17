@@ -39,13 +39,13 @@
 		<defaultValueExpression><![CDATA["HH:mm:ss"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="sleeve_qty" class="java.lang.Integer">
-		<property name="prompt" value="^qty_uk_pallets^"/>
+		<property name="prompt" value="^sleeve_qty^"/>
 	</parameter>
 	<parameter name="carton_qty" class="java.lang.Integer">
-		<property name="prompt" value="^qty_half_uk_pallets^"/>
+		<property name="prompt" value="^carton_qty^"/>
 	</parameter>
 	<parameter name="box_qty" class="java.lang.Integer">
-		<property name="prompt" value="^qty_euro_pallets^"/>
+		<property name="prompt" value="^box_qty^"/>
 	</parameter>
 	<queryString language="MOCA">
 		<![CDATA[list lc tcl overland pallets where wh_id = @wh_id  and sleeve_qty=@sleeve_qty and carton_qty = @carton_qty and box_qty = @box_qty]]>
