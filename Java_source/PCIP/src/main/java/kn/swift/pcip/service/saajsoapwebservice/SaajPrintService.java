@@ -1,7 +1,7 @@
 package kn.swift.pcip.service.saajsoapwebservice;
 import com.redprairie.moca.MocaContext;
 import com.redprairie.moca.util.MocaUtils;
-import kn.swift.moca.utils.Logger;
+import kn.swift.moca.utils.PCIPLogger;
 import kn.swift.ms.pcip.dto.Audit;
 import kn.swift.ms.pcip.dto.AuthenticationHeader;
 import kn.swift.ms.pcip.dto.PrintParcelRequest;
@@ -32,45 +32,45 @@ public class SaajPrintService {
         SOAPEnvelope envelope = soapPart.getEnvelope();
         envelope.addNamespaceDeclaration(myNamespace, myNamespaceURI);
         SOAPHeader soapHeader = envelope.getHeader();
-        Logger.log("added namespace");
+        PCIPLogger.log("added namespace");
 
 
         JAXBContext jaxbContext = JAXBContext.newInstance(AuthenticationHeader.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.marshal(authHeader,soapHeader);
 
-        Logger.log("marshalling authentication element");
+        PCIPLogger.log("marshalling authentication element");
 
         jaxbContext = JAXBContext.newInstance(Audit.class);
         marshaller = jaxbContext.createMarshaller();
         marshaller.marshal(audit,soapHeader);
 
-        Logger.log("marshalling audit element");
+        PCIPLogger.log("marshalling audit element");
 
         // SOAP Body
         SOAPBody soapBody = envelope.getBody();
         jaxbContext = JAXBContext.newInstance(PrintParcelRequest.class);
         marshaller = jaxbContext.createMarshaller();
 
-        Logger.log("marshalling body element");
+        PCIPLogger.log("marshalling body element");
 
         marshaller.marshal(request,soapBody);
     }
 
     public static PrintParcelResponse callSoapWebService(String soapEndpointUrl, String soapAction,PrintParcelRequest request,AuthenticationHeader authHeader,Audit audit) throws JAXBException, SOAPException {
 
-        Logger.log("entered saaj service");
+        PCIPLogger.log("entered saaj service");
         SOAPMessage soapResponse = null;
 
         try {
             soapResponse = sendAndReceive(soapAction,request,authHeader,audit,soapEndpointUrl);
         } catch (Exception e) {
-            Logger.log("problem making connection: "+ e);
+            PCIPLogger.log("problem making connection: "+ e);
         }
 
         Unmarshaller unmarshaller = JAXBContext.newInstance(PrintParcelResponse.class).createUnmarshaller();
-        Logger.log("returning printresponse");
-        Logger.log("retrieving xml string");
+        PCIPLogger.log("returning printresponse");
+        PCIPLogger.log("retrieving xml string");
         printOutgoingXml(soapResponse);
 
         return (PrintParcelResponse) unmarshaller.unmarshal(soapResponse.getSOAPBody().extractContentAsDocument());
@@ -86,7 +86,7 @@ public class SaajPrintService {
         SOAPMessage soapMessage = getSoapMessage();
 
         createSoapEnvelope(soapMessage,request,authHeader,audit);
-        Logger.log("created SOAP envelope");
+        PCIPLogger.log("created SOAP envelope");
 
         MimeHeaders headers = soapMessage.getMimeHeaders();
         headers.addHeader("SOAPAction", soapAction);
@@ -94,7 +94,7 @@ public class SaajPrintService {
         soapMessage.saveChanges();
 
         /* Print the request message, just for debugging purposes */
-        Logger.log("SOAP message created: "+ soapMessage.toString());
+        PCIPLogger.log("SOAP message created: "+ soapMessage.toString());
 
         printOutgoingXml(soapMessage);
         return soapMessage;
@@ -111,7 +111,7 @@ public class SaajPrintService {
             throw new RuntimeException(e);
         }
 
-        Logger.log("xml trace is: " + sw.toString());
+        PCIPLogger.log("xml trace is: " + sw.toString());
     }
 
     private static SOAPMessage getSoapMessage() throws SOAPException {
@@ -121,17 +121,17 @@ public class SaajPrintService {
 
     public static SOAPMessage sendAndReceive(String soapAction, PrintParcelRequest request,AuthenticationHeader authHeader, Audit audit, String soapEndpointUrl) throws Exception{
         // Create SOAP Connection
-        Logger.log("creating SOAP connection");
+        PCIPLogger.log("creating SOAP connection");
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
         SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
         // Send SOAP Message to SOAP Server
-        Logger.log("calling SOAP connection.call");
+        PCIPLogger.log("calling SOAP connection.call");
         SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction,request,authHeader,audit), soapEndpointUrl);
 
         // Print the SOAP Response
-        Logger.log("Response SOAP Message:");
-        Logger.log(soapResponse.toString());
+        PCIPLogger.log("Response SOAP Message:");
+        PCIPLogger.log(soapResponse.toString());
 
         soapConnection.close();
 

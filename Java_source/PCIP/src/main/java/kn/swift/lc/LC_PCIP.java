@@ -64,8 +64,8 @@ public class LC_PCIP {
 
 
 
-        Logger.log("entered printParcel");
-        Logger.log("updating properties");
+        PCIPLogger.log("entered printParcel");
+        PCIPLogger.log("updating properties");
         propertyUpdater.updatePcipProperties(url,
                 culture,
                 user_id,
@@ -75,7 +75,7 @@ public class LC_PCIP {
                 businesskey2,
                 businesskey3,
                 businesskey4);
-        Logger.log("creating printRequest Map");
+        PCIPLogger.log("creating printRequest Map");
         HashMap<String,String> requestMap = mapCreator.createPrintRequestMap(
                 ordnum,
                 wh_id,
@@ -106,19 +106,19 @@ public class LC_PCIP {
 				stemail);
 
         PrintUtils utils = new PrintUtils();
-        Logger.log("creating request");
+        PCIPLogger.log("creating request");
         PrintParcelRequest request = (PrintParcelRequest) utils.createRequest(requestMap, "Print");
 
         PrintParcelService service = new PrintParcelService();
 
         PcipHandler handler = new PcipHandler(service);
-        Logger.log("sending message to api");
+        PCIPLogger.log("sending message to api");
         PrintParcelResponse response = handler.handle(request);
 
 
         MocaResultsService returnService = new MocaResultsService(utils);
 
-        Logger.log("returning printresponse to WMS");
+        PCIPLogger.log("returning printresponse to WMS");
         return returnService.buildMocaResult(response);
     }
 
@@ -140,9 +140,9 @@ public class LC_PCIP {
 
 
 
-        Logger.log("entered reprintParcel");
+        PCIPLogger.log("entered reprintParcel");
 
-        Logger.log("updating properties");
+        PCIPLogger.log("updating properties");
         propertyUpdater.updatePcipProperties(url,
                 culture,
                 user_id,
@@ -154,7 +154,7 @@ public class LC_PCIP {
                 businesskey4);
 
 
-        Logger.log("creating reprint Map");
+        PCIPLogger.log("creating reprint Map");
         HashMap<String,String> reprintMap = mapCreator.createReprintRequestMap(client_id,
                 depot,
                 carcod,
@@ -164,17 +164,17 @@ public class LC_PCIP {
 
         PrintUtils utils = new PrintUtils();
 
-        Logger.log("creating request");
+        PCIPLogger.log("creating request");
         PrintParcelRequest request = (PrintParcelRequest) utils.createRequest(reprintMap,"Reprint");
 
         PrintParcelService service = new PrintParcelService();
 
         PcipHandler handler = new PcipHandler(service);
-        Logger.log("sending request");
+        PCIPLogger.log("sending request");
         PrintParcelResponse response = handler.handle(request);
 
         MocaResultsService returnService = new MocaResultsService(utils);
-        Logger.log("returning printresponse to WMS");
+        PCIPLogger.log("returning printresponse to WMS");
         return returnService.buildMocaResult(response);
     }
 
@@ -195,9 +195,9 @@ public class LC_PCIP {
 
 
 
-        Logger.log("entered cancel Parcel");
+        PCIPLogger.log("entered cancel Parcel");
 
-        Logger.log("setting properties");
+        PCIPLogger.log("setting properties");
         propertyUpdater.updatePcipProperties(url,
                 culture,
                 user_id,
@@ -208,7 +208,7 @@ public class LC_PCIP {
                 businesskey3,
                 businesskey4);
 
-        Logger.log("creating cancel Map");
+        PCIPLogger.log("creating cancel Map");
         HashMap<String,String> deleteMap = mapCreator.createDeleteRequestMap(client_id,
                 depot,
                 carcod,
@@ -217,20 +217,20 @@ public class LC_PCIP {
 
         PrintUtils utils = new PrintUtils();
 
-        Logger.log("creating cancel request");
+        PCIPLogger.log("creating cancel request");
         DeleteParcelRequest request = (DeleteParcelRequest) utils.createRequest(deleteMap, "Delete");
 
         DeleteParcelService service = new DeleteParcelService();
 
         PcipHandler handler = new PcipHandler(service);
 
-        Logger.log("sending cancel request to api");
+        PCIPLogger.log("sending cancel request to api");
         DeleteParcelResponse response = handler.handle(request);
 
         MocaResultsService returnService = new MocaResultsService(utils);
 
 
-        Logger.log("returning printresponse to WMS");
+        PCIPLogger.log("returning printresponse to WMS");
         return returnService.buildMocaResult(response);
     }
 
@@ -250,9 +250,9 @@ public class LC_PCIP {
 
         MocaContext moca = MocaUtils.currentContext();
 
-        Logger.log("entered close consignment");
+        PCIPLogger.log("entered close consignment");
 
-        Logger.log("updating properties");
+        PCIPLogger.log("updating properties");
         propertyUpdater.updatePcipProperties(url,
                 culture,
                 user_id,
@@ -263,7 +263,7 @@ public class LC_PCIP {
                 businesskey3,
                 businesskey4);
 
-        Logger.log("creating close Map");
+        PCIPLogger.log("creating close Map");
         HashMap<String,String> closeMap = mapCreator.createCloseMap(client_id,
                 depot,
                 carcod,
@@ -271,19 +271,19 @@ public class LC_PCIP {
 
         PrintUtils utils = new PrintUtils();
 
-        Logger.log("creating request");
+        PCIPLogger.log("creating request");
         CloseShipmentsRequest request = (CloseShipmentsRequest) utils.createRequest(closeMap, "Close");
 
         CloseShipmentsService service = new CloseShipmentsService();
 
         PcipHandler handler = new PcipHandler(service);
 
-        Logger.log("sending printresponse to api");
+        PCIPLogger.log("sending printresponse to api");
         CloseShipmentsResponse response = handler.handle(request);
 
         MocaResultsService returnService = new MocaResultsService(utils);
 
-        Logger.log("returning printresponse to WMS");
+        PCIPLogger.log("returning printresponse to WMS");
         return returnService.buildMocaResult(response);
 
 

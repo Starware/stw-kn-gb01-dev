@@ -36,12 +36,12 @@ public class PrintUtils {
 
         EditableResults results = moca.newResults();
 
-        Logger.log("building Print Success Message ");
+        PCIPLogger.log("building Print Success Message ");
 
         if(response.getExitStatus().getStatusDetails().getStatusDetail().size() != 0){
 
             for(PrintParcelResponse.ExitStatus.StatusDetails.StatusDetail detail : response.getExitStatus().getStatusDetails().getStatusDetail()){
-                Logger.log("Exit Status message-> Status: "+ detail.getStatus() + " | Message: "+detail.getMessage());
+                PCIPLogger.log("Exit Status message-> Status: "+ detail.getStatus() + " | Message: "+detail.getMessage());
             }
         }
 
@@ -50,7 +50,7 @@ public class PrintUtils {
         results.addColumn(STATUS_CODE, MocaType.STRING);
 
         for (PrintParcelResponse.OutputParameters.ShippingParameter nameValuePair : parameterList) {
-            Logger.log("adding column: "+ nameValuePair.getName().replace('.','_'));
+            PCIPLogger.log("adding column: "+ nameValuePair.getName().replace('.','_'));
             results.addColumn(nameValuePair.getName().replace('.', '_'), MocaType.STRING);
         }
 
@@ -58,7 +58,7 @@ public class PrintUtils {
         results.addRow();
         results.setStringValue(STATUS_CODE,"Success");
         for (PrintParcelResponse.OutputParameters.ShippingParameter nameValuePair : parameterList) {
-            Logger.log("adding values to columns: " + nameValuePair.getName().replace('.', '_') + "|" + nameValuePair.getValue());
+            PCIPLogger.log("adding values to columns: " + nameValuePair.getName().replace('.', '_') + "|" + nameValuePair.getValue());
 
             results.setStringValue(nameValuePair.getName().replace('.', '_'), nameValuePair.getValue());
         }
@@ -71,12 +71,12 @@ public class PrintUtils {
 
         EditableResults results = moca.newResults();
 
-        Logger.log("building Print Success Message ");
+        PCIPLogger.log("building Print Success Message ");
 
         if(response.getExitStatus().getStatusDetails().getStatusDetail().size() != 0){
 
             for(DeleteParcelResponse.ExitStatus.StatusDetails.StatusDetail detail : response.getExitStatus().getStatusDetails().getStatusDetail()){
-                Logger.log("Exit Status message-> Status: "+ detail.getStatus() + " | Message: "+detail.getMessage());
+                PCIPLogger.log("Exit Status message-> Status: "+ detail.getStatus() + " | Message: "+detail.getMessage());
             }
         }
 
@@ -85,7 +85,7 @@ public class PrintUtils {
         results.addColumn(STATUS_CODE, MocaType.STRING);
 
         for (DeleteParcelResponse.OutputParameters.ShippingParameter nameValuePair : parameterList) {
-            Logger.log("adding column: "+ nameValuePair.getName().replace('.','_'));
+            PCIPLogger.log("adding column: "+ nameValuePair.getName().replace('.','_'));
             results.addColumn(nameValuePair.getName().replace('.', '_'), MocaType.STRING);
         }
 
@@ -94,7 +94,7 @@ public class PrintUtils {
         results.addRow();
         results.setStringValue(STATUS_CODE,"Success");
         for (DeleteParcelResponse.OutputParameters.ShippingParameter nameValuePair : parameterList) {
-            Logger.log("adding values to columns: " + nameValuePair.getName().replace('.', '_') + "|" + nameValuePair.getValue());
+            PCIPLogger.log("adding values to columns: " + nameValuePair.getName().replace('.', '_') + "|" + nameValuePair.getValue());
 
             results.setStringValue(nameValuePair.getName().replace('.', '_'), nameValuePair.getValue());
         }
@@ -107,12 +107,12 @@ public class PrintUtils {
 
         EditableResults results = moca.newResults();
 
-        Logger.log("building Print Success Message ");
+        PCIPLogger.log("building Print Success Message ");
 
         if(response.getExitStatus().getStatusDetails().getStatusDetail().size() != 0){
 
             for(CloseShipmentsResponse.ExitStatus.StatusDetails.StatusDetail detail : response.getExitStatus().getStatusDetails().getStatusDetail()){
-                Logger.log("Exit Status message-> Status: "+ detail.getStatus() + " | Message: "+detail.getMessage());
+                PCIPLogger.log("Exit Status message-> Status: "+ detail.getStatus() + " | Message: "+detail.getMessage());
             }
         }
 
@@ -121,7 +121,7 @@ public class PrintUtils {
         results.addColumn(STATUS_CODE, MocaType.STRING);
 
         for (CloseShipmentsResponse.OutputParameters.ShippingParameter nameValuePair : parameterList) {
-            Logger.log("adding column: "+ nameValuePair.getName().replace('.','_'));
+            PCIPLogger.log("adding column: "+ nameValuePair.getName().replace('.','_'));
             results.addColumn(nameValuePair.getName().replace('.', '_'), MocaType.STRING);
         }
 
@@ -129,7 +129,7 @@ public class PrintUtils {
         results.addRow();
         results.setStringValue(STATUS_CODE,"Success");
         for (CloseShipmentsResponse.OutputParameters.ShippingParameter nameValuePair : parameterList) {
-            Logger.log("adding values to columns: " + nameValuePair.getName().replace('.', '_') + "|" + nameValuePair.getValue());
+            PCIPLogger.log("adding values to columns: " + nameValuePair.getName().replace('.', '_') + "|" + nameValuePair.getValue());
 
             results.setStringValue(nameValuePair.getName().replace('.', '_'), nameValuePair.getValue());
         }
@@ -143,7 +143,7 @@ public class PrintUtils {
         MocaContext moca = MocaUtils.currentContext();
 
 
-        Logger.log("building print failure message");
+        PCIPLogger.log("building print failure message");
 
         EditableResults results = moca.newResults();
         String message = response.getExitStatus().getStatus();
@@ -152,7 +152,7 @@ public class PrintUtils {
         results.addRow();
         for(PrintParcelResponse.ExitStatus.StatusDetails.StatusDetail parameter : response.getExitStatus().getStatusDetails().getStatusDetail())
         {
-            Logger.log("status: " + parameter.getStatus() + " | " + parameter.getMessage());
+            PCIPLogger.log("status: " + parameter.getStatus() + " | " + parameter.getMessage());
             if(parameter.getStatus().equals("Error")) {
                 results.setStringValue(STATUS_CODE, parameter.getStatus());
                 results.setStringValue(STATUS, parameter.getMessage());
@@ -160,7 +160,7 @@ public class PrintUtils {
         }
 
 
-        Logger.log("fail message: "+ message);
+        PCIPLogger.log("fail message: "+ message);
 
 
         return results;
@@ -172,7 +172,7 @@ public class PrintUtils {
         MocaContext moca = MocaUtils.currentContext();
 
 
-        Logger.log("building print failure message");
+        PCIPLogger.log("building print failure message");
 
         EditableResults results = moca.newResults();
         String message = response.getExitStatus().getStatus();
@@ -181,7 +181,7 @@ public class PrintUtils {
         results.addRow();
         for(DeleteParcelResponse.ExitStatus.StatusDetails.StatusDetail parameter : response.getExitStatus().getStatusDetails().getStatusDetail())
         {
-            Logger.log("status: " + parameter.getStatus() + " | " + parameter.getMessage());
+            PCIPLogger.log("status: " + parameter.getStatus() + " | " + parameter.getMessage());
             if(parameter.getStatus().equals("Error")) {
                 results.setStringValue(STATUS_CODE, parameter.getStatus());
                 results.setStringValue(STATUS, parameter.getMessage());
@@ -189,7 +189,7 @@ public class PrintUtils {
         }
 
 
-        Logger.log("fail message: "+ message);
+        PCIPLogger.log("fail message: "+ message);
 
 
         return results;
@@ -201,7 +201,7 @@ public class PrintUtils {
         MocaContext moca = MocaUtils.currentContext();
 
 
-        Logger.log("building print failure message");
+        PCIPLogger.log("building print failure message");
 
         EditableResults results = moca.newResults();
         String message = response.getExitStatus().getStatus();
@@ -210,7 +210,7 @@ public class PrintUtils {
         results.addRow();
         for(CloseShipmentsResponse.ExitStatus.StatusDetails.StatusDetail parameter : response.getExitStatus().getStatusDetails().getStatusDetail())
         {
-            Logger.log("status: " + parameter.getStatus() + " | " + parameter.getMessage());
+            PCIPLogger.log("status: " + parameter.getStatus() + " | " + parameter.getMessage());
             if(parameter.getStatus().equals("Error")) {
                 results.setStringValue(STATUS_CODE, parameter.getStatus());
                 results.setStringValue(STATUS, parameter.getMessage());
@@ -218,7 +218,7 @@ public class PrintUtils {
         }
 
 
-        Logger.log("fail message: "+ message);
+        PCIPLogger.log("fail message: "+ message);
 
 
         return results;
@@ -237,7 +237,7 @@ public class PrintUtils {
         }else if(requestType.equals("Close")){
             request = new CloseShipmentsRequest();
         }
-        Logger.log("creating request shipping parameter");
+        PCIPLogger.log("creating request shipping parameter");
         InputParameters ShippingCollection = factory.createShippingParameterCollection();
         request.setInputParameters(factory.createShippingParameterCollection(ShippingCollection));
 
@@ -249,7 +249,7 @@ public class PrintUtils {
 
             parameter.setValue(factory.createShippingParameterValue(entry.getValue()));
 
-            Logger.log("creating parameter and adding to request: name= "+parameter.getName()+"value="+parameter.getValue().getValue());
+            PCIPLogger.log("creating parameter and adding to request: name= "+parameter.getName()+"value="+parameter.getValue().getValue());
 
             request.getInputParameters().getValue().getShippingParameter().add(parameter);
         }
@@ -263,7 +263,7 @@ public class PrintUtils {
         MocaContext moca = MocaUtils.currentContext();
 
 
-        Logger.log("building print null message");
+        PCIPLogger.log("building print null message");
 
         EditableResults results = moca.newResults();
         String message = "Could not communicate with PCIP";
@@ -273,7 +273,7 @@ public class PrintUtils {
         results.setStringValue(STATUS_CODE, "Fail");
         results.setStringValue(STATUS,message);
 
-        Logger.log("fail message: "+ message);
+        PCIPLogger.log("fail message: "+ message);
 
         return results;
 

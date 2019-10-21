@@ -23,18 +23,18 @@ public class HeaderGenerator {
 
 
 
-        Logger.log("autheader Created: "+authHeader.getCulture().getValue());
+        PCIPLogger.log("autheader Created: "+authHeader.getCulture().getValue());
 
         String uuid = UUID.randomUUID().toString();
 
-        Logger.log("uuid created: "+ uuid);
+        PCIPLogger.log("uuid created: "+ uuid);
         Audit audit = new Audit();
         audit.setApplicationID(pcipProperties.getAppId());
-        Logger.log("appID set: "+ audit.getApplicationID());
+        PCIPLogger.log("appID set: "+ audit.getApplicationID());
         audit.setCorrelationID(uuid);
-        Logger.log("corrID set: "+ audit.getCorrelationID());
+        PCIPLogger.log("corrID set: "+ audit.getCorrelationID());
         audit.setRequestID(uuid);
-        Logger.log("reqId set: "+ audit.getRequestID());
+        PCIPLogger.log("reqId set: "+ audit.getRequestID());
 
         Audit.BusinessKeys businessKeys = factory.createAuditBusinessKeys();
         audit.setBusinessKeys(businessKeys);
@@ -43,7 +43,7 @@ public class HeaderGenerator {
         audit.getBusinessKeys().setBusinessKey3(pcipProperties.getXpath().getShipmentRefno());
         audit.getBusinessKeys().setBusinessKey4(pcipProperties.getXpath().getKnSscc());
 
-        Logger.log("audit created: "+ audit.getBusinessKeys().getBusinessKey1());
+        PCIPLogger.log("audit created: "+ audit.getBusinessKeys().getBusinessKey1());
 
 
         return new Header(authHeader,audit);

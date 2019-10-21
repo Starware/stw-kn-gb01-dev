@@ -3,7 +3,7 @@ package kn.swift.pcip.service.closeshipments;
 import com.redprairie.moca.MocaContext;
 import com.redprairie.moca.util.MocaUtils;
 import kn.swift.moca.utils.HeaderGenerator;
-import kn.swift.moca.utils.Logger;
+import kn.swift.moca.utils.PCIPLogger;
 import kn.swift.ms.pcip.dto.CloseShipmentsRequest;
 import kn.swift.ms.pcip.dto.Header;
 import kn.swift.ms.pcip.dto.closeresponse.CloseShipmentsResponse;
@@ -30,7 +30,7 @@ public class CloseShipmentsService {
 
 
 
-        Logger.log("sending parcel");
+        PCIPLogger.log("sending parcel");
 
         HeaderGenerator generator = new HeaderGenerator();
 
