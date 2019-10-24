@@ -7,7 +7,7 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
         cmpdtl.lotnum,
         prtmst_view.prtstyle uom,
         prtmst_view.prtsize,
-        sum(wkodtl.tot_dlvqty) cmpqty,
+        (sum(wkodtl.tot_dlvqty) * sum(inventory_view.untqty)) / sum(wkohdr.prdqty) cmpqty,
         wkodtl.inv_attr_str2
    from cmpdtl
    join prtmst_view
@@ -21,11 +21,18 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
     and wkodtl.wh_id = cmpdtl.wh_id
     and wkodtl.tot_dlvqty > 0
     and wkodtl.wkonum = :i_c_wkonum
+   join wkohdr
+     on wkohdr.wkonum = wkodtl.wkonum
+    and wkohdr.wh_id = wkodtl.wh_id
+   join inventory_view
+     on inventory_view.cmpkey = cmpdtl.cmpkey
+    and inventory_view.wh_id = cmpdtl.wh_id
+    AND inventory_view.lodnum = :i_c_lodnum
   where cmpdtl.cmpkey = (select cmpkey
-                         from cmphdr
-                        where cmphdr.wkonum = :i_c_wkonum
-                          and cmphdr.wh_id = :i_c_wh_id
-                          and cmphdr.client_id = :i_c_client_id)
+                           from cmphdr
+                          where cmphdr.wkonum = :i_c_wkonum
+                            and cmphdr.wh_id = :i_c_wh_id
+                            and cmphdr.client_id = :i_c_client_id)
   group by cmpdtl.prtnum,
         cmpdtl.prt_client_id,
         cmpdtl.lotnum,
@@ -33,33 +40,39 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
         cmpdtl.invsts,
         prtmst_view.prtstyle,
         prtmst_view.prtsize,
-        wkodtl.inv_attr_str2]','1120'
+        wkodtl.inv_attr_str2]','1425'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
 SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
-2018.1,'LC_GET_WO_CLOSE_HDR','SL_RETR_MTHD_IMPL','MOCA','Get work order header','F','F','F','F','F','F','T','[select 
-        cmphdr.wh_id,
+2018.1,'LC_GET_WO_CLOSE_HDR','SL_RETR_MTHD_IMPL','MOCA','Get work order header','F','F','F','F','F','F','T','[select cmphdr.wh_id,
         cmphdr.client_id,
         cmphdr.wkonum,
-        cmphdr.prtnum,
-        cmphdr.prt_client_id,
-        cmphdr.invsts,
-        cmphdr.lotnum,
-        cmphdr.untqty,
+        inventory_view.lodnum,
+        inventory_view.prtnum,
+        inventory_view.prt_client_id,
+        inventory_view.invsts,
+        inventory_view.lotnum,
+        inventory_view.untqty,
         prtmst_view.prtstyle uom,
-       prtmst_view.prtsize
+        prtmst_view.prtsize
    from cmphdr
    join prtmst_view
      on cmphdr.wh_id = prtmst_view.wh_id
     and cmphdr.prtnum = prtmst_view.prtnum
     and cmphdr.prt_client_id = prtmst_view.prt_client_id
-  where cmphdr.wkonum = :i_c_wkonum
-    and cmphdr.wh_id = :i_c_wh_id
-    and cmphdr.client_id = :i_c_client_id]','551'
+   join inventory_view
+     on inventory_view.cmpkey = cmphdr.cmpkey
+    and inventory_view.wh_id = cmphdr.wh_id
+  where inventory_view.lodnum = :i_c_lodnum]
+','660'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
 2018.1,'LC_GET_WO_CLOSE_DTL','I_C_CLIENT_ID',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_GET_WO_CLOSE_DTL','I_C_LODNUM',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
@@ -71,15 +84,7 @@ SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'LC_GET_WO_CLOSE_HDR','I_C_CLIENT_ID',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
-SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'LC_GET_WO_CLOSE_HDR','I_C_WH_ID',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
-SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'LC_GET_WO_CLOSE_HDR','I_C_WKONUM',''
+2018.1,'LC_GET_WO_CLOSE_HDR','I_C_LODNUM',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def_grp
 SL_VERSION,sys_grp_id,sys_grp_descr
@@ -139,6 +144,10 @@ SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
 SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-WO-CLOSE','LODNUM','LPN','C','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
 2018.1,'LC-WO-CLOSE','WH_ID','Warehouse ID','C','T'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
@@ -167,7 +176,7 @@ SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
-2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_HDR','LOTNUM','Lot Number','C','70','','30',''
+2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_HDR','LOTNUM','SCJ''s LPN number','C','70','','30',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
@@ -271,7 +280,7 @@ SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sy
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
-2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_HDR','LOTNUM','LC_WO_CLOSE_HDR_RM','SYS_DCS','DCS','','','','0','LOTNUM','F'
+2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_HDR','LOTNUM','LC_WO_CLOSE_HDR_RM','SYS_DCS','DCS','','','','0','LODNUM','F'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg

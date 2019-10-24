@@ -8,11 +8,18 @@
 get integrator system id
    where systyp = 'WMD'
 |
+[select inventory_view.lodnum
+   from cmphdr
+   join inventory_view
+     on inventory_view.cmpkey = cmphdr.cmpkey
+    and inventory_view.wh_id = cmphdr.wh_id
+  where cmphdr.wkonum = @wkonum]
+|
 sl_log event where evt_id='LC-WO-CLOSE' 
                             and wh_id = @wh_id
                             and client_id = @client_id
-							and wkonum = @wkonum 
-   
+							and lodnum = @lodnum
+							and wkonum = @wkonum
 ]]>
 </local-syntax>
   <enable>yes</enable>
