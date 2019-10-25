@@ -1,0 +1,3 @@
+var_nam,appl_id,frm_id,addon_id,cust_lvl,valdt_cmd,ena_flg,ret_fld_flg,ret_fld,grp_nam,valdt_mod
+prtnum,LES,UNDIR_ASSEMBLY,LES,10,if ('&prtnum' != '') {if ('&prt_client_id' = '') {validate part client for user where prtnum = '&prtnum' and wh_id = '@global.wh_id' and usr_id='@global.usr_id'} else { if ('&prt_client_id' = 'HUEL'){ validate part identifier where prtnum = '&prtnum' and prt_client_id = '&prt_client_id' and wh_id = '@global.wh_id'}}},1,0,,mtf_dcs_data,I
+prtnum,LES,PICKUP_A,LES,10,if ('&prtnum' != '' and '&prt_client_id'='HUEL') {validate part identifier where prtnum = '&prtnum' and wh_id = '@global.wh_id'},1,0,,mtf_dcs_data,I

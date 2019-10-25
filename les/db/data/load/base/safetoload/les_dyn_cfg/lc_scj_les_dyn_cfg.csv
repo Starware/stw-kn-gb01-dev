@@ -1,0 +1,3 @@
+dyn_cfg_id,appl_id,frm_id,addon_id,cust_lvl,inp_mod,var_nam_lst,les_cmd_id,moddte,mod_usr_id,grp_nam
+lc_parse_barcode,dcsrdt,UNDIR_ASSEMBLY,LES,10,A,"prtnum",lc_parse_barcode,,,les_data
+lc_parse_prtnum,dcsrdt,PICKUP_A,LES,10,A,"prtnum",lc_parse_prtnum,,,les_data

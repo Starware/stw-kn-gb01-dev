@@ -1,0 +1,60 @@
+<command>
+  <name>get rf default manufacturing date</name>
+  <description>Get RF Default Manufacturing Date</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+if (@wkonum  and @wkorev and @client_id and @lotnum and @frm_id='IDENTIFY_LOAD' )
+{
+    [select 1
+	   from poldat_view
+	  where polcod = 'LC_SCJ_BARCODE'
+		and polvar = 'DATE_FORMAT'
+		and polval = 'ENABLED'
+		and wh_id = nvl(@wh_id,@@wh_id)
+		and rtnum1 =1]catch(-1403)
+    |
+    if(@? =0)
+    {   
+		[select 1
+		   from wkohdr
+		  where wkonum = @wkonum
+			and client_id = @client_id
+			and wkorev = @wkorev
+			and wh_id = @wh_id
+			and inv_attr_str10 = @lotnum] catch(-1403)
+		|
+		if (@? = 0)
+		{
+			[select to_date(@lotnum, 'DDDRR') mandte
+			   from dual]
+		
+			|
+			publish data
+			 where mandte = @mandte
+			 |
+			 format rf manufacturing date
+					where mandte = @mandte
+					  and frm_id = @frm_id
+		}
+		else
+		{
+		     ^get rf default manufacturing date
+               where @*
+		}
+	}
+	else
+	{
+		 ^get rf default manufacturing date
+		   where @*
+	}
+
+}
+else
+{
+    ^get rf default manufacturing date
+     where @*
+}
+]]>
+</local-syntax>
+</command>

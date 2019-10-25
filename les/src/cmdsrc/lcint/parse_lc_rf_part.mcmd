@@ -1,0 +1,53 @@
+<command>
+  <name>parse lc rf part</name>
+  <description>Parse LC RF Part</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+if (@prt_client_id = 'SCJP'  and @prtnum != '')
+{    
+    [select prtmst_view.prtnum, 
+	        prtmst_view.prt_client_id
+	   from prtmst_view 
+	  where prtnum = @prtnum
+	    and prt_client_id =@prt_client_id ]catch(-1403)
+	|
+	if(@? = -1403)
+	{
+	    [select 1
+		   from poldat_view
+		  where polcod = 'LC_SCJ_BARCODE'
+			and polvar = 'DATE_FORMAT'
+			and polval = 'ENABLED'
+			and wh_id = nvl(@wh_id,@@wh_id)
+			and rtnum1 =1]catch(-1403)
+		|
+		if(@?=0)
+		{
+			publish data
+			where barcode_str_val= @prtnum
+			  and prt_client_id =@prt_client_id
+			  and prtnum = substr(@barcode_str_val, length(@barcode_str_val) -13, length(@barcode_str_val) -1)
+		}
+	}
+	|
+	publish data 
+		 where prtnum=@prtnum
+	    and prt_client_id = @prt_client_id
+	|
+	validate part identifier  
+	   where prtnum = @prtnum 
+	     and prt_client_id = @prt_client_id 
+		 and wh_id = nvl(@wh_id,@@wh_id)
+	|
+	if(@?= 0)
+	{
+	   publish data 
+		 where prtnum=@prtnum
+	       and prt_client_id = @prt_client_id
+	}
+		
+}
+]]>
+</local-syntax>
+</command>

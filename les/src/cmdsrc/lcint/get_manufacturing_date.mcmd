@@ -1,0 +1,60 @@
+<command>
+  <name>get manufacturing date</name>
+  <description>Gets the manufacturing date</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+if (@trknum and @invnum and @client_id and @lotnum )
+{
+    [select 1
+	   from poldat_view
+	  where polcod = 'LC_SCJ_BARCODE'
+		and polvar = 'DATE_FORMAT'
+		and polval = 'ENABLED'
+		and wh_id = nvl(@wh_id,@@wh_id)
+		and rtnum1 =1]catch(-1403)
+    |
+    if(@? =0)
+    {   
+		[select 1
+		   from wkohdr
+		  where wkonum = @trknum
+			and client_id = @client_id
+			and wkorev = @invnum
+			and wh_id = @wh_id
+			and lc_lotnum_barcode_str = @lotnum] catch(-1403)
+		|
+		if (@? = 0)
+		{
+			[select to_date(@lotnum, 'DDDRR') mandte
+			   from dual]
+		
+			|
+			publish data
+			 where mandte = @mandte
+			 |
+			 format rf manufacturing date
+					where mandte = @mandte
+					  and frm_id = @frm_id
+		}
+		else
+		{
+		     ^get manufacturing date
+               where @*
+		}
+	}
+	else
+    {
+		^get manufacturing date
+		 where @*
+    }
+
+}
+else
+{
+    ^get manufacturing date
+     where @*
+}
+]]>
+</local-syntax>
+</command>

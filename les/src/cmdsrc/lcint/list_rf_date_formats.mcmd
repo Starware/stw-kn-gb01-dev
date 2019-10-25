@@ -15,40 +15,56 @@
 
     if (@var_nam is not null and @var_nam != '')
     {
-		[select 1
+	    [select 1
 		   from poldat_view
-		  where polcod = 'LC_DATE_FORMAT'
-			and polvar = 'EXPIRATION_DATE'
+		  where polcod = 'LC_SCJ_BARCODE'
+			and polvar = 'DATE_FORMAT'
 			and polval = 'ENABLED'
 			and wh_id = nvl(@wh_id,@@wh_id)
 			and rtnum1 =1]catch(-1403)
 		|
-		if(@? =0 and @var_nam = 'expire_dte')
+		if(@? = 0 and @frm_id = 'IDENTIFY_LOAD' and (@var_nam ='mandte' or @var_nam = 'expire_dte'))
 		{
 		  publish data 
-			where fmt_str = 'YYYYMMDD'			
+				where fmt_str = 'YYYYMMDD'
 		}
-        else{
-			[select substr(ctrl_prop, 6) fmt_str,
-					decode(frm_id, 'LES', 2, 1) rank
-			   from les_var_config
-			  where var_nam   = @var_nam
-				and fld_typ   = 'CUST_DATE'
-				and ( appl_id = 'LES'
-				 or   appl_id = 'dcsrdt' )
-				and addon_id  = 'LES'
-				and ( frm_id  = @frm_id
-				 or   frm_id  = 'LES')
-			  order by rank,
-					   cust_lvl desc] catch(@?) >> res
+		else
+        {		
+		    [select 1
+			   from poldat_view
+			  where polcod = 'LC_DATE_FORMAT'
+				and polvar = 'EXPIRATION_DATE'
+				and polval = 'ENABLED'
+				and wh_id = nvl(@wh_id,@@wh_id)
+				and rtnum1 =1]catch(-1403)
 			|
-			if (rowcount(@res) > 0)
+			if(@? =0 and @var_nam = 'expire_dte')
 			{
-				publish top rows
-					where rows      = 1
-					  and resultset = @res
+			  publish data 
+				where fmt_str = 'YYYYMMDD'			
 			}
-		}
+			else{
+				[select substr(ctrl_prop, 6) fmt_str,
+						decode(frm_id, 'LES', 2, 1) rank
+				   from les_var_config
+				  where var_nam   = @var_nam
+					and fld_typ   = 'CUST_DATE'
+					and ( appl_id = 'LES'
+					 or   appl_id = 'dcsrdt' )
+					and addon_id  = 'LES'
+					and ( frm_id  = @frm_id
+					 or   frm_id  = 'LES')
+				  order by rank,
+						   cust_lvl desc] catch(@?) >> res
+				|
+				if (rowcount(@res) > 0)
+				{
+					publish top rows
+						where rows      = 1
+						  and resultset = @res
+				}
+			}
+		}	
     }
     |
     if (@var_nam ='' or @fmt_str ='')
