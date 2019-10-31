@@ -26,10 +26,12 @@ if (@prt_client_id = 'SCJP'  and @prtnum != '')
 		{
 			publish data
 			where barcode_str_val= @prtnum
-			  and mandte = substr(@barcode_str_val, 1, 5)
-		      and wkonum = substr(@barcode_str_val, 7, 6)
-		      and prdlin = substr(@barcode_str_val, 14, 5)
-		      and prtnum = substr(@barcode_str_val, length(@barcode_str_val) -13, length(@barcode_str_val) -1)
+			  and mandte = substr(@barcode_str_val, 1, instr(@barcode_str_val, ',', 1) -1)
+			  and res_str = substr(@barcode_str_val, instr(@barcode_str_val, ',', 1) + 1, length(@barcode_str_val) -1)
+			  and wkonum = substr(@res_str, 1, instr(@res_str, ',', 1) -1)
+			  and res_str1 = substr(@res_str, instr(@res_str, ',', 1) + 1, length(@res_str) -1)
+			  and prdlin = substr(@res_str1, 1, instr(@res_str1, ',', 1) -1)
+			  and prtnum = substr(@res_str1, instr(@res_str1, ',', 1) + 1, length(@res_str1) -1)
 			  and prt_client_id =@prt_client_id
 		   |
 		   [select 1
