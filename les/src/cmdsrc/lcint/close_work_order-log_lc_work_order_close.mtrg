@@ -20,6 +20,7 @@ sl_log event where evt_id='LC-WO-CLOSE'
                             and client_id = @client_id
 							and lodnum = @lodnum
 							and wkonum = @wkonum
+							
 ]]>
 </local-syntax>
   <enable>yes</enable>
