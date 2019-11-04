@@ -4,11 +4,11 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
 2018.1,'LC_GET_WO_CLOSE_DTL','SL_RETR_MTHD_IMPL','MOCA','Get Work order details','F','F','F','F','F','F','T','[select cmpdtl.prtnum,
         cmpdtl.prt_client_id,
         cmpdtl.invsts,
-        cmpdtl.lotnum,
         prtmst_view.prtstyle uom,
         prtmst_view.prtsize,
-        (sum(wkodtl.tot_dlvqty) * sum(inventory_view.untqty)) / sum(wkohdr.prdqty) cmpqty,
-        wkodtl.inv_attr_str2
+        sum(wkodtl.lc_consumed_part_qty) start_consumed,
+        sum(wkodtl.lc_consumed_part_qty) + ((sum(wkodtl.tot_dlvqty) * sum(inventory_view.untqty)) / sum(wkohdr.prdqty)) qty_on_dest_pallet,
+        ((sum(wkodtl.tot_dlvqty) * sum(inventory_view.untqty)) / sum(wkohdr.prdqty)) sub_total
    from cmpdtl
    join prtmst_view
      on cmpdtl.wh_id = prtmst_view.wh_id
@@ -20,27 +20,110 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
     and wkodtl.prt_client_id = cmpdtl.prt_client_id
     and wkodtl.wh_id = cmpdtl.wh_id
     and wkodtl.tot_dlvqty > 0
-    and wkodtl.wkonum = :i_c_wkonum
+    and wkodtl.wkonum = @wkonum
    join wkohdr
      on wkohdr.wkonum = wkodtl.wkonum
     and wkohdr.wh_id = wkodtl.wh_id
    join inventory_view
      on inventory_view.cmpkey = cmpdtl.cmpkey
     and inventory_view.wh_id = cmpdtl.wh_id
-    AND inventory_view.lodnum = :i_c_lodnum
+    AND inventory_view.lodnum = @lodnum
   where cmpdtl.cmpkey = (select cmpkey
                            from cmphdr
-                          where cmphdr.wkonum = :i_c_wkonum
-                            and cmphdr.wh_id = :i_c_wh_id
-                            and cmphdr.client_id = :i_c_client_id)
+                          where cmphdr.wkonum = @wkonum
+                            and cmphdr.wh_id = @wh_id
+                            and cmphdr.client_id = @client_id)
   group by cmpdtl.prtnum,
         cmpdtl.prt_client_id,
-        cmpdtl.lotnum,
-        cmpdtl.cmpqty,
         cmpdtl.invsts,
         prtmst_view.prtstyle,
-        prtmst_view.prtsize,
-        wkodtl.inv_attr_str2]','1425'
+        prtmst_view.prtsize
+  order by cmpdtl.prtnum]
+|
+[select rownum pallet_number,
+        dtl.wkonum,
+        dtl.wkolin,
+        dtl.lotnum,
+        dtl.inv_attr_str2,
+        dtl.seqnum
+   from wkodtl dtl
+  where dtl.prtnum = @prtnum
+    and dtl.wkonum = @wkonum
+    and (dtl.tot_dlvqty - dtl.lc_consumed_part_qty) > 0
+  order by dtl.seqnum]
+|
+[select sum(dtl.lc_consumed_part_qty) total_consumed_lpn_qty
+   from wkodtl dtl
+  where dtl.prtnum = @prtnum
+    and dtl.wkonum = @wkonum
+  group by dtl.prtnum,
+        dtl.wkonum]
+|
+[select sum(dtl.lc_consumed_part_qty) processed_lpn_qty
+   from wkodtl dtl
+  where dtl.prtnum = @prtnum
+    and dtl.wkonum = @wkonum
+    and dtl.tot_dlvqty = dtl.lc_consumed_part_qty
+  group by dtl.prtnum,
+        dtl.wkonum]
+|
+[select (dtl.tot_dlvqty - dtl.lc_consumed_part_qty) avl_qty_line,
+        dtl.lc_consumed_part_qty pre_consumed
+   from wkodtl dtl
+  where dtl.prtnum = @prtnum
+    and dtl.wkonum = @wkonum
+    and dtl.wkolin = @wkolin
+    and dtl.seqnum = @seqnum]
+|
+if ((@qty_on_dest_pallet - @total_consumed_lpn_qty) > 0)
+{
+    if ((@qty_on_dest_pallet - @total_consumed_lpn_qty) <= @avl_qty_line)
+    {
+        if (@pallet_number = 1)
+        {
+            [update wkodtl
+                set lc_consumed_part_qty = @qty_on_dest_pallet - @processed_lpn_qty
+              where wkodtl.prtnum = @prtnum
+                and wkodtl.wkonum = @wkonum
+                and wkodtl.seqnum = @seqnum
+                and wkodtl.wkolin = @wkolin]
+        }
+        else
+        {
+            [update wkodtl
+                set lc_consumed_part_qty = @qty_on_dest_pallet - @processed_lpn_qty
+              where wkodtl.prtnum = @prtnum
+                and wkodtl.wkonum = @wkonum
+                and wkodtl.seqnum = @seqnum
+                and wkodtl.wkolin = @wkolin]
+        }
+        |
+        publish data
+         where cpmqty = @qty_on_dest_pallet - @total_consumed_lpn_qty
+    }
+    else
+    {
+        [update wkodtl
+            set lc_consumed_part_qty = @total_consumed_lpn_qty + @avl_qty_line
+          where wkodtl.prtnum = @prtnum
+            and wkodtl.wkonum = @wkonum
+            and wkodtl.seqnum = @seqnum
+            and wkodtl.wkolin = @wkolin]
+        |
+        publish data
+         where cpmqty = @avl_qty_line
+    }
+    |
+    publish data
+     where prtnum = @prtnum
+       and prt_client_id = @prt_client_id
+       and invsts = @invsts
+       and lotnum = @lotnum
+       and uom = @uom
+       and prtsize = @prtsize
+       and cmpqty = @cpmqty
+       and inv_attr_str2 = @inv_attr_str2
+}','3993'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
 SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
@@ -65,22 +148,6 @@ SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,
     and inventory_view.wh_id = cmphdr.wh_id
   where inventory_view.lodnum = :i_c_lodnum]
 ','660'
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
-SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'LC_GET_WO_CLOSE_DTL','I_C_CLIENT_ID',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
-SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'LC_GET_WO_CLOSE_DTL','I_C_LODNUM',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
-SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'LC_GET_WO_CLOSE_DTL','I_C_WH_ID',''
-
-CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
-SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
-2018.1,'LC_GET_WO_CLOSE_DTL','I_C_WKONUM',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
 SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
@@ -220,7 +287,7 @@ SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
-2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','COMP_UNTQTY','Component Unit Qty','C','60','','4',''
+2018.1,'LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','COMP_UNTQTY','Component Unit Qty','C','60','','20',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
 SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
@@ -376,7 +443,7 @@ SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_f
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
 SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
-2018.1,'LC_WO_CLOSE_IFD','2019.1','LC_WO_CLOSE_DTL','COMP_UNTQTY','Currently, no English translation is available.','50','','LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','COMP_UNTQTY','','','','','EO','C','','','','','','','','L','','N','','','4','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+2018.1,'LC_WO_CLOSE_IFD','2019.1','LC_WO_CLOSE_DTL','COMP_UNTQTY','Currently, no English translation is available.','50','','LC-WO-CLOSE','2019.1','LC_WO_CLOSE_DTL','COMP_UNTQTY','','','','','EO','C','','','','','','','','L','','N','','','20','','F','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
 SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars

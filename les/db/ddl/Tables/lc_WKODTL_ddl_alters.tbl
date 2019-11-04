@@ -9,10 +9,15 @@
 #include <dcstbldef.h>
 
 mset command on
-[ALTER_TABLE_ADD_COLUMN_BEGIN(wkohdr, lc_lotnum_barcode_str)
-    STRING_TY (20)
+
+[ALTER_TABLE_ADD_COLUMN_BEGIN(wkodtl, lc_consumed_part_qty)
+    INTEGER_TY default 0
 ALTER_TABLE_ADD_COLUMN_END]
 catch(ERR_COLUMN_ALREADY_EXISTS)
 RUN_DDL
 
-mset command off
+create db documentation
+ where table = "wkodtl"
+   and lc_consumed_part_qty = "Consumed quantity"
+
+/
