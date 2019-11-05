@@ -1,3 +1,3 @@
 les_cmd_id,cust_lvl,syntax,moddte,mod_usr_id,grp_nam
-lc_parse_barcode,10,"if('&prtnum'!= '' and '&prt_client_id' ='SCJP') {parse lc rf bar code fields where prtnum = '&UNDIR_ASSEMBLY.prtnum' and  prt_client_id = '&UNDIR_ASSEMBLY.prt_client_id'}",,,les_data
+lc_parse_barcode,10,"if('&prtnum'!= '' and '&prt_client_id' ='SCJP' and '&UNDIR_ASSEMBLY.prdlin' = '') {parse lc rf bar code fields where prtnum = '&UNDIR_ASSEMBLY.prtnum' and  prt_client_id = '&UNDIR_ASSEMBLY.prt_client_id'}",,,les_data
 lc_parse_prtnum,10,"if('&prtnum'!= '' and '&prt_client_id' ='SCJP') {parse lc rf part where prtnum = '@PICKUP_A.prtnum' and  prt_client_id = '@PICKUP_A.prt_client_id'}",,,les_data
