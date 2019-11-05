@@ -598,10 +598,10 @@ SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_f
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
 SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
-2018.1,'LC_YAMATO_MNFST_DTLS_IFD','2018.1','HOST','','','SYNCE','','T','T','T','','','','','',''
+2018.1,'LC_YAMATO_MNFST_DTLS_IFD','2018.1','HOST','','','SYNCE','','T','T','F','','','','','',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
 SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
-2018.1,'LC_YAMATO_MNFST_DTLS_IFD','2018.1','HOST_HTTP','','','SYNCD','','T','T','F','','','','','',''
+2018.1,'LC_YAMATO_MNFST_DTLS_IFD','2018.1','HOST_HTTP','','','SYNCE','','T','T','T','','','','','',''
 
 CSV__TAG__KLUDGE___COMMIT
