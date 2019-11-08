@@ -7,7 +7,7 @@
 [select cur_cas,
         tot_cas_cnt,
         subnum,
-        ordnum,
+        cponum,
         schbat,
         ctnmst.ctncod,
         dscmst.lngdsc
@@ -19,13 +19,15 @@
      on ctnmst.ctncod || '|' || ctnmst.wh_id = dscmst.colval
     and dscmst.colnam = 'ctncod|wh_id'
     and dscmst.locale_id = nvl(@locale_id, @@locale_id)
+   join ord
+     on ord.ordnum = pckwrk_view.ordnum
   where pckwrk_view.wh_id = @wh_id
     and wrktyp = 'K'
     and pckwrk_view.wrkref = @wrkref
   order by cur_cas] catch(-1403)
 |
 publish data
- where ordnum = @ordnum || '-' || @cur_cas
+ where ordnum = @cponum || '-' || @cur_cas
    and subnum = @subnum
    and ctncod = @lngdsc
    and cur_cas = @cur_cas
