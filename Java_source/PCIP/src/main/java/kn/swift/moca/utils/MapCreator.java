@@ -1,5 +1,8 @@
 package kn.swift.moca.utils;
-
+import com.redprairie.moca.MocaContext;
+import com.redprairie.moca.util.MocaUtils;
+import com.redprairie.moca.MocaResults;
+import com.redprairie.moca.MocaException;
 
 import java.util.HashMap;
 
@@ -35,6 +38,15 @@ public class MapCreator {
     public static final String KN_GOODS_CONTENT = "KN.GoodsContent";
     public static final String PARCEL_REF_NO = "Parcel.RefNo";
     public static final String KN_ARTICLE_CODE = "KN.ArticleCode";
+
+    public static final String PRODUCT_CODE = "Product.Code.1.";
+    public static final String PRODUCT_DESCRIPTION = "Product.Description.1.";
+    public static final String PRODUCT_HARMONISATION_CODE = "Product.TypeDescription2.1.";
+    public static final String PRODUCT_TYPE_DESCRIPTION = "Product.TypeDescription1.1.";
+    public static final String PRODUCT_QUANTITY = "Product.Quantity.1.";
+    public static final String PRODUCT_MANUFACTURE_DATE = "Product.Date1.1.";
+    public static final String PRODUCT_EXPIRY_DATE = "Product.Date2.1.";
+    public static final String PRODUCT_VALUE = "Product.Value.1."; 
 
     //hardcoded values
     public static final String CTN = "CTN";
@@ -104,7 +116,10 @@ public class MapCreator {
 
         HashMap<String,String> printRequestMap = new HashMap<String, String>();
 
-        printRequestMap.put(KN_CLIENT_ORDER_NO,ordnum);
+        int ProductCount = 0;
+		
+		PCIPLogger.log("Adding main shipping parameters");
+		printRequestMap.put(KN_CLIENT_ORDER_NO,ordnum);
         printRequestMap.put(KN_WAREHOUSE,wh_id);
         printRequestMap.put(KN_DEPOT,depot);
         printRequestMap.put(RECEIVER_NAME_1,stname);
@@ -134,7 +149,60 @@ public class MapCreator {
         printRequestMap.put(KN_ARTICLE_CODE,prtnum);
 		printRequestMap.put(KN_OUTPUT_QUEUE, output_queue);
 		printRequestMap.put(KN_SERVICE_LEVEL, srvlvl);
+		PCIPLogger.log("Shipping parameters added");
+		
+		// get the item info
+		MocaContext moca = MocaUtils.currentContext();
+		
+		MocaResults res = null;
+		String MocaCommand = "[select prtmst.prtnum, "
+					+				"prtdsc.lngdsc description, "
+        			+				"inventory_view.untqty, "
+        			+				"nvl(prtmst.comcod,' ') harmonisation_code, "
+        			+				"nvl(prtmst.prtfam,' ') product_type, "
+        			+				"nvl(TO_CHAR(inventory_view.mandte, 'YYYY-MM-DD HH24:MI'),' ') manufacture_date, "
+        			+				"nvl(TO_CHAR(inventory_view.expire_dte, 'YYYY-MM-DD HH24:MI'),' ') expiry_date, "
+        			+				"prtmst.untcst product_value "
+					+		"from inventory_view, "
+        			+				"prtmst, "
+        			+				"prtdsc "
+					+		"where (lodnum = '" + invtid + "' or subnum = '" + invtid + "')"
+					+			"and prtmst.prtnum = inventory_view.prtnum "
+    				+			"and prtmst.wh_id_tmpl = inventory_view.wh_id "
+    				+			"and prtmst.prt_client_id = inventory_view.prt_client_id "
+    				+			"and prtdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl' "
+    				+			"and prtdsc.colval = prtmst.prtnum || '|' || prtmst.prt_client_id || '|' || prtmst.wh_id_tmpl "
+    				+			"and prtdsc.locale_id = nvl(@locale_id, @@locale_id)] catch(-1403) ";
+						
+        try {
+                PCIPLogger.log("Getting item info");
+				PCIPLogger.log(MocaCommand);
+				res = moca.executeInline(MocaCommand);
 
+        }
+		catch (MocaException e) {
+				PCIPLogger.log("*** COMMAND FAILED ***");
+		}		
+			// reset the pointer to the first record 
+			res.reset();
+
+			PCIPLogger.log("About to add article information");
+			// loop over the results copying SOME stuff
+			while(res.next()) {
+				PCIPLogger.log("Adding article information");
+				ProductCount++;
+
+				printRequestMap.put(PRODUCT_CODE + Integer.toString(ProductCount), res.getString("prtnum").trim());
+				printRequestMap.put(PRODUCT_DESCRIPTION + Integer.toString(ProductCount), res.getString("description").trim());
+				printRequestMap.put(PRODUCT_HARMONISATION_CODE + Integer.toString(ProductCount), res.getString("harmonisation_code").trim());
+				printRequestMap.put(PRODUCT_TYPE_DESCRIPTION + Integer.toString(ProductCount), res.getString("product_type").trim());
+				printRequestMap.put(PRODUCT_QUANTITY + Integer.toString(ProductCount), Integer.toString(res.getInt("untqty")));
+				printRequestMap.put(PRODUCT_MANUFACTURE_DATE + Integer.toString(ProductCount), res.getString("manufacture_date").trim());
+				printRequestMap.put(PRODUCT_EXPIRY_DATE + Integer.toString(ProductCount), res.getString("expiry_date").trim());
+				printRequestMap.put(PRODUCT_VALUE + Integer.toString(ProductCount), Double.toString(res.getDouble("product_value")));
+
+			}
+		
         return printRequestMap;
 
     }

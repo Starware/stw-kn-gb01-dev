@@ -1,4 +1,4 @@
 job_id,role_id,name,enabled,type,command,log_file,trace_level,overlap,schedule,start_delay,timer,grp_nam
-LC-YAMATO-MNFST,,Log Yamato Manifest Event,1,cron,"process lc manifest event",$LESDIR/log/yamato_manifest.log,,0,"0 0 23 * * ?",,,les_data
+LC-YAMATO-MNFST,,Log Yamato Manifest Event,1,cron,"process lc manifest event",$LESDIR/log/yamato_manifest.log,,0,"0 0 1 * * ?",,,les_data
 LC-ARCHIVE-USR-MNFST,,"Archive Customized Manifest table",0,cron,"archive single table data where arc_nam = 'LC-USR-MNFST' and arc_date_column = 'cfmdte' and arc_purge_flg = 0 ",$LESDIR/log/sync_usr_lc_mnfst.log,,0,"0 0 1 ? * 1",,,les_data
 
