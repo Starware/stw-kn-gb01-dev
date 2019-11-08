@@ -16,48 +16,64 @@
 |
 if (@? = 0)
 {
-    change record
-     where table = 'invlod'
-       and lodnum = nvl(@srclod, @lodnum)
-       and lc_tcl_Trigger_LPN = 'NONE'
-	   and stoloc = @dstloc
-	   and wh_id = nvl(@wh_id,@@wh_id)
-    |
-    [select num_pallets
-       from (select count(*) num_pallets
-               from invlod
-              where stoloc = @dstloc
-                and wh_id = nvl(@wh_id,@@wh_id)
-                and lc_tcl_Trigger_LPN = 'NONE')
-      where num_pallets >= @min_pallets] catch(-1403)
+    [select 'x'
+	   from inventory_view,
+			prtmst
+	  where lodnum = nvl(@srclod, @lodnum)
+        and prtmst.prtnum = inventory_view.prtnum
+        and prtmst.prt_client_id = inventory_view.prt_client_id
+        and prtmst.wh_id_tmpl = inventory_view.wh_id
+        and prtmst.hazmat_flg = 1] catch(-1403)
 	|
-	if(@? =0)
+	if (@? = 0) {
+		set return status
+			where status = '900002'
+	}
+	else
 	{
 		change record
-			 where table = 'locmst'
-			   and wh_id = nvl(@wh_id,@@wh_id)
-			   and stoloc = @dstloc
-			   and useflg = false
-	    |
-		[update invlod
-			set lc_tcl_Trigger_LPN = nvl(@srclod, @lodnum)
-	      where stoloc = @dstloc
-		    and lc_tcl_Trigger_LPN = 'NONE'] catch(-1403)
-	    |
-		[select min(inventory_view.prt_client_id) client_id
-           from inventory_view
-          where lodnum = nvl(@srclod, @lodnum)]catch(-1403)
-		|
-	    get integrator system id
-				 where systyp = 'WMD'
-	    |
-	    sl_log event
-		 where evt_id = @event_id
+		 where table = 'invlod'
+		   and lodnum = nvl(@srclod, @lodnum)
+		   and lc_tcl_Trigger_LPN = 'NONE'
+		   and stoloc = @dstloc
 		   and wh_id = nvl(@wh_id,@@wh_id)
-		   and client_id = @client_id
-		   and lc_tcl_Trigger_LPN = nvl(@srclod, @lodnum)
-		   and stoloc = @dstloc  catch(@?)
-				
+		|
+		[select num_pallets
+		   from (select count(*) num_pallets
+				   from invlod
+				  where stoloc = @dstloc
+					and wh_id = nvl(@wh_id,@@wh_id)
+					and lc_tcl_Trigger_LPN = 'NONE')
+		  where num_pallets >= @min_pallets] catch(-1403)
+		|
+		if(@? =0)
+		{
+			change record
+				 where table = 'locmst'
+				   and wh_id = nvl(@wh_id,@@wh_id)
+				   and stoloc = @dstloc
+				   and useflg = false
+			|
+			[update invlod
+				set lc_tcl_Trigger_LPN = nvl(@srclod, @lodnum)
+			  where stoloc = @dstloc
+				and lc_tcl_Trigger_LPN = 'NONE'] catch(-1403)
+			|
+			[select min(inventory_view.prt_client_id) client_id
+			   from inventory_view
+			  where lodnum = nvl(@srclod, @lodnum)]catch(-1403)
+			|
+			get integrator system id
+					 where systyp = 'WMD'
+			|
+			sl_log event
+			 where evt_id = @event_id
+			   and wh_id = nvl(@wh_id,@@wh_id)
+			   and client_id = @client_id
+			   and lc_tcl_Trigger_LPN = nvl(@srclod, @lodnum)
+			   and stoloc = @dstloc  catch(@?)
+					
+		}
 	}
 }
 ]]>
