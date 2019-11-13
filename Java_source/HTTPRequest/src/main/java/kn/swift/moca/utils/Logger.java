@@ -15,8 +15,8 @@ public class Logger {
 		
 		try {
 			
-			String timeStamp = new SimpleDateFormat("YYYY.MM.DD.HH.mm.ss").format(new Date());
-			String Filename = "$LESDIRlog/HTTP_Request_" + timeStamp.substring(0,10) + ".log";
+			String timeStamp = new SimpleDateFormat("yyyy.MM.dd - HH.mm.ss (z)").format(new Date());
+			String Filename = "log/HTTP_Request_" + timeStamp.substring(0,10) + ".log";
 			File OutFile = new File(Filename);
 			
 			if (!OutFile.exists()) {

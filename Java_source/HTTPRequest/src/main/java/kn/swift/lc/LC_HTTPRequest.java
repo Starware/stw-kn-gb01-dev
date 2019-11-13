@@ -48,7 +48,7 @@ public class LC_HTTPRequest {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "text/xml");
+        con.setRequestProperty("Content-Type", "application/xml");
         con.setRequestProperty("Accept", "text/xml");
         con.setDoOutput(true);
 
