@@ -46,7 +46,8 @@ if(@ship_id)
 			count(distinct invlod.lodnum) *(1.2) loading_len,
 			(sum(invlod.lodhgt)/100)load_hgt,
 			min(prtmst_view.prtfam) package_type,
-			decode(count(distinct prtmst_view.dept_cod), 1, max(prtmst_view.dept_cod), 0, NULL, 'II+III') marks_numbers
+			decode(count(distinct prtmst_view.dept_cod), 1, max(prtmst_view.dept_cod), 0, NULL, 'II+III') marks_numbers,
+			max(prtmst_view.prtfit) delivery_remark
 	   from invlod
 	   join invsub
 		 on invsub.lodnum = invlod.lodnum
