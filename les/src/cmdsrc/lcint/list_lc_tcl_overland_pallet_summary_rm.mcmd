@@ -8,7 +8,7 @@ if(@ship_id)
 {
     publish data
       where loc_clause = "invlod.stoloc in ('" || @stoloc_lst || "') "
-	 | 
+    | 
 	[select (sum(pkg.grs_wgt)/1000)gross_weight
 	   from (select invdtl.prtnum,
 					(sum(invdtl.untqty / invdtl.untcas) * min(prtftp_dtl.grswgt)) grs_wgt
@@ -40,14 +40,46 @@ if(@ship_id)
 				and invlod.wh_id = @wh_id
 			  group by invdtl.prtnum) pkg ]catch(-1403)
 	|
+	[select nvl(sum(cashgt)/100, 0) tot_hgt
+	   from (select s.subnum,
+					max(pd.hgt) cashgt
+			   from invsub s,
+					invdtl d,
+					prtftp_dtl pd,
+					invlod,
+					shipment_line
+			  where s.subnum = d.subnum
+				and d.prtnum = pd.prtnum
+				and d.prt_client_id = pd.prt_client_id
+				and invlod.lodnum = s.lodnum
+				and d.ship_line_id = shipment_line.ship_line_id
+				and d.prtnum = shipment_line.prtnum
+				and d.prt_client_id = shipment_line.prt_client_id
+				and invlod.wh_id = shipment_line.wh_id
+			 /* If we have ftpcod on invdtl, we use it; otherwise we use the default ftpcod */
+				and (d.ftpcod = pd.ftpcod or exists(select 'x'
+													  from prtftp p
+													 where p.ftpcod = pd.ftpcod
+													   and p.prtnum = pd.prtnum
+													   and p.prt_client_id = pd.prt_client_id
+													   and p.wh_id = pd.wh_id
+													   and p.defftp_flg = decode(d.ftpcod, NULL, 1, -1)))
+				and pd.wh_id = invlod.wh_id
+				and pd.cas_flg = 1
+				and invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
+				and shipment_line.ship_id = @ship_id
+				and @loc_clause:raw
+				and invlod.wh_id = @wh_id
+			  group by s.subnum)] catch(-1403)
+    |
 	[select decode(count(distinct invdtl.prtnum), 1, 'N', 'Y') mixed_pallet,
 			decode(sum(prtmst_view.hazmat_flg), 0, 'N', 'Y') haz_cargo,
 			count(distinct invlod.lodnum) label_qty,
 			count(distinct invlod.lodnum) *(1.2) loading_len,
-			(sum(invlod.lodhgt)/100)load_hgt,
 			min(prtmst_view.prtfam) package_type,
 			decode(count(distinct prtmst_view.dept_cod), 1, max(prtmst_view.dept_cod), 0, NULL, 'II+III') marks_numbers,
-			max(prtmst_view.prtfit) delivery_remark
+			max(prtmst_view.prtfit) delivery_remark,
+			min(ord_line.late_dlvdte) late_dlvdte
 	   from invlod
 	   join invsub
 		 on invsub.lodnum = invlod.lodnum
@@ -58,6 +90,12 @@ if(@ship_id)
 		and shipment_line.wh_id = invlod.wh_id
 		and invdtl.prtnum = shipment_line.prtnum
 		and invdtl.prt_client_id = shipment_line.prt_client_id
+	   join ord_line
+		 on ord_line.ordnum = shipment_line.ordnum
+		and ord_line.ordlin = shipment_line.ordlin
+		and ord_line.client_id = shipment_line.client_id
+		and ord_line.wh_id = shipment_line.wh_id
+		and ord_line.prtnum = shipment_line.prtnum
 	   join prtmst_view
 		 on prtmst_view.prtnum = shipment_line.prtnum
 		and prtmst_view.wh_id = shipment_line.wh_id
@@ -65,18 +103,19 @@ if(@ship_id)
 	  where invlod.lc_tcl_trigger_lpn = @lc_tcl_trigger_lpn
 		and shipment_line.ship_id = @ship_id
 		and @loc_clause:raw
-		and invlod.wh_id = @wh_id]	
+		and invlod.wh_id = @wh_id] catch(-1403)	
 	|
 	publish data 
 	  where marks_numbers = @marks_numbers
 	    and label_qty =@label_qty
 		and package_type = @package_type
 		and gross_weight = @gross_weight
-		and volume =@load_hgt
+		and volume =@tot_hgt
 		and loading_len = @loading_len
 		and delivery_remark = @delivery_remark
 		and mixed_pallet = @mixed_pallet
 		and haz_cargo = @haz_cargo
+		and late_dlvdte = @late_dlvdte
 }
 ]]>
 </local-syntax>
