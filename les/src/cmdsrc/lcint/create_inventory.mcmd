@@ -14,8 +14,30 @@
 	|
 	if(@? = 0 and @lodnum and (!@inv_attr_str2 or @inv_attr_str2 = ''))
 	{  
-		publish data
-		  where inv_attr_str2 = @lodnum
+	    if(@rcvkey and @movref = 'RTNTOSTK')
+		{
+			[select inv_attr_str2
+			   from rcvlin
+			  where rcvkey = @rcvkey
+				and inv_attr_str2 is not null] catch(-1403)
+			|
+			if (@? = 0)
+			{
+				publish data
+				 where inv_attr_str2 = @inv_attr_str2
+			}
+			else
+			{
+			    publish data
+			  where inv_attr_str2 = @lodnum
+			
+			}
+		}
+		else
+		{
+			publish data
+			  where inv_attr_str2 = @lodnum
+		}
 	    |
 		^create inventory where @*
 	}
