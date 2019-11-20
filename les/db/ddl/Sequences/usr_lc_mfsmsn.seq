@@ -15,11 +15,13 @@
 #define INC 1
 #define MAX 9999999
 
-CREATE_SEQUENCE(SEQ, SEED, INC, MAX)
+mset command on
+
+[CREATE_SEQUENCE(SEQ, SEED, INC, MAX)] catch(-955)
 RUN_DDL
 
-insert into sysctl (numcod, prefix, prelen, prlflg, seqlen,
+[insert into sysctl (numcod, prefix, prelen, prlflg, seqlen,
  		suflen, btsflg, lstseq, seqflg)
     values ('mfsmsn', '"MSN"', 3, 0, 10,
-             0, 0, 0, 0)
+             0, 0, 0, 0)] catch(-1) 
 RUN_DDL
