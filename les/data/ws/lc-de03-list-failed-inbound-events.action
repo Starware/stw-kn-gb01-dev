@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<action>
+    <id>lc-de03-list-failed-inbound-events.action</id>
+    <name>List Failed Inbound Events</name>
+    <description>List failed inbound events</description>
+    
+    <type>LIST</type>
+    
+    <ws>
+        <method>GET</method>
+        <href>/lc/de03/errors/events/inbound</href>
+    </ws>
+    <impl>
+        <command>lc_list_failed_inbound_events</command>
+    </impl>
+    <auth>
+        <opt>optOpen</opt>
+    </auth>
+</action>

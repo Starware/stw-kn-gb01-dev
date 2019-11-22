@@ -1,0 +1,33 @@
+<command>
+  <name>LC_List_failed_inbound_events</name>
+  <description>LC_List_failed_inbound_events</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+validate stack variable not null
+ where name = 'age'
+|
+[select ed.evt_data_seq,
+        ed.evt_id,
+        ed.evt_dt,
+        ed.evt_user_id,
+        ed.sys_id,
+        ed.ifd_id,
+        ed.ifd_ver,
+        ed.evt_stat_cd
+   from sl_evt_data ed
+  where evt_stat_cd <> 'SC' 
+and ed.evt_dt > sysdate - @age/60/60/24
+    and SYS_ID <> 'DCS']
+|
+publish data
+where evt_data_seq = @evt_data_seq
+   and evt_id = @evt_id
+   and evt_dt = @evt_dt
+   and evt_user_id = @evt_user_id
+   and sys_id = @sys_id
+   and evt_stat_cd = @evt_stat_cd
+]]>
+</local-syntax>
+  <argument name="age" required="yes" datatype="integer">Time</argument>
+</command>

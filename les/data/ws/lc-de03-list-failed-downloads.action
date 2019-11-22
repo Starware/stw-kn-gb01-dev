@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<action>
+    <id>lc-de03-list-failed-downloads</id>
+    <name>List Failed Downloads</name>
+    <description>List failed Integrator downloads</description>
+    
+    <type>LIST</type>
+    
+    <ws>
+        <method>GET</method>
+        <href>/lc/de03/errors/downloads</href>
+    </ws>
+    <impl>
+        <command>lc_list_failed_downloads</command>
+    </impl>
+    <auth>
+        <opt>optOpen</opt>
+    </auth>
+</action>

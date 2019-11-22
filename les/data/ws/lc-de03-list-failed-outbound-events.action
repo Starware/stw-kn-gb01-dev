@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<action>
+    <id>lc-de03-list-failed-outbound-events</id>
+    <name>List Failed Outbound Events</name>
+    <description>List failed outbound events</description>
+    
+    <type>LIST</type>
+    
+    <ws>
+        <method>GET</method>
+        <href>/lc/de03/errors/events/outbound</href>
+    </ws>
+    <impl>
+        <command>lc_list_failed_outbound_events</command>
+    </impl>
+    <auth>
+        <opt>optOpen</opt>
+    </auth>
+</action>
