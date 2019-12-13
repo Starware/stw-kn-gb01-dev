@@ -5,7 +5,8 @@
 # test
 #
 
-export POSTINSTALL_LOG=$LESDIR/install/isccustom.log
+current_time=$(date "+%Y%m%d%H%M%S")
+export POSTINSTALL_LOG=$LESDIR/install/isccustom_$current_time.log
 
 if [ -f ${POSTINSTALL_LOG} ]; then
     /bin/rm -f ${POSTINSTALL_LOG}
