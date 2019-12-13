@@ -64,7 +64,7 @@ SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_comm
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def
 SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_commit_ctxt_defn_cd,pre_async_alg_id,post_async_alg_id,pre_dwnld_alg_id,post_dwnld_alg_id,fail_evt_id,prsrv_evt_seq_flg,snd_err_stat_flg,rcv_fail_evt_id,rcv_succ_evt_id,null_ind_char,nochg_ind_char,absent_ind_char,eol_delim,mailbox_nam,host_port,host_nam,service,sys_user_id,sys_password,sys_conn_data,moca_sys_flg,xml_tag_data_inst,xml_tag_ifd,xml_tag_data,max_grp_siz
-2018.1,'HOST','Generic Host System','HOST','LEGACY','T','F','SIFD','','','','','','F','T','','','','*','+','<10>','','','','','','','','','','','',''
+2018.1,'HOST_HTTP','Customized system for HTTP','HOST_HTTP','LES','T','F','SIFD','','','','','','F','T','','','','*','+','<10>','','','','','','','','','','','',''
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def_grp
 SL_VERSION,ifd_grp_id,ifd_grp_descr
@@ -316,23 +316,23 @@ SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_f
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_i_sys_ifd_id
 SL_VERSION,sys_id,ifd_id,ifd_ver,id_seg_alg_id,ord_ind,ena_flg
-2018.1,'HOST','LC_WORK_ORDER_IFD','1.0','','1','T'
+2018.1,'HOST_HTTP','LC_WORK_ORDER_IFD','1.0','','1','T'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_i_sys_ifd_seg_id
 SL_VERSION,ifd_id,ifd_ver,sys_id,ifd_seg_id,ifd_fld_id,fld_val
-2018.1,'LC_WORK_ORDER_IFD','1.0','HOST','CTRL_SEG','TRNNAM','WO_TRAN'
+2018.1,'LC_WORK_ORDER_IFD','1.0','HOST_HTTP','CTRL_SEG','TRNNAM','WO_TRAN'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_i_sys_ifd_seg_id
 SL_VERSION,ifd_id,ifd_ver,sys_id,ifd_seg_id,ifd_fld_id,fld_val
-2018.1,'LC_WORK_ORDER_IFD','1.0','HOST','CTRL_SEG','TRNVER','2017.1'
+2018.1,'LC_WORK_ORDER_IFD','1.0','HOST_HTTP','CTRL_SEG','TRNVER','2017.1'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_i_sys_ifd_seg_id
 SL_VERSION,ifd_id,ifd_ver,sys_id,ifd_seg_id,ifd_fld_id,fld_val
-2018.1,'LC_WORK_ORDER_IFD','1.0','HOST','WO_HEADER','SEGNAM','HEADER_SEG'
+2018.1,'LC_WORK_ORDER_IFD','1.0','HOST_HTTP','WO_HEADER','SEGNAM','HEADER_SEG'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_i_ifd_evt_map
 SL_VERSION,ifd_id,ifd_ver,ifd_action,sys_id,ifd_action_alg_id,evt_id,ena_flg
-2018.1,'LC_WORK_ORDER_IFD','1.0','[ALL]','HOST','','LC_WORK_ORDER_EV','T'
+2018.1,'LC_WORK_ORDER_IFD','1.0','[ALL]','HOST_HTTP','','LC_WORK_ORDER_EV','T'
 
 CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
 SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
