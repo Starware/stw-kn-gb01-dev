@@ -16,7 +16,7 @@
 		|
 		[select round(sum(wgt.net_wgt), 2) weight
            from(select inventory_view.prtnum,
-                       sum(inventory_view.untqty / inventory_view.untcas) * min(prtftp_dtl.netwgt) net_wgt
+                       sum(inventory_view.untqty) * min(prtftp_dtl.netwgt) net_wgt
                   from inventory_view
                   join prtftp
                     on prtftp.prtnum = inventory_view.prtnum
@@ -28,6 +28,7 @@
                    and prtftp_dtl.prt_client_id = prtftp.prt_client_id
                    and prtftp_dtl.wh_id = prtftp.wh_id
                    and prtftp_dtl.ftpcod = prtftp.ftpcod
+				   and prtftp_dtl.stk_flg = 1
                  where (inventory_view.lodnum = @invtid or inventory_view.subnum = @invtid)
                    and inventory_view.wh_id = nvl(@wh_id, @@wh_id)
                   group by inventory_view.prtnum) wgt] catch(-1403)
