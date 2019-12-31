@@ -76,7 +76,7 @@ public class LC_PCIP {
                 businesskey3,
                 businesskey4);
         PCIPLogger.log("creating printRequest Map");
-        HashMap<String,String> requestMap = mapCreator.createPrintRequestMap(
+        LinkedHashMap<String,String> requestMap = mapCreator.createPrintRequestMap(
                 ordnum,
                 wh_id,
                 depot,
@@ -155,7 +155,7 @@ public class LC_PCIP {
 
 
         PCIPLogger.log("creating reprint Map");
-        HashMap<String,String> reprintMap = mapCreator.createReprintRequestMap(client_id,
+        LinkedHashMap<String,String> reprintMap = mapCreator.createReprintRequestMap(client_id,
                 depot,
                 carcod,
                 invtid,
@@ -209,7 +209,7 @@ public class LC_PCIP {
                 businesskey4);
 
         PCIPLogger.log("creating cancel Map");
-        HashMap<String,String> deleteMap = mapCreator.createDeleteRequestMap(client_id,
+        LinkedHashMap<String,String> deleteMap = mapCreator.createDeleteRequestMap(client_id,
                 depot,
                 carcod,
                 output_queue,
@@ -264,7 +264,7 @@ public class LC_PCIP {
                 businesskey4);
 
         PCIPLogger.log("creating close Map");
-        HashMap<String,String> closeMap = mapCreator.createCloseMap(client_id,
+        LinkedHashMap<String,String> closeMap = mapCreator.createCloseMap(client_id,
                 depot,
                 carcod,
                 invtid);

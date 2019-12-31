@@ -12,7 +12,7 @@ import kn.swift.ms.pcip.dto.closeresponse.CloseShipmentsResponse;
 import kn.swift.ms.pcip.dto.deleteresponse.DeleteParcelResponse;
 import kn.swift.ms.pcip.dto.printresponse.PrintParcelResponse;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -225,7 +225,7 @@ public class PrintUtils {
 
     }
 
-    public IRequest createRequest(HashMap<String,String> requestMap, String requestType){
+    public IRequest createRequest(LinkedHashMap<String,String> requestMap, String requestType){
         ObjectFactory factory = new ObjectFactory();
         IRequest request = null;
         if(requestType.equals("Print")) {

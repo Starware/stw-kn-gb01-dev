@@ -4,7 +4,7 @@ import com.redprairie.moca.util.MocaUtils;
 import com.redprairie.moca.MocaResults;
 import com.redprairie.moca.MocaException;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class MapCreator {
 
@@ -51,11 +51,11 @@ public class MapCreator {
     //hardcoded values
     public static final String CTN = "CTN";
 
-    public HashMap<String, String> createCloseMap(String client_id,
+    public LinkedHashMap<String, String> createCloseMap(String client_id,
                                                   String depot,
                                                   String carcod,
                                                   String invtid) {
-        HashMap<String,String> returnSet = new HashMap<>();
+        LinkedHashMap<String,String> returnSet = new LinkedHashMap<>();
 
         returnSet.put(KN_CLIENT_ID,client_id);
         returnSet.put(KN_DEPOT,depot);
@@ -68,13 +68,13 @@ public class MapCreator {
     }
 
 
-    public HashMap<String, String> createDeleteRequestMap(String client_id,
+    public LinkedHashMap<String, String> createDeleteRequestMap(String client_id,
                                                            String depot,
                                                            String carcod,
                                                            String output_queue,
                                                            String operation) {
 
-        HashMap<String,String> returnSet = new HashMap<>();
+        LinkedHashMap<String,String> returnSet = new LinkedHashMap<>();
 
         returnSet.put(KN_CLIENT_ID,client_id);
         returnSet.put(KN_DEPOT,depot);
@@ -86,7 +86,7 @@ public class MapCreator {
     }
 
 
-    public HashMap<String,String> createPrintRequestMap(String ordnum,
+    public LinkedHashMap<String,String> createPrintRequestMap(String ordnum,
                                                          String wh_id,
                                                          String depot,
                                                          String client_id,
@@ -114,7 +114,7 @@ public class MapCreator {
 														 String srvlvl,
 														 String stemail){
 
-        HashMap<String,String> printRequestMap = new HashMap<String, String>();
+        LinkedHashMap<String,String> printRequestMap = new LinkedHashMap<String, String>();
 
         int ProductCount = 0;
 		
@@ -140,7 +140,7 @@ public class MapCreator {
         printRequestMap.put(PARCEL_WEIGHT,weight);
         printRequestMap.put(PARCEL_VOLUME,volume);
         printRequestMap.put(PARCEL_LENGTH,length);
-        printRequestMap.put(KN_REPRINT,"");//set to blank
+        printRequestMap.put(KN_REPRINT,"R");//set to blank
         printRequestMap.put(KN_DANGEROUS,dg_dsc);
         printRequestMap.put(KN_PACKAGE_TYPE_ID, CTN);//need? might need to import
         printRequestMap.put(KN_PARCEL_NUMBER,cur_pkg);//need?
@@ -192,14 +192,14 @@ public class MapCreator {
 				PCIPLogger.log("Adding article information");
 				ProductCount++;
 
-				printRequestMap.put(PRODUCT_CODE + Integer.toString(ProductCount), res.getString("prtnum").trim());
-				printRequestMap.put(PRODUCT_DESCRIPTION + Integer.toString(ProductCount), res.getString("description").trim());
-				printRequestMap.put(PRODUCT_HARMONISATION_CODE + Integer.toString(ProductCount), res.getString("harmonisation_code").trim());
-				printRequestMap.put(PRODUCT_TYPE_DESCRIPTION + Integer.toString(ProductCount), res.getString("product_type").trim());
 				printRequestMap.put(PRODUCT_QUANTITY + Integer.toString(ProductCount), Integer.toString(res.getInt("untqty")));
 				printRequestMap.put(PRODUCT_MANUFACTURE_DATE + Integer.toString(ProductCount), res.getString("manufacture_date").trim());
 				printRequestMap.put(PRODUCT_EXPIRY_DATE + Integer.toString(ProductCount), res.getString("expiry_date").trim());
 				printRequestMap.put(PRODUCT_VALUE + Integer.toString(ProductCount), Double.toString(res.getDouble("product_value")));
+				printRequestMap.put(PRODUCT_DESCRIPTION + Integer.toString(ProductCount), res.getString("description").trim());
+				printRequestMap.put(PRODUCT_HARMONISATION_CODE + Integer.toString(ProductCount), res.getString("harmonisation_code").trim());
+				printRequestMap.put(PRODUCT_CODE + Integer.toString(ProductCount), res.getString("prtnum").trim());
+				printRequestMap.put(PRODUCT_TYPE_DESCRIPTION + Integer.toString(ProductCount), res.getString("product_type").trim());
 
 			}
 		
@@ -207,14 +207,14 @@ public class MapCreator {
 
     }
 
-    public HashMap<String,String> createReprintRequestMap(String client_id,
+    public LinkedHashMap<String,String> createReprintRequestMap(String client_id,
                                                            String depot,
                                                            String carcod,
                                                            String invtid,
                                                            String output_queue,
                                                            String operation){
 
-        HashMap<String,String> returnSet = new HashMap<>();
+        LinkedHashMap<String,String> returnSet = new LinkedHashMap<>();
 
         returnSet.put(KN_CLIENT_ID,client_id);
         returnSet.put(KN_DEPOT,depot);

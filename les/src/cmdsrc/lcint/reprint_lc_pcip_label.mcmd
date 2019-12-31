@@ -1,0 +1,87 @@
+<command>
+  <name>reprint lc pcip label</name>
+  <description>Re-Print PCIP Label</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+  <![CDATA[
+[select lbl_prtadr
+   from devmst
+  where wh_id = @wh_id
+    and devcod = @devcod] catch(-1403)
+|
+[select manfst.crtnid
+   from manfst
+  where (subnum = @invtid or lodnum = @invtid)
+    and wh_id = @wh_id] catch(-1403)
+|
+if (@? = 0)
+{
+    [select distinct mf.wh_id,
+            mf.client_id,
+            mf.ship_id,
+            mf.ordnum,
+            mf.carcod,
+            mf.srvlvl,
+            mf.weight,
+            am.adrnam stname,
+            am.adrln1 stadd1,
+            am.adrln2 stadd2,
+            am.adrln3 stadd3,
+            am.adrcty stcity,
+            am.adrpsz stposc,
+            am.ctry_name stcnty,
+            am.phnnum stphon,
+            am.email_adr stemail
+       from manfst mf
+       join ord o
+         on o.ordnum = mf.ordnum
+        and o.wh_id = mf.wh_id
+       join adrmst am
+         on am.adr_id = o.rt_adr_id
+       join all_inventory_view iv
+         on (iv.subnum = mf.subnum or iv.lodnum = mf.lodnum)
+        and iv.wh_id = mf.wh_id
+       join prtmst pm
+         on pm.prtnum = iv.prtnum
+        and pm.wh_id_tmpl = iv.wh_id
+       join prtdsc pdsc
+         on pdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
+        and pdsc.colval = pm.prtnum || '|' || pm.prt_client_id || '|' || pm.wh_id_tmpl
+        and pdsc.locale_id = 'EN-GB'
+      where mf.crtnid = @crtnid]
+    |
+    create lc pcip package
+     where invtid = @invtid
+       and ordnum = @ordnum
+       and wh_id = @wh_id
+       and height = nvl(@height, 0)
+       and width = nvl(@width, 0)
+       and length = nvl(@length, 0)
+       and volume = nvl(@volume, 0)
+       and lbl_prtadr = @lbl_prtadr
+       and @*
+}
+else if (@? = -1403)
+{
+    [select distinct subnum,
+            lodnum,
+            wh_id
+       from inventory_pckwrk_view
+      where subnum = @invtid] catch(-1403)
+    |
+    if (@? = 0)
+    {
+        process lc label request
+         where lodnum = @lodnum
+           and subnum = @subnum
+           and wh_id = @wh_id
+    }
+    else if (@? = -1403)
+    {
+        set return status
+         where status = 510
+    }
+}
+]]>
+  </local-syntax>
+</command>

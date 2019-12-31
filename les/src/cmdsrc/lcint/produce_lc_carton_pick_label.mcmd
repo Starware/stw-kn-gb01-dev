@@ -6,9 +6,9 @@
 <![CDATA[
 [select def_printer prtadr
    from lblfmt
-  where lblfmt = 'Lc-CartonLabel'] catch(-1403)
+  where lblfmt = 'lc-cartonlabel'] catch(-1403)
 |
-get label format where format = "Lc-CartonLabel" | produce label
+get label format where format = "lc-cartonlabel" | produce label
 |
 if (@outfile_name <> '' and @outfile_name is not null)
     {
