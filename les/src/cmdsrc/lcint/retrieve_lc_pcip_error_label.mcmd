@@ -7,8 +7,9 @@
 <local-syntax>
 <![CDATA[
 publish data
-where stoloc =@err_msg
-
+ where stoloc = @err_msg
+   and ordnum = @ordnum
+   and invtid = @invtid
 ]]>
 </local-syntax>
 </command>
