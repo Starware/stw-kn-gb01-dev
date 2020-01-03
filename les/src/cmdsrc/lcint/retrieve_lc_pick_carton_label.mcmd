@@ -4,13 +4,15 @@
 <type>Local Syntax</type>
 <local-syntax>
 <![CDATA[
-[select cur_cas,
+[select distinct cur_cas,
         tot_cas_cnt,
         subnum,
         cponum,
         schbat,
         ctnmst.ctncod,
-        dscmst.lngdsc
+        dscmst.lngdsc,
+        shipment.carcod,
+        ctry_mst.iso_2_ctry_name ctry_name
    from pckwrk_view
    join ctnmst
      on ctnmst.ctncod = pckwrk_view.ctncod
@@ -21,6 +23,12 @@
     and dscmst.locale_id = nvl(@locale_id, @@locale_id)
    join ord
      on ord.ordnum = pckwrk_view.ordnum
+   join shipment
+     on shipment.ship_id = pckwrk_view.ship_id
+   join adrmst
+     on adrmst.adr_id = ord.rt_adr_id
+   join ctry_mst
+     on adrmst.ctry_name = ctry_mst.ctry_name
   where pckwrk_view.wh_id = @wh_id
     and wrktyp = 'K'
     and pckwrk_view.wrkref = @wrkref
@@ -32,6 +40,8 @@ publish data
    and ctncod = @lngdsc
    and cur_cas = @cur_cas
    and tot_cas_cnt = @tot_cas_cnt
+   and carcod = @carcod
+   and ctry_name = @ctry_name
    and schbat = @schbat;
 ]]>
 </local-syntax>
