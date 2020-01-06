@@ -26,6 +26,7 @@ public class MapCreator {
     public static final String RECEIVER_COUNTRY = "Receiver.Country";
     public static final String RECEIVER_TELEPHONE = "Receiver.Telephone";
     public static final String RECEIVER_EMAIL = "KN.Email";
+	public static final String RECEIVER_STATE = "Receiver.State";
     public static final String KN_TOTAL_PARCEL_NO = "KN.TotalParcelNo";
     public static final String PARCEL_WIDTH = "Parcel.Width";
     public static final String PARCEL_HEIGHT = "Parcel.Height";
@@ -112,7 +113,8 @@ public class MapCreator {
                                                          String goods_content,
                                                          String output_queue,
 														 String srvlvl,
-														 String stemail){
+														 String stemail,
+														 String ststcd){
 
         LinkedHashMap<String,String> printRequestMap = new LinkedHashMap<String, String>();
 
@@ -128,9 +130,10 @@ public class MapCreator {
         printRequestMap.put(RECEIVER_STREET,stadd3);
         printRequestMap.put(RECEIVER_CITY,stcity);
         printRequestMap.put(RECEIVER_POST_CODE,stposc);
+		printRequestMap.put(RECEIVER_STATE,ststcd);
         printRequestMap.put(RECEIVER_COUNTRY,stcnty);
         printRequestMap.put(RECEIVER_TELEPHONE,stphon);
-        printRequestMap.put(RECEIVER_EMAIL,stemail);
+        printRequestMap.put(RECEIVER_EMAIL,stemail);	
         printRequestMap.put(KN_CLIENT_ID,client_id);
         printRequestMap.put(KN_CARRIER_ID,carcod);
         printRequestMap.put(KN_TOTAL_PARCEL_NO,tot_pkg_count);

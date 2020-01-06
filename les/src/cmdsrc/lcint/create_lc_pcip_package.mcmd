@@ -167,6 +167,7 @@ create lc pcip consignment
    and goods_content = @goods_content
    and output_queue = nvl(@lbl_prtadr, @output_queue)
    and stemail = @stemail
+   and ststcd = @ststcd
 |
 if (@? = 0)
 {

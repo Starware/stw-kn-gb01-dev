@@ -69,6 +69,7 @@
 			and stcnty = @stcnty
 			and stphon = @stphon
 			and invtid = @invtid
+			and ststcd = @ststcd
 			and @*
     }
     else if (@dstnam = 'FEDEX')

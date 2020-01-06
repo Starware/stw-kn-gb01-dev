@@ -58,7 +58,8 @@ public class LC_PCIP {
                                              String goods_content,
                                              String output_queue,
 											 String srvlvl,
-											 String stemail) throws MocaException {
+											 String stemail,
+											 String ststcd) throws MocaException {
 
 
 
@@ -103,7 +104,8 @@ public class LC_PCIP {
                 goods_content,
                 output_queue,
 				srvlvl,
-				stemail);
+				stemail,
+				ststcd);
 
         PrintUtils utils = new PrintUtils();
         PCIPLogger.log("creating request");
