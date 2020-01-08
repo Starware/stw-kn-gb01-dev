@@ -210,7 +210,7 @@ if (@? = 0)
         |
         print lbl label operations label
          where filename = @outfile_name
-           and prtadr = @lbl_prtadr catch(@?)
+           and prtadr = nvl(@lbl_prtadr, @output_queue) catch(@?)
         |
         [select rtstr1
            from poldat_view
