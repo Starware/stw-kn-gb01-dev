@@ -22,14 +22,14 @@ if (@? = 0)
             mf.ordnum,
             mf.carcod,
             mf.srvlvl,
-            mf.weight,
+            mf.weight / 1000 weight,
             am.adrnam stname,
             am.adrln1 stadd1,
             am.adrln2 stadd2,
             am.adrln3 stadd3,
             am.adrcty stcity,
             am.adrpsz stposc,
-            am.ctry_name stcnty,
+            cm.iso_2_ctry_name stcnty,
             am.phnnum stphon,
             am.email_adr stemail
        from manfst mf
@@ -38,6 +38,8 @@ if (@? = 0)
         and o.wh_id = mf.wh_id
        join adrmst am
          on am.adr_id = o.rt_adr_id
+       join ctry_mst cm
+         on am.ctry_name = cm.ctry_name
        join all_inventory_view iv
          on (iv.subnum = mf.subnum or iv.lodnum = mf.lodnum)
         and iv.wh_id = mf.wh_id
