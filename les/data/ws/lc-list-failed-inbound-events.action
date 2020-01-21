@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <action>
-    <id>lc-de03-list-failed-inbound-events.action</id>
+    <id>lc-list-failed-inbound-events</id>
     <name>List Failed Inbound Events</name>
     <description>List failed inbound events</description>
     
@@ -8,7 +8,7 @@
     
     <ws>
         <method>GET</method>
-        <href>/lc/de03/errors/events/inbound</href>
+        <href>/lc-list-failed-inbound-events</href>
     </ws>
     <impl>
         <command>lc_list_failed_inbound_events</command>
