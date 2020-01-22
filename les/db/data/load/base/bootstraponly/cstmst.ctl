@@ -1,0 +1,45 @@
+[MERGE INTO cstmst c 
+      USING (SELECT '@client_id@' client_id, '@cstnum@' cstnum, '@adr_id@' adr_id, to_number('@bckflg@') bckflg, 
+                    to_number('@parflg@') parflg, to_number('@carflg@') carflg, to_number('@splflg@') splflg, to_number('@stdflg@') stdflg, 
+                    '@shplbl@' shplbl, '@shipby@' shipby, '@cargrp@' cargrp, '@manfid@' manfid, '@deptno@' deptno, '@ordinv@' ordinv, 
+                    '@requir_tms_cod@' requir_tms_cod, to_number('@trk_shp_flg@') trk_shp_flg, '@pltbld_consby@' pltbld_consby, 
+                    to_number('@acct_chkdigit@') acct_chkdigit, to_number('@acct_num_len@') acct_num_len, 
+                    '@lod_tag_sngle_encode@' lod_tag_sngle_encode, '@lod_tag_mix_encode@' lod_tag_mix_encode, 
+                    '@sub_tag_sngle_encode@' sub_tag_sngle_encode, '@sub_tag_mix_encode@' sub_tag_mix_encode, '@urn_format@' urn_format, 
+                    '@asn_sys@' asn_sys, '@grp_nam@' grp_nam, 
+                    to_number('@early_dlv_thresh_flg@') early_dlv_thresh_flg, to_number('@early_dlv_thresh@') early_dlv_thresh, 
+                    to_number('@late_dlv_thresh_flg@') late_dlv_thresh_flg, to_number('@late_dlv_thresh@') late_dlv_thresh, 
+                    to_number('@ord_split_flg@') ord_split_flg, to_number('@line_split_flg@') line_split_flg, 
+                    to_number('@ovr_shp_tol@') ovr_shp_tol, to_number('@ovr_shp_tol_pct@') ovr_shp_tol_pct, 
+                    to_number('@und_shp_tol@') und_shp_tol, to_number('@und_shp_tol_pct@') und_shp_tol_pct, 
+                    '@transit_serv_id@' transit_serv_id, to_number('@sf_ovr_flg@') sf_ovr_flg, '@und_shp_tol_cod@' und_shp_tol_cod, 
+                    '@ovr_shp_tol_cod@' ovr_shp_tol_cod, '@shp_mod_rule_cod@' shp_mod_rule_cod, 
+                    to_number('@shp_meas_ovr_flg@') shp_meas_ovr_flg, to_number('@req_shp_wgt_flg@') req_shp_wgt_flg, 
+                    to_number('@req_shp_cube_flg@') req_shp_cube_flg, to_number('@req_shp_pal_flg@') req_shp_pal_flg, 
+                    to_number('@req_shp_cas_flg@') req_shp_cas_flg, to_number('@req_shp_misc_flg@') req_shp_misc_flg, 
+                    to_number('@req_shp_misc2_flg@') req_shp_misc2_flg, '@mc_csttyp@' mc_csttyp, '@mc_invsts_prg@' mc_invsts_prg, 
+                    '@mc_frscod@' mc_frscod, to_number('@mc_min_shelf_hrs@') mc_min_shelf_hrs, '@mc_rsvpri@' mc_rsvpri, '@store_typ@' store_typ, 
+                    '@store_grp@' store_grp, '@concept_code@' concept_code, '@alc_search_path@' alc_search_path, 
+                    to_number('@abs_ordinv_win@') abs_ordinv_win, '@abs_ordinv_code@' abs_ordinv_code
+                    FROM dual) input 
+         ON (c.client_id = input.client_id
+             AND c.cstnum = input.cstnum)
+ WHEN NOT MATCHED THEN
+     INSERT (client_id, cstnum, adr_id, bckflg, parflg, carflg, splflg, stdflg, shplbl, shipby, cargrp, manfid, deptno, ordinv, 
+             requir_tms_cod, trk_shp_flg, pltbld_consby, acct_chkdigit, acct_num_len, lod_tag_sngle_encode, lod_tag_mix_encode, 
+             sub_tag_sngle_encode, sub_tag_mix_encode, urn_format, asn_sys, grp_nam, early_dlv_thresh_flg, early_dlv_thresh, 
+             late_dlv_thresh_flg, late_dlv_thresh, ord_split_flg, line_split_flg, ovr_shp_tol, ovr_shp_tol_pct, und_shp_tol, 
+             und_shp_tol_pct, transit_serv_id, sf_ovr_flg, und_shp_tol_cod, ovr_shp_tol_cod, shp_mod_rule_cod, shp_meas_ovr_flg, 
+             req_shp_wgt_flg, req_shp_cube_flg, req_shp_pal_flg, req_shp_cas_flg, req_shp_misc_flg, req_shp_misc2_flg, mc_csttyp, mc_invsts_prg, 
+             mc_frscod, mc_min_shelf_hrs, mc_rsvpri, store_typ, store_grp, concept_code, alc_search_path, abs_ordinv_win, abs_ordinv_code) 
+     VALUES (input.client_id, input.cstnum, input.adr_id, input.bckflg, input.parflg, input.carflg, input.splflg, input.stdflg, 
+             input.shplbl, input.shipby, input.cargrp, input.manfid, input.deptno, input.ordinv, input.requir_tms_cod, input.trk_shp_flg, 
+             input.pltbld_consby, input.acct_chkdigit, input.acct_num_len, input.lod_tag_sngle_encode, input.lod_tag_mix_encode, 
+             input.sub_tag_sngle_encode, input.sub_tag_mix_encode, input.urn_format, input.asn_sys, input.grp_nam, 
+             input.early_dlv_thresh_flg, input.early_dlv_thresh, input.late_dlv_thresh_flg, input.late_dlv_thresh, input.ord_split_flg, 
+             input.line_split_flg, input.ovr_shp_tol, input.ovr_shp_tol_pct, input.und_shp_tol, input.und_shp_tol_pct, 
+             input.transit_serv_id, input.sf_ovr_flg, input.und_shp_tol_cod, input.ovr_shp_tol_cod, input.shp_mod_rule_cod, 
+             input.shp_meas_ovr_flg, input.req_shp_wgt_flg, input.req_shp_cube_flg, input.req_shp_pal_flg, input.req_shp_cas_flg, 
+             input.req_shp_misc_flg, input.req_shp_misc2_flg, input.mc_csttyp, input.mc_invsts_prg, input.mc_frscod, input.mc_min_shelf_hrs, 
+             input.mc_rsvpri, input.store_typ, input.store_grp, input.concept_code, input.alc_search_path, input.abs_ordinv_win,
+             input.abs_ordinv_code)]
