@@ -217,9 +217,11 @@ if (@? = 0)
           where polcod = 'LC_PCIP'
             and polvar = 'ERROR_EMAIL_ALERTS'
             and polval = 'EMAIL_ID'
-            and wh_id = @wh_id] >> res
+            and length(rtstr1) > 0
+            and rtnum1 = 1
+            and wh_id = @wh_id] catch(-1403) >> res
         |
-        if (rowcount(@res) > 0)
+        if (@? = 0)
         {
             convert column results to string
              where colnam = 'rtstr1'
@@ -229,19 +231,24 @@ if (@? = 0)
             publish data
              where email_to = @result_string
             |
-            [select rtstr2 mail_from
+            [select rtstr1 mail_from
                from poldat_view
               where polcod = 'LC_PCIP'
                 and polvar = 'ERROR_EMAIL_ALERTS'
-                and polval = 'EMAIL_ID'
-                and wh_id = @wh_id]
+                and polval = 'FROM_EMAIL'
+                and length(rtstr1) > 0
+                and rownum = 1
+                and wh_id = @wh_id] catch(-1403)
             |
-            send email
-             where mail_from = @mail_from
-               and send_to = @email_to
-               and subject = 'PCIP Error Alert - ' || @invtid
-               and msg = @err_msg || '-For LPN ' || @invtid || '-Automatic Alert '
-               and hostname = 'localhost'
+            if (@? = 0)
+            {
+                send email
+                 where mail_from = @mail_from
+                   and send_to = @email_to
+                   and subject = 'PCIP Error Alert - ' || @invtid
+                   and msg = @err_msg || '-For LPN ' || @invtid || '-Automatic Alert '
+                   and hostname = 'localhost'
+            }
         }
         |
         set return status
