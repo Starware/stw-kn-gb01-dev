@@ -1,0 +1,207 @@
+<command>
+
+<name>validate rf case transfer quantity</name>
+
+<description>Validate RF Case Transfer Quantity</description>
+
+<type>Local Syntax</type>
+
+<local-syntax>
+<![CDATA[
+         [select 1
+			   from poldat_view
+			  where polcod = 'LC_DATE_FORMAT'
+				and polvar = 'EXPIRATION_DATE'
+				and polval = 'ENABLED'
+				and wh_id = nvl(@wh_id,@@wh_id)
+				and rtnum1 =1]catch(-1403)
+		|
+        if(@? =0)
+        {		
+			/*
+			 * @actqty, @untqty,... are of coming off the stack as string type, 
+			 * All here are numeric comparision, so use to_number to force
+			 * to numeric.
+			 */ 
+			if (to_number(@actqty) <= 0)
+			{
+				set return status where status = 10236
+			}
+			else
+			{
+			    if(@expire_dte)
+				{
+				   publish data where expire_dte_val = @expire_dte
+				}
+				|
+				/* Get the original quantity according to inventory criteria */
+				validate rf case transfer source
+				where expire_dte =''
+				  and @+invtid
+				  and @+prtnum
+				  and @+prt_client_id
+				  and @+invsts
+				  and @+lotnum
+				  and @+sup_lotnum
+				  and @+revlvl
+				  and @+supnum
+				  and @+orgcod
+				  and @+mandte
+				  and @+inv_attr_str1 
+				  and @+inv_attr_str2
+				  and @+inv_attr_str3
+				  and @+inv_attr_str4
+				  and @+inv_attr_str5
+				  and @+inv_attr_str6
+				  and @+inv_attr_str7
+				  and @+inv_attr_str8
+				  and @+inv_attr_str9
+				  and @+inv_attr_str10
+				  and @+inv_attr_str11
+				  and @+inv_attr_str12
+				  and @+inv_attr_str13
+				  and @+inv_attr_str14
+				  and @+inv_attr_str15
+				  and @+inv_attr_str16
+				  and @+inv_attr_str17
+				  and @+inv_attr_str18
+				  and @+inv_attr_int1
+				  and @+inv_attr_int2
+				  and @+inv_attr_int3
+				  and @+inv_attr_int4
+				  and @+inv_attr_int5
+				  and @+inv_attr_flt1
+				  and @+inv_attr_flt2
+				  and @+inv_attr_flt3
+				  and @+inv_attr_dte1
+				  and @+inv_attr_dte2
+				  and @+rttn_id catch(@?)
+				|
+				if (@? != 0)
+				{
+					set return status where status = @?
+				}
+				else 
+				{
+					if(@expire_dte_val)
+					{
+						[select 1
+						   from invsub,
+								invdtl
+						  where invsub.subnum = invdtl.subnum
+							and invsub.subnum = @invtid
+							and trunc(invdtl.expire_dte) = to_date(@expire_dte_val, 'YYYYMMDDHH24MISS')
+							and @+prtnum
+							and @+prt_client_id
+							and @+invsts
+							and @+lotnum
+							and @+sup_lotnum
+							and @+revlvl
+							and @+supnum
+							and @+orgcod
+							and @+mandte
+							and @+inv_attr_str1
+							and @+inv_attr_str2
+							and @+inv_attr_str3
+							and @+inv_attr_str4
+							and @+inv_attr_str5
+							and @+inv_attr_str6
+							and @+inv_attr_str7
+							and @+inv_attr_str8
+							and @+inv_attr_str9
+							and @+inv_attr_str10
+							and @+inv_attr_str11
+							and @+inv_attr_str12
+							and @+inv_attr_str13
+							and @+inv_attr_str14
+							and @+inv_attr_str15
+							and @+inv_attr_str16
+							and @+inv_attr_str17
+							and @+inv_attr_str18
+							and @+inv_attr_int1
+							and @+inv_attr_int2
+							and @+inv_attr_int3
+							and @+inv_attr_int4
+							and @+inv_attr_int5
+							and @+inv_attr_flt1
+							and @+inv_attr_flt2
+							and @+inv_attr_flt3
+							and @+inv_attr_dte1
+							and @+inv_attr_dte2
+							and @+rttn_id] catch(-1403) >> res
+
+					}
+					|
+					if (rowcount(@res) > 0)
+					{
+						if (to_number(@actqty) > to_number(@untqty))
+						{
+							set return status where status = 10007
+						}
+						else
+						{
+							if (to_number(@untqty) > to_number(@actqty))
+							{
+								if (@partialflg = 0)
+								{
+									/* Error with eINT_NO_PARTIAL_TRANSFER */
+									set return status where status = 10550
+								}
+								else
+								{
+									/* For partial transfers, part information must  */
+									/* be specified, if the source is mixed. If this */
+									/* fails error with                              */
+									/* eINT_PARTIAL_XFER_SRC_TOO_GENERAL             */
+									if ((@prtnum = '') or (@prt_client_id = ''))
+									{
+										set return status where status = 10549
+									}
+								}
+							}
+						}
+					}
+					else
+					{
+						set return status where status = 10174
+					}
+				}
+			}
+        }
+		else
+		{ 
+		    ^validate rf case transfer quantity
+		       where @*
+		}
+]]>
+</local-syntax>
+
+<documentation>
+
+<remarks>
+<![CDATA[
+  <p>
+  This command validates the desired transfer quantity during RF Inventory
+  Transfers.  The entered quantity must pass the following validations:
+  <ul>
+  <li> The entered value must be greater than zero.  </li>
+  <li> The entered value must be less than or equal to the available amount.  
+       </li>
+  <li> If transferring partial quantity, the area the transfer is being
+       performed must allow partial transfers.  </li>
+  <li> If the inventory identifier contains mixed parts, part and part client
+       ID must be specified.  </li>
+  </ul>
+  </p>
+]]>
+</remarks>
+
+<exception value="eOK">Normal successful completion</exception>
+<exception value="eINT_NOT_ENOUGH_QTY">The actual desired quantity was greater than the available quantity</exception>
+<exception value="eINT_INVALID_QTY">Invalid actual desired quantity.</exception>
+<exception value="eINT_PARTIAL_XFER_SRC_TOO_GENERAL">One or more inventory attribute specifications were missing when attempting to partial transfer</exception>
+<exception value="eINT_NO_PARTIAL_TRANSFER">Partial transfers are not allowed in the area which this inventory resides</exception>
+
+</documentation>
+
+</command>
