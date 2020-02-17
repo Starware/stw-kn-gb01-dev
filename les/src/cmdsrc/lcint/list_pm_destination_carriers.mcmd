@@ -12,6 +12,7 @@
     from poldat_view
    where polcod = 'LC_PCIP'
      and polvar = 'PCIP_SYSTEM'
+	 and polval = 'ENABLED'
      and wh_id = nvl(@wh_id, @@wh_id)
      and rtnum1 = 1] catch(-1403)
  |

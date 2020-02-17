@@ -130,6 +130,27 @@ if (@? = -1403)
         and wh_id = @wh_id] catch(-1403)
 }
 |
+[select 1
+   from poldat_view
+  where polcod = 'LC_PCIP'
+    and polvar = 'PCIP_SYSTEM'
+    and polval = 'SEND-CUSTOMER-PO'
+	and rtnum1 =1
+    and wh_id = @wh_id] catch(-1403)
+|
+if (@? = 0)
+{
+    [select ord.cponum ord_cpo_val
+       from ord
+      where ordnum = @ordnum
+        and wh_id = @wh_id] catch(-1403)
+}
+else
+{
+    publish data
+	  where ord_cpo_val =@ordnum
+}
+|
 create lc pcip consignment
  where url = @url
    and culture = @culture
@@ -140,7 +161,7 @@ create lc pcip consignment
    and businesskey2 = @client_id
    and businesskey3 = @ship_id
    and businesskey4 = @invtid
-   and ordnum = @ordnum
+   and ordnum = @ord_cpo_val
    and wh_id = @wh_id
    and depot = @wh_id
    and client_id = @client_id
