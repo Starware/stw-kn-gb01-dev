@@ -4,7 +4,7 @@
      and cust_lvl = to_number(@cust_lvl@) 
 ] 
 | 
-   if (@row_count > 0) 
+   if (@row_count = 0) 
    {
    
       [ insert into rf_frm_mst
