@@ -3,3 +3,7 @@ doc_typ,Lc-SCJPalletLabel,EN-GB,"Duisburg Pallet Label","",les_doc_typ
 doc_typ,Lc-SCJPalletLabel,US_ENGLISH,"Duisburg Pallet Label","",les_doc_typ
 lblfmt,Lc-SCJPalletLabel,EN-GB,"Duisburg Pallet Label","",les_doc_typ
 lblfmt,Lc-SCJPalletLabel,US_ENGLISH,"Duisburg Pallet Label","",les_doc_typ
+doc_typ,Lc-OvrlandPltLbl,EN-GB,"Overland Pallet Label","",les_doc_typ
+doc_typ,Lc-OvrlandPltLbl,US_ENGLISH,"Overland Pallet Label","",les_doc_typ
+lblfmt,Lc-OvrlandPltLbl,EN-GB,"Overland Pallet Label","",les_doc_typ
+lblfmt,Lc-OvrlandPltLbl,US_ENGLISH,"Overland Pallet Label","",les_doc_typ

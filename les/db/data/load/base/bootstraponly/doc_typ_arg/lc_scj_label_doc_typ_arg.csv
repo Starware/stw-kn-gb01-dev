@@ -1,3 +1,7 @@
 doc_typ,doc_typ_arg,rqdflg,moddte,mod_usr_id
 Lc-SCJPalletLabel,lodnum,1,,
 Lc-SCJPalletLabel,wh_id,1,,
+Lc-OvrlandPltLbl,lodnum,1,,
+Lc-OvrlandPltLbl,wh_id,1,,
+Lc-OvrlandPltLbl,dstloc,1,,
+Lc-OvrlandPltLbl,ordnum,1,,

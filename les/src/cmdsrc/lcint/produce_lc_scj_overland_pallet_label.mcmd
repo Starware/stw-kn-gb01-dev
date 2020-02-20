@@ -1,0 +1,60 @@
+<command>
+<name>produce lc scj overland pallet label</name>
+<description>Produce LC SCJ Overland Pallet Label</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[ 
+if(@lodnum and @dstloc)
+{
+	[select distinct shipment_line.ordnum,
+	        all_inventory_view.lodnum,
+			all_inventory_view.wh_id
+	   from all_inventory_view
+	   join shipment_line
+		 on shipment_line.ship_line_id = all_inventory_view.ship_line_id
+		and shipment_line.wh_id = all_inventory_view.wh_id
+	  where all_inventory_view.wh_id = nvl(@wh_id, @@wh_id)
+		and all_inventory_view.lodnum = @lodnum
+		and substr(shipment_line.ordnum, 0, 1) in ('Y', 'D', 'N')] catch(-1403)
+	|
+	if(@? = 0)
+	{
+		[select 1
+		   from poldat_view
+		  where polcod = 'LC_PICKING'
+			and polvar = 'SCANDINAVIAN_OVERLAND_LABEL'
+			and polval = 'INSTALLED'
+			and wh_id = nvl(@wh_id, @@wh_id)
+			and rtnum1 = 1] catch(-1403)
+		|
+		if (@? = 0)
+		{
+			[select devmst.lbl_prtadr
+			   from devmst
+			  where devmst.devcod = nvl(@devcod, @@devcod)
+				and devmst.wh_id = nvl(@wh_id, @@wh_id)
+				and devmst.lbl_prtadr is not NULL] catch(-1403)
+		
+		    |
+            if(@? =1403)
+            {			
+				[select def_printer def_prtadr
+				   from lblfmt
+				  where lblfmt = 'Lc-OvrlandPltLbl'] catch(-1403)
+			}
+	        |
+			generate label
+			 where locale_id = nvl(@locale_id, 'EN-GB')
+			   and label_name = 'Lc-OvrlandPltLbl' catch(@?)
+			|
+			print lbl label operations label 
+			 where filename = @outfile_name 
+			   and prtadr = nvl(@lbl_prtadr,@def_prtadr) catch(@?)
+		
+		}
+		
+	}
+}
+]]>
+</local-syntax>
+</command>

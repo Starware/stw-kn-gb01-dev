@@ -1,0 +1,110 @@
+<command>
+<name>retrieve lc scj overland label details</name>
+<description>Retrieve data for Overland label</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select round(sum(wgt.net_wgt), 3) weight_kg
+   from (select inventory_view.prtnum,
+                sum(inventory_view.untqty) * min(prtftp_dtl.netwgt) / 1000 net_wgt
+           from inventory_view
+           join prtftp
+             on prtftp.prtnum = inventory_view.prtnum
+            and prtftp.prt_client_id = inventory_view.prt_client_id
+            and prtftp.wh_id = inventory_view.wh_id
+            and prtftp.defftp_flg = 1
+           join prtftp_dtl
+             on prtftp_dtl.prtnum = prtftp.prtnum
+            and prtftp_dtl.prt_client_id = prtftp.prt_client_id
+            and prtftp_dtl.wh_id = prtftp.wh_id
+            and prtftp_dtl.ftpcod = prtftp.ftpcod
+            and prtftp_dtl.stk_flg = 1
+          where (inventory_view.lodnum = @lodnum)
+            and inventory_view.wh_id = nvl(@wh_id, @@wh_id)
+          group by inventory_view.prtnum) wgt] catch(-1403)
+|
+[select distinct o.ordnum,
+        am.adrnam cons_adrnam,
+        am.adrln1 cons_adrln1,
+        am.adrln2 cons_adrln2,
+        am.adrln3 cons_adrln3,
+        am.adrcty cons_adrcty,
+        am.ctry_name cons_ctry,
+        am.adrpsz cons_adrpsz,
+        wh_add.adrnam shp_adrnam,
+        wh_add.adrln1 shp_adrln1,
+        wh_add.adrln2 shp_adrln2,
+        wh_add.adrln3 shp_adrln3,
+        wh_add.adrcty shp_adrcty,
+        wh_add.ctry_name shp_ctry,
+        wh_add.adrpsz shp_adrpsz,
+        iv.lodnum,
+        row_num cur_pkg,
+        tot_count tot_pkg
+   from all_inventory_view iv
+   join shipment_line sl
+     on sl.ship_line_id = iv.ship_line_id
+    and sl.prtnum = iv.prtnum
+    and sl.prt_client_id = iv.prt_client_id
+    and sl.wh_id = iv.wh_id
+   join ord_line ol
+     on ol.ordnum = sl.ordnum
+    and ol.ordlin = sl.ordlin
+    and ol.wh_id = sl.wh_id
+    and ol.client_id = sl.client_id
+   join ord o
+     on o.ordnum = ol.ordnum
+    and o.wh_id = ol.wh_id
+    and o.client_id = ol.client_id
+   join adrmst am
+     on am.adr_id = o.st_adr_id
+   join wh
+     on wh.wh_id = o.wh_id
+   left
+   join adrmst wh_add
+     on wh_add.adr_id = wh.adr_id
+   join (select x.lodnum,
+                ROW_NUMBER() OVER(ORDER BY x.ordnum) AS row_num,
+                count(x.lodnum) OVER(PARTITION BY x.ordnum) tot_count
+           from (select distinct iv.lodnum,
+                        sl.ordnum
+                   from all_inventory_view iv
+                   join shipment_line sl
+                     on sl.ship_line_id = iv.ship_line_id
+                    and sl.wh_id = iv.wh_id
+                  where iv.ship_line_id is not null
+                    and sl.ordnum = @ordnum
+                    and sl.wh_id = nvl(@wh_id, @@wh_id)) x) lpncount
+     on lpncount.lodnum = iv.lodnum
+  where iv.ship_line_id is not null
+    and iv.lodnum = @lodnum
+    and sl.ordnum = @ordnum
+    and sl.wh_id = nvl(@wh_id, @@wh_id)
+  order by o.ordnum,
+        iv.lodnum] catch(-1403)
+|
+publish data
+ where lodnum = @lodnum
+   and ordnum = @ordnum
+   and cur_pkg = @cur_pkg
+   and tot_pkg = @tot_pkg
+   and wgt_kg = @weight_kg || ' Kgs'
+   and shp_adrnam = @shp_adrnam
+   and shp_adrln1 = @shp_adrln1
+   and shp_adrln2 = @shp_adrln2
+   and shp_adrln3 = @shp_adrln3
+   and shp_adrcty = @shp_adrcty
+   and shp_ctry = @shp_ctry
+   and shp_adrpsz = @shp_adrpsz
+   and cons_adrnam = @cons_adrnam
+   and cons_adrln1 = @cons_adrln1
+   and cons_adrln2 = @cons_adrln2
+   and cons_adrln3 = @cons_adrln3
+   and cons_adrcty = @cons_adrcty
+   and cons_ctry = @cons_ctry
+   and cons_adrpsz = @cons_adrpsz
+   and dstloc = @dstloc
+
+]]>
+</local-syntax>
+</command>
