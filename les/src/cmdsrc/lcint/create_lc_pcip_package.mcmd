@@ -136,7 +136,8 @@ if (@? = -1403)
     and polvar = 'PCIP_SYSTEM'
     and polval = 'SEND-CUSTOMER-PO'
 	and rtnum1 =1
-    and wh_id = @wh_id] catch(-1403)
+    and wh_id = @wh_id
+    and rtstr1 = @client_id]catch(-1403)
 |
 if (@? = 0)
 {
