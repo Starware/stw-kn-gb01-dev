@@ -87,6 +87,9 @@ slImp -f $LESDIR/db/data/load/integrator/lc/LC-PACKAGE-DETAILS.slexp -v 2>&1 >> 
 echo "slImp -f LC-HUEL-YAMATO-MANIFEST-CLOSE.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC-HUEL-YAMATO-MANIFEST-CLOSE.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
+echo "slImp -f LC_UNRESTRICT_LOT.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/LC_UNRESTRICT_LOT.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
+
 echo "slImp -f HOST_HTTP_COMMUNICATIONS.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/HOST_HTTP_COMMUNICATIONS.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
