@@ -1,0 +1,95 @@
+<command>
+  <name>create part footprint detail for web</name>
+  <description>Create Part Footprint Detail</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+<![CDATA[
+^ create part footprint detail for web
+	where @*
+|
+list policies
+ where polcod = 'LC-PRS-PART-INT'
+   and polvar = 'PART-INT'
+   and polval = 'ENABLED'
+|
+if ((@rtstr2 is not null) and (@rtstr1 = @prt_client_id))
+{
+	[select count(1) cas_pal_cnt
+	   from prtftp_dtl prtftp_dtl_pal
+	   join prtftp_dtl prtftp_dtl_cas
+	     on prtftp_dtl_cas.prtnum = prtftp_dtl_pal.prtnum
+	    and prtftp_dtl_cas.prt_client_id = prtftp_dtl_pal.prt_client_id
+	    and prtftp_dtl_cas.wh_id = prtftp_dtl_pal.wh_id
+	    and prtftp_dtl_cas.ftpcod = @ftpcod
+	   join prtftp_dtl prtftp_dtl_each
+	     on prtftp_dtl_each.prtnum = prtftp_dtl_pal.prtnum
+	    and prtftp_dtl_each.prt_client_id = prtftp_dtl_pal.prt_client_id
+	    and prtftp_dtl_each.wh_id = prtftp_dtl_pal.wh_id
+	    and prtftp_dtl_each.ftpcod = @ftpcod
+	  where @+prtftp_dtl_pal.wh_id
+	    and @+prtftp_dtl_pal.prtnum
+	    and @+prtftp_dtl_pal.prt_client_id
+	    and @+prtftp_dtl_pal.ftpcod
+	    and prtftp_dtl_pal.pal_flg = 1
+	    and prtftp_dtl_cas.cas_flg = 1
+	    and prtftp_dtl_each.pal_flg = 0
+	    and prtftp_dtl_each.cas_flg = 0]
+|
+	[select rcvflg
+	   from prtmst
+	  where prt_client_id = @prt_client_id
+	    and prtnum = @prtnum
+	    and wh_id_tmpl = @rtstr2] catch(-1403)
+
+	|
+	if ((@rcvflg = 1) and (@cas_pal_cnt > 0))	
+	{
+		get integrator system id
+			where systyp = 'WMD'
+			and wh_id = @rtstr2
+		|
+		sl_log event
+		     where evt_id = 'LC_PRS_PART_OUB'
+		       and wh_id = @rtstr2
+		       and prt_client_id = @prt_client_id
+		       and prtnum = @prtnum
+		       and sys_id = @sys_id
+	}
+}
+]]>
+</local-syntax>
+  <argument name="ftpcod" datatype="string" />
+  <argument name="prtnum" datatype="string" />
+  <argument name="prt_client_id" datatype="string" />
+  <argument name="wh_id" datatype="string" />
+  <argument name="uomcod" datatype="string" />
+  <argument name="untqty" datatype="int" />
+  <argument name="uomlvl" datatype="int" />
+  <argument name="len" datatype="float" />
+  <argument name="wid" datatype="float" />
+  <argument name="hgt" datatype="float" />
+  <argument name="grswgt" datatype="float" />
+  <argument name="netwgt" datatype="float" />
+  <argument name="pal_flg" datatype="int" />
+  <argument name="cas_flg" datatype="int" />
+  <argument name="pak_flg" datatype="int" />
+  <argument name="stk_flg" datatype="int" />
+  <argument name="rcv_flg" datatype="int" />
+  <argument name="ctn_flg" datatype="int" />
+  <argument name="thresh_pct" datatype="float" />
+  <argument name="ctn_dstr_flg" datatype="int" />
+  <argument name="bulk_pck_flg" datatype="int" />
+  <documentation>
+<remarks></remarks>
+<retcol name="ftpcod" type="COMTYP_CHAR">Footprint Code</retcol>
+<retcol name="prtnum" type="COMTYP_CHAR">Part Number</retcol>
+<retcol name="prt_client_id" type="COMTYP_CHAR">Part Client ID</retcol>
+<retcol name="wh_id" type="COMTYP_CHAR">Warehouse ID</retcol>
+<retcol name="uomcod" type="COMTYP_CHAR">UOM Level</retcol>
+<exception value="eOK">Normal successful completion</exception>
+<seealso cref="remove part footprint detail"></seealso>
+<seealso cref="list part footprint details"></seealso>
+<seealso cref="validate details for part footprint"></seealso>
+
+</documentation>
+</command>
