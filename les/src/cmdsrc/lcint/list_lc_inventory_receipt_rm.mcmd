@@ -236,6 +236,7 @@ else
         invrcv_eo_dtl.wh_id,
         invrcv_eo_dtl.invtyp,
         invrcv_eo_dtl.lodnum,
+		invrcv_eo_dtl.stoloc,
         invrcv_eo_dtl.prtnum,
         invrcv_eo_dtl.prt_client_id,
         invrcv_eo_dtl.expqty expqty,
@@ -279,6 +280,7 @@ else
                 @invtyp invtyp,
                 @lodnum_orig lodnum,
                 @subnum_orig subnum,
+				invrcv_data.stoloc stoloc,
                 invrcv_data.prtnum prtnum,
                 invrcv_data.prt_client_id prt_client_id,
                 invrcv_data.expqty expqty,
@@ -458,7 +460,7 @@ else
                         nvl(rim.inv_attr_str13, rcv.org_rcvlin_inv_attr_str13) orig_inv_attr_str13,
                         nvl(rim.inv_attr_str14, rcv.org_rcvlin_inv_attr_str14) orig_inv_attr_str14,
                         nvl(rim.inv_attr_str15, rcv.org_rcvlin_inv_attr_str15) orig_inv_attr_str15,
-                        nvl(rim.inv_attr_str16, rcv.org_rcvlin_inv_attr_str16) orig_inv_attr_str16,
+                       nvl(rim.inv_attr_str16, rcv.org_rcvlin_inv_attr_str16) orig_inv_attr_str16,
                         nvl(rim.inv_attr_str17, rcv.org_rcvlin_inv_attr_str17) orig_inv_attr_str17,
                         nvl(rim.inv_attr_str18, rcv.org_rcvlin_inv_attr_str18) orig_inv_attr_str18,
                         nvl(rim.inv_attr_int1, rcv.org_rcvlin_inv_attr_int1) orig_inv_attr_int1,
@@ -485,13 +487,15 @@ else
                         rcv.asnflg,
                         rcv.dtlnum,
                         rcv.lot_sts,
-                        rcv.hld_flg
+                        rcv.hld_flg,
+						rcv.stoloc
                    from rimlin rim
                    right outer join
                         (/* Core query against receive line and inventory */
                          select iv.dtlnum,
                                 iv.hld_flg,
                                 rcvlin.rcvkey,
+								iv.stoloc,
                                 trlr.trlr_num,
                                 trlr.carcod,
                                 rcvlin.trknum,
@@ -793,6 +797,7 @@ else
             invrcv_eo_dtl.wh_id,
             invrcv_eo_dtl.invtyp,
             invrcv_eo_dtl.lodnum,
+			invrcv_eo_dtl.stoloc,
             invrcv_eo_dtl.prtnum,
             invrcv_eo_dtl.prt_client_id,
             invrcv_eo_dtl.expqty,

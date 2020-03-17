@@ -1,0 +1,120 @@
+<command>
+
+<name>log inventory receipt transaction</name>
+
+<description>Log the INV-RCV transaction for a single receipt.</description>
+
+<type>Local Syntax</type>
+
+<local-syntax>
+
+<![CDATA[
+    get translated warehouse id
+    |
+    /* We need to do a deferred execution here because
+     * logging this event may take a great deal of time
+     * and the client is not depending upon the results
+     * to continue execution.
+     */
+    get event arguments for event
+        where evt_id = 'INV-RCV' catch(-1403) >> res
+    |
+    if (@? = 0)
+    {
+        /* Get the event argument clause by supplying a
+         * list of the needed arguments.  We do NOT want
+         * to catch(10006) here; this is a problem and
+         * should go through to the user if event argument
+         * value(s) is/are missing from the stack.
+         */
+        build event argument clause
+              where resultset = @res
+    }
+    else
+    {
+        publish data
+          where evt_arg_clause = '1=1'
+    }
+	|
+	[select 1
+	   from poldat_view
+	  where polcod = 'LC_RECEIVING'
+		and polvar = 'SCJ-CUSTOM-INV-RCV'
+		and polval = 'ENABLED'
+		and wh_id = nvl(@wh_id,@@wh_id)
+		and rtnum1 = 1]catch(-1403)
+	|
+	if(@? = -1403)
+	{
+		publish data
+          where evt_id_clause = 'INV-RCV'
+	}
+	else if (@? =0)
+	{
+		publish data
+          where evt_id_clause = 'LC-INV-RCV'
+	}
+    |
+    publish data
+      where deferred_cmd =
+          "sl_log event" ||
+          " where evt_id = '" || @evt_id_clause || "'" ||
+          "   and ifd_data_ptr = NULL " ||
+          "   and sys_id = '" || @sys_id || "'" ||
+          "   and usr_id =  '" ||  nvl(@usr_id, @@usr_id) || "'" ||
+          "   and " || @evt_arg_clause
+    |
+    [select max(rtnum1) defer_enabled
+       from poldat_view
+      where polcod = 'RECEIVE-INVENTORY'
+        and polvar = 'RECEIVE-DEFERRED'
+        and polval = 'RECEIVE-INVENTORY-DEFER-ENABLED'
+        and wh_id  = @wh_id] catch (-1403)
+    |
+    if (@defer_enabled = 1)
+    {
+        create deferred execution
+            where deferred_cmd = @deferred_cmd
+    }
+    else
+    {
+        execute server command where cmd = @deferred_cmd
+    }
+]]>
+</local-syntax>
+
+<documentation>
+<remarks>
+<![CDATA[
+  <p>This command will log the INV-REC for a single receipt either immediately or as
+  deferred execution depending on the 'RECEIVE-INVENTORY', 'RECEIVE-DEFERRED' ,'RECEIVE-INVENTORY-DEFER-ENABLED' policy
+  </p>
+  <p>
+  deferred command will look like:
+  sl_log event
+   where evt_id = 'INV-RCV'
+     and ifd_data_ptr = NULL
+     and sys_id = 'DCS'
+     and usr_id = 'SUPER'
+     and catch_qty = 0
+     and client_id = 'DEFAULTCLIENT'
+     and hld_flg = 0
+     and invnum = 'RCV-IA7K'
+     and invtyp = 'P'
+     and lodnum = 'LOD-IA7K'
+     and prt_client_id = 'DEFAULTCLIENT'
+     and rcvkey = '140400000000001'
+     and subnum = 'CS-IA7K'
+     and supnum = 'SUP-IA7K'
+     and trans_wh_id = 'WH1'
+     and trknum = 'TRK-IA7K'
+     and trnqty = 100
+     and wh_id = 'WH1'
+     </p>
+
+]]>
+</remarks>
+
+</documentation>
+
+</command>
