@@ -1,0 +1,31 @@
+/************************************************************************/
+/* *Please* back up database prior to executing this script.            */
+/*                                                                      */
+/* WARNING: Use with caution (dangerous components follow)!             */
+/*                                                                      */
+/* This script will attempt to wipe transaction definitions.            */
+/*                                                                      */
+/* You may choose to use this for transactions where you are            */
+/* attempting to remove fields from existing transaction definitions.   */
+/*                                                                      */
+/* But you may want to consider using new a transaction instead of      */
+/* wiping existing transaction as this script attempts to do.           */
+/************************************************************************/
+sl_wipe evt_def where evt_id='LC_PRS_SHIP_LOAD' catch (-1403)
+/
+sl_wipe eo_def where eo_id='LC_PRS_SHIP_LOAD' and eo_ver='2017.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_PREP_FOR_SHIPPING_OUB' and ifd_ver='9.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_RPS_ASN' and ifd_ver='2009.2' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_SHIP_CONFIRM-LENS' and ifd_ver='2010.2' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_SHIP_CONFIRM_ORDER-LENS' and ifd_ver='2010.2' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_SHIP_LOAD_LENS' and ifd_ver='9.0' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_SHIP_LOAD_OUB_IFD' and ifd_ver='2017.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_TO_DW_SHIPHIST' and ifd_ver='9.1' catch (-1403)
+/

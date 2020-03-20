@@ -1,0 +1,23 @@
+/************************************************************************/
+/* *Please* back up database prior to executing this script.            */
+/*                                                                      */
+/* WARNING: Use with caution (dangerous components follow)!             */
+/*                                                                      */
+/* This script will attempt to wipe transaction definitions.            */
+/*                                                                      */
+/* You may choose to use this for transactions where you are            */
+/* attempting to remove fields from existing transaction definitions.   */
+/*                                                                      */
+/* But you may want to consider using new a transaction instead of      */
+/* wiping existing transaction as this script attempts to do.           */
+/************************************************************************/
+sl_wipe ifd_def where ifd_id='LC_PRS_ORDER_INB_IFD' and ifd_ver='2017.1' catch (-1403)
+/
+sl_wipe evt_def where evt_id='LC_PRS_ORDER_MANAGEMENT' catch (-1403)
+/
+sl_wipe eo_def where eo_id='LC_PRS_ORDER_TRAN' and eo_ver='2017.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_ORDER_DCS_DEL_IFD' and ifd_ver='9.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_ORDER_DCS_IFD' and ifd_ver='2017.1' catch (-1403)
+/

@@ -1,0 +1,1690 @@
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_EXPIRE_DTE_FORMAT','SL_IFD_FLD','MOCA','Get the specified format of the Expire Date.','F','F','F','F','F','F','T','/* Get the control properties from les_var_config for manufacture date field for the maximum customization level set */
+{
+    if(:i_c_expire_dte != '''')
+    {
+        get les variable configuration
+            where var_nam  = ''expire_dte''
+              and appl_id  = ''LES''
+              and frm_id   = ''LES''
+              and addon_id = ''LES'' >> res
+        |
+        publish top rows
+            where rows = 1
+              and resultset = @res
+        |
+        if(@ctrl_prop != '''')
+        {
+            publish data
+                where expire_dte_fmt = substr(@ctrl_prop, 6, LEN(@ctrl_prop))
+        }
+        else
+        {
+            publish data
+                where expire_dte_fmt = ''''
+        }
+    }
+    else
+    {
+        publish data
+            where expire_dte_fmt = ''''
+    }
+}','797'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_EXPIRE_DTE_FMT_VAL','SL_IFD_FLD','MOCA','Get the Expire Date Value based on the specified format.','F','F','F','F','F','F','T','{
+    if(:i_c_expire_dte != '''')
+    {
+        get les variable configuration
+            where var_nam  = ''expire_dte''
+              and appl_id  = ''LES''
+              and frm_id   = ''LES''
+              and addon_id = ''LES'' >> res
+        |
+        publish top rows
+            where rows = 1
+              and resultset = @res
+        |
+        if(@ctrl_prop != '''')
+        {
+            publish data
+                where date = :i_c_expire_dte
+                  and fmt_str = substr(@ctrl_prop, 6, LEN(@ctrl_prop))
+            |
+            format date
+                where date = @date
+                  and fmt_str = @fmt_str
+            |
+            publish data
+                where expire_dte_fmtval = @fmt_dte
+        }
+        else
+        {
+            publish data
+                where expire_dte_fmtval = ''''
+        }
+    }
+    else
+    {
+        publish data
+            where expire_dte_fmtval = ''''
+    }
+}','925'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_INV_ATTR_DTE1_FMT','RECEIVING','MOCA','Get the formatting that is used for Inventory Attribute Date 1','F','F','F','F','F','F','T','/* Get the control properties from les_var_config for inventory attribute date 1 field for the maximum customization level set */
+{
+    if(:i_c_inv_attr_dte1 != '''' or :i_c_to_inv_attr_dte1 != '''')
+    {
+        get les variable configuration
+            where var_nam  = ''inv_attr_dte1''
+              and appl_id  = ''LES''
+              and frm_id   = ''LES''
+              and addon_id = ''LES'' >> res
+        |
+        publish top rows
+            where rows = 1
+              and resultset = @res
+        |
+        if(@ctrl_prop != '''')
+        {
+            publish data
+                where inv_attr_dte1_fmt = substr(@ctrl_prop, 6, LEN(@ctrl_prop))
+        }
+        else
+        {
+            publish data
+                where inv_attr_dte1_fmt = ''''
+        }
+    }
+    else
+    {
+        publish data
+            where inv_attr_dte1_fmt = ''''
+    }
+}','853'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_INV_ATR_DTE1_FMTVAL','RECEIVING','MOCA','Gets the formatted date value for inventory attribute date 1','F','F','F','F','F','F','T','/* Get the control properties from les_var_config for inventory attribute date 1 field for the maximum customization level set */
+{
+    if(:i_c_inv_attr_dte1 != '''' or :i_c_to_inv_attr_dte1 != '''')
+    {
+        get les variable configuration
+            where var_nam  = ''inv_attr_dte1''
+              and appl_id  = ''LES''
+              and frm_id   = ''LES''
+              and addon_id = ''LES'' >> res
+        |
+        publish top rows
+            where rows = 1
+              and resultset = @res
+        |
+        if(@ctrl_prop != '''')
+        {
+            publish data
+                where date = nvl(:i_c_inv_attr_dte1, :i_c_to_inv_attr_dte1)
+                  and fmt_str = substr(@ctrl_prop, 6, LEN(@ctrl_prop))
+            |
+            format date
+                where date = @date
+                  and fmt_str = @fmt_str
+            |
+            publish data
+                where inv_attr_dte1_fmtval = @fmt_dte
+        }
+        else
+        {
+            publish data
+                where inv_attr_dte1_fmtval = ''''
+        }
+    }
+    else
+    {
+        publish data
+            where inv_attr_dte1_fmtval = ''''
+    }
+}','1132'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_INV_ATTR_DTE2_FMT','RECEIVING','MOCA','Get the formatting that is used for Inventory Attribute Date 2','F','F','F','F','F','F','T','/* Get the control properties from les_var_config for inventory attribute date 2 field for the maximum customization level set */
+{
+    if(:i_c_inv_attr_dte2 != '''' or :i_c_to_inv_attr_dte2 != '''')
+    {
+        get les variable configuration
+            where var_nam  = ''inv_attr_dte2''
+              and appl_id  = ''LES''
+              and frm_id   = ''LES''
+              and addon_id = ''LES'' >> res
+        |
+        publish top rows
+            where rows = 1
+              and resultset = @res
+        |
+        if(@ctrl_prop != '''')
+        {
+            publish data
+                where inv_attr_dte2_fmt = substr(@ctrl_prop, 6, LEN(@ctrl_prop))
+        }
+        else
+        {
+            publish data
+                where inv_attr_dte2_fmt = ''''
+        }
+    }
+    else
+    {
+        publish data
+            where inv_attr_dte2_fmt = ''''
+    }
+}','853'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_INV_ATR_DTE2_FMTVAL','RECEIVING','MOCA','Gets the formatted date value for inventory attribute date 2','F','F','F','F','F','F','T','/* Get the control properties from les_var_config for inventory attribute date 2 field for the maximum customization level set */
+{
+    if(:i_c_inv_attr_dte2 != '''' or :i_c_to_inv_attr_dte2 != '''')
+    {
+        get les variable configuration
+            where var_nam  = ''inv_attr_dte2''
+              and appl_id  = ''LES''
+              and frm_id   = ''LES''
+              and addon_id = ''LES'' >> res
+        |
+        publish top rows
+            where rows = 1
+              and resultset = @res
+        |
+        if(@ctrl_prop != '''')
+        {
+            publish data
+                where date = nvl(:i_c_inv_attr_dte2, :i_c_to_inv_attr_dte2)
+                  and fmt_str = substr(@ctrl_prop, 6, LEN(@ctrl_prop))
+            |
+            format date
+                where date = @date
+                  and fmt_str = @fmt_str
+            |
+            publish data
+                where inv_attr_dte2_fmtval = @fmt_dte
+        }
+        else
+        {
+            publish data
+                where inv_attr_dte2_fmtval = ''''
+        }
+    }
+    else
+    {
+        publish data
+            where inv_attr_dte2_fmtval = ''''
+    }
+}','1132'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_MANDTE_FORMAT','SL_IFD_FLD','MOCA','Get the specified format of the Manufacturing Date.','F','F','F','F','F','F','T','/* Get the control properties from les_var_config for manufacture date field for the maximum customization level set */
+{
+    if(:i_c_mandte != '''')
+    {
+        get les variable configuration
+            where var_nam  = ''mandte''
+              and appl_id  = ''LES''
+              and frm_id   = ''LES''
+              and addon_id = ''LES'' >> res
+        |
+        publish top rows
+            where rows = 1
+              and resultset = @res
+        |
+        if(@ctrl_prop != '''')
+        {
+            publish data
+                where mandte_fmt = substr(@ctrl_prop, 6, LEN(@ctrl_prop))
+        }
+        else
+        {
+            publish data
+                where mandte_fmt = ''''
+        }
+    }
+    else
+    {
+        publish data
+            where mandte_fmt = ''''
+    }
+}','777'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_MANDTE_FORMAT_VAL','SL_IFD_FLD','MOCA','Get the Manufacturing Date Value based on the specified format.','F','F','F','F','F','F','T','{
+    if(:i_c_mandte != '''')
+    {
+        get les variable configuration
+            where var_nam  = ''mandte''
+              and appl_id  = ''LES''
+              and frm_id   = ''LES''
+              and addon_id = ''LES'' >> res
+        |
+        publish top rows
+            where rows = 1
+              and resultset = @res
+        |
+        if(@ctrl_prop != '''')
+        {
+            publish data
+                where date = :i_c_mandte
+                  and fmt_str = substr(@ctrl_prop, 6, LEN(@ctrl_prop))
+            |
+            format date
+                where date = @date
+                  and fmt_str = @fmt_str
+            |
+            publish data
+                where mandte_fmtval = @fmt_dte
+        }
+        else
+        {
+            publish data
+                where mandte_fmtval = ''''
+        }
+    }
+    else
+    {
+        publish data
+            where mandte_fmtval = ''''
+    }
+}','901'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_LENS_SITNAM','SL_IFD_FLD','MOCA','Get Lens Sitnam value as Native Name from warehouse table if the Warehouse Id is passed, otherwise return the native name for the System Id.','F','F','F','F','F','F','T','{
+    if (:i_c_wh_id = '''' or :i_c_wh_id = @absent_ind_char or :i_c_wh_id = ''----'')
+    {
+        publish data
+          where fld_val = :i_c_ifd_fld_data
+            and evt_sys_id = :i_c_evt_sys_id
+        |
+        if (@fld_val != '''' )
+            [select min(native_nam) native_nam
+               from sl_sys_def where sys_id = @fld_val]
+        else
+            [select min(native_nam) native_nam
+               from sl_sys_def where sys_id = @evt_sys_id]
+    }
+    else
+    {
+        [select lens_sitnam native_nam from wh where wh_id = :i_c_wh_id]
+        |
+        if (@native_nam = '''')
+        {
+            publish data
+              where fld_val = :i_c_ifd_fld_data
+                and evt_sys_id = :i_c_evt_sys_id
+            |
+            if (@fld_val != '''')
+                [select min(native_nam) native_nam
+                   from sl_sys_def where sys_id = @fld_val]
+            else
+                [select min(native_nam) native_nam
+                   from sl_sys_def where sys_id = @evt_sys_id]
+        }
+        |
+        publish data where native_nam = @native_nam
+    }
+    |
+    publish data where native_nam = @native_nam
+}','1147'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GEN_GET_HOST_LOC','SL_IFD_FLD','MOCA','Get SAP host location from WMS status','F','F','F','F','F','F','T','sl_es_sap_get hst_loc where wms_stk_sts = :i_c_ifd_fld_data','59'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GEN_GET_HOST_STATUS','SL_IFD_FLD','MOCA','Get Host Status','F','F','F','F','F','F','T','sl_es_sap_get stk_sts where wms_stk_sts = :i_c_ifd_fld_data
+|
+if (@hst_stk_sts = '''')
+  publish data where hst_stk_sts = :i_c_ifd_fld_data
+else
+  publish data where hst_stk_sts = @hst_stk_sts
+','191'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_BLK_INVSTS_SEND_TO_LENS','SL_IFD_BLOCK','MOCA','block for send to host','F','F','F','F','F','F','T','if (:i_c_result_of_hold = 1)
+    publish data where blkval = ''T''
+else
+    publish data where blkval = ''F''','105'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_SITCOD','SL_IFD_FLD','MOCA','Get the Facility''s Site Code from the policy','T','T','F','F','F','F','T','{
+    [select rtstr1 sitcod
+       from poldat
+      where polcod = ''SYSTEM-INFORMATION''
+        and polvar = ''MISCELLANEOUS''
+        and polval = ''SITE-CODE''] catch (-1403)
+    |
+    if ((@? = -1403) or (@sitcod = ''''))
+    {
+        publish data where sitcod = ''DCS''
+    }
+    else
+        publish data where sitcod = @sitcod
+}','328'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_BLOCK_INVSTS_CHNG','SL_EO_SEG_BLOCK','MOCA','Block Inventory Status Change','T','T','F','T','F','F','T','sl_es_sap_get stk_sts where wms_stk_sts = :i_c_hstsrc
+|
+if (@hst_stk_sts != '''')
+  publish data where f_host = @hst_stk_sts
+else
+  publish data where f_host = :i_c_hstsrc
+|
+sl_es_sap_get stk_sts where wms_stk_sts = :i_c_hstdst
+|
+if (@hst_stk_sts != '''')
+  publish data where t_host = @hst_stk_sts
+else
+  publish data where t_host = :i_c_hstdst
+|
+sl_es_sap_get hst_loc where wms_stk_sts = :i_c_hstsrc |
+publish data where f_loc = @hst_loc
+|
+sl_es_sap_get hst_loc where wms_stk_sts = :i_c_hstdst |
+publish data where t_loc = @hst_loc
+|
+if (@f_host != '''' and @t_host != '''' and ( (@f_host != @t_host) or (@f_loc != @t_loc) ))
+        [select ''F'' from dual]
+else
+        [select ''T'' from dual]','686'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC_PRS_GET_ASSET_TYP_FOR_LPN','SL_IFD_FLD','MOCA','To get the Handling Unit typ for the given LPN','F','F','F','F','F','F','T','{
+    if(:i_c_lpn)
+    {
+        /* If the passed in LPN is a dtlnum, then join on invsub, invlod to get the handling unit type.
+         * We will always get asset_typ from invsub first. If its null, then get from invlod.
+         * If this query fails, then assume the LPN is subnum and get handling unit typ for the given subnum
+         */
+        [select nvl(invsub.asset_typ, invlod.asset_typ) asset_typ
+           from invlod,
+                invsub,
+                invdtl
+          where invlod.lodnum = invsub.lodnum
+            and invsub.subnum = invdtl.subnum
+            and invdtl.dtlnum = :i_c_lpn
+            and rownum < 2] catch(-1403)
+        |
+        if(@? != 0)
+        {
+            [select nvl(invsub.asset_typ, invlod.asset_typ) asset_typ
+               from invlod,
+                    invsub
+              where invlod.lodnum = invsub.lodnum
+                and invsub.subnum = :i_c_lpn] catch(-1403)
+            |
+            if(@? != 0)
+            {
+                 publish data where platform = ''''
+            }
+            else
+            {
+                 publish data where platform = @asset_typ
+            }
+        }
+        else
+        {
+             publish data where platform = @asset_typ
+        }
+    }
+    else
+        publish data where platform = ''''
+}','1302'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_EXPIRE_DTE_FORMAT','I_C_EXPIRE_DTE',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_EXPIRE_DTE_FMT_VAL','I_C_EXPIRE_DTE',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_INV_ATTR_DTE1_FMT','I_C_INV_ATTR_DTE1',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_INV_ATTR_DTE1_FMT','I_C_TO_INV_ATTR_DTE1',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_INV_ATR_DTE1_FMTVAL','I_C_INV_ATTR_DTE1',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_INV_ATR_DTE1_FMTVAL','I_C_TO_INV_ATTR_DTE1',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_INV_ATTR_DTE2_FMT','I_C_INV_ATTR_DTE2',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_INV_ATTR_DTE2_FMT','I_C_TO_INV_ATTR_DTE2',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_INV_ATR_DTE2_FMTVAL','I_C_INV_ATTR_DTE2',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_INV_ATR_DTE2_FMTVAL','I_C_TO_INV_ATTR_DTE2',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_MANDTE_FORMAT','I_C_MANDTE',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_MANDTE_FORMAT_VAL','I_C_MANDTE',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_LENS_SITNAM','I_C_EVT_SYS_ID',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_LENS_SITNAM','I_C_IFD_FLD_DATA',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_LENS_SITNAM','I_C_WH_ID',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GEN_GET_HOST_LOC','I_C_IFD_FLD_DATA',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GEN_GET_HOST_STATUS','I_C_IFD_FLD_DATA',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_BLK_INVSTS_SEND_TO_LENS','I_C_RESULT_OF_HOLD',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_BLOCK_INVSTS_CHNG','I_C_HSTDST',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_BLOCK_INVSTS_CHNG','I_C_HSTSRC',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC_PRS_GET_ASSET_TYP_FOR_LPN','I_C_LPN',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_def
+SL_VERSION,retr_mthd_id,retr_mthd_descr
+2018.1,'DCS_DUMMY_RM','DCS Dummy Retrieval Method'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_def
+SL_VERSION,retr_mthd_id,retr_mthd_descr
+2018.1,'LC_PRS_INV-ADJ','Inventory Adjustment'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_impl_def
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,retr_mthd_impl_cd,alg_id
+2018.1,'DCS_DUMMY_RM','SYS_DCS','DCS','','','','SD',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_impl_def
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,retr_mthd_impl_cd,alg_id
+2018.1,'LC_PRS_INV-ADJ','SYS_DCS','DCS','','','','SD',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sql_crsr_component
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,component_ordr,sql_set_oper,sql_code,sql_code_len
+2018.1,'DCS_DUMMY_RM','SYS_DCS','DCS','','','','0','0','','from dual','9'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sql_crsr_component
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,component_ordr,sql_set_oper,sql_code,sql_code_len
+2018.1,'LC_PRS_INV-ADJ','SYS_DCS','DCS','','','','1','1','','from prtmst_view prtmst where prtnum=:i_c_prtnum and prt_client_id=:i_c_prt_client_id    and prdflg = 1 and wh_id = :i_c_wh_id','126'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_def
+SL_VERSION,evt_id,evt_descr,log_evt_flg,evt_grp_id
+2018.1,'LC_PRS_INV-STS','Inventory Status Change','F','LEF TRANSACTION EVENTS'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','ARECOD','Area Code','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','CNSG_FLG','This field specifies the status of the consigned inventory state.','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','DTLNUM','Inventory Detail LPN','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_CSTMS_BOND_FLG','Customs Bonded flag','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_CSTMS_CNSGNMNT_ID','Customs Consignment Id','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_DTY_STMP_FLG','Duty Stamp flag','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_EXPIRE_DTE','From Expiration Date','D','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INVSTS','From inventory status','C','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_DTE1','Inventory Attribute Date 1','D','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_DTE2','Inventory Attribute Date 2','D','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_FLT1','Inventory Attribute Decimal 1','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_FLT2','Inventory Attribute Decimal 2','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_FLT3','Inventory Attribute Decimal 3','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_INT1','Inventory Attribute Number 1','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_INT2','Inventory Attribute Number 2','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_INT3','Inventory Attribute Number 3','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_INT4','Inventory Attribute Number 4','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_INT5','Inventory Attribute Number 5','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR1','Inventory Attribute Text 1','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR10','Inventory Attribute Text 10','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR11','Inventory Attribute Text 11','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR12','Inventory Attribute Text 12','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR13','Inventory Attribute Text 13','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR14','Inventory Attribute Text 14','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR15','Inventory Attribute Text 15','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR16','Inventory Attribute Text 16','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR17','Inventory Attribute Text 17','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR18','Inventory Attribute Text 18','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR2','Inventory Attribute Text 2','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR3','Inventory Attribute Text 3','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR4','Inventory Attribute Text 4','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR5','Inventory Attribute Text 5','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR6','Inventory Attribute Text 6','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR7','Inventory Attribute Text 7','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR8','Inventory Attribute Text 8','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_INV_ATTR_STR9','Inventory Attribute Text 9','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_LOTNUM','Batch Number/Lot','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_MANDTE','From Manufacturing Date','D','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_ORGCOD','Organization Code','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_REVLVL','Revision Level','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_RTTN_ID','Rotation ID','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','FR_SUP_LOTNUM','From Supplier Lot Number','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','HLDNUM','Hold Number','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','HLDPFX','Hold Prefix','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','HLD_FLG','Hold Flag','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','HLD_QTY','Held Quantity','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','HSTDST','Destination Host Account','C','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','HSTSRC','Source Host Account','C','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','LODNUM','LPN','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','OWNER','Consignment Type','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','PRTNUM','Material','C','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','PRT_CLIENT_ID','Item Client ID (>v4.x)','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','REACOD','Reason Code','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','RESULT_OF_HOLD','Transaction Logged Because of Hold','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','STOLOC','Storage Location','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','SUBNUM','Sub-LPN','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','SUPNUM','Supplier Number','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_CSTMS_BOND_FLG','Target Customs Bonded flag','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_CSTMS_CNSGNMNT_ID','Target Customs Consignment ID','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_DTY_STMP_FLG','Target Duty Stamp','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_EXPIRE_DTE','Target Expiration Date','D','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INVSTS','Target Inventory Status','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_DTE1','Target Inventory Attribute Date 1','D','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_DTE2','Target Inventory Attribute Date 2','D','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_FLT1','Target Inventory Attribute Decimal 1','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_FLT2','Target Inventory Attribute Decimal 2','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_FLT3','Target Inventory Attribute Decimal 3','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_INT1','Target Inventory Attribute Number 1','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_INT2','Target Inventory Attribute Number 2','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_INT3','Target Inventory Attribute Number 3','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_INT4','Target Inventory Attribute Number 4','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_INT5','Target Inventory Attribute Number 5','N','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR1','Target Inventory Attribute Text 1','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR10','Target Inventory Attribute Text 10','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR11','Target Inventory Attribute Text 11','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR12','Target Inventory Attribute Text 12','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR13','Target Inventory Attribute Text 13','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR14','Target Inventory Attribute Text 14','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR15','Target Inventory Attribute Text 15','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR16','Target Inventory Attribute Text 16','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR17','Target Inventory Attribute Text 17','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR18','Target Inventory Attribute Text 18','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR2','Target Inventory Attribute Text 2','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR3','Target Inventory Attribute Text 3','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR4','Target Inventory Attribute Text 4','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR5','Target Inventory Attribute Text 5','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR6','Target Inventory Attribute Text 6','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR7','Target Inventory Attribute Text 7','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR8','Target Inventory Attribute Text 8','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_INV_ATTR_STR9','Target Inventory Attribute Text 9','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_LOTNUM','Target Lot Number','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_MANDTE','Target Manufacturing Date','D','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_ORGCOD','Target Origin Code','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_REVLVL','Target Revision Level','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_RTTN_ID','Target Rotation ID','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TO_SUP_LOTNUM','To Supplier Lot Number','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TRANS_WH_ID','Translated Warehouse ID','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','TRNQTY','Transaction Quantity','N','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC_PRS_INV-STS','WH_ID','Warehouse ID','C','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_def
+SL_VERSION,eo_id,eo_ver,eo_descr,evt_id,always_create_flg
+2018.1,'LC_PRS_INV-STS','2009.2','Inventory Status Change','LC_PRS_INV-STS','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_seg
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_seg_descr,parent_eo_id,parent_eo_ver,parent_eo_seg_id,blk_alg_id,blk_alg_eval_cd,retr_mthd_id,eo_seg_ordr
+2018.1,'LC_PRS_INV-STS','2009.2','STATUS','Inventory Status Change Header','','','','','','LC_PRS_INV-ADJ','1'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_seg
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_seg_descr,parent_eo_id,parent_eo_ver,parent_eo_seg_id,blk_alg_id,blk_alg_eval_cd,retr_mthd_id,eo_seg_ordr
+2018.1,'LC_PRS_INV-STS','2009.2','HOLD','Inventory Hold','LC_PRS_INV-STS','2009.2','STATUS','','','DCS_DUMMY_RM','2'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_PRS_INV-STS','2009.2','STATUS','ADDDTE','Transaction Date','D','20','','20',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_PRS_INV-STS','2009.2','STATUS','STKUOM','Stocking UOM','C','10','','8','2'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC_PRS_INV-STS','2009.2','HOLD','DUMMY','DUMMY','C','10','','20','5'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_PRS_INV-STS','2009.2','HOLD','DUMMY','DCS_DUMMY_RM','SYS_DCS','DCS','','','','0','''X''','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_PRS_INV-STS','2009.2','STATUS','ADDDTE','LC_PRS_INV-ADJ','SYS_DCS','DCS','','','','1','sysdate','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC_PRS_INV-STS','2009.2','STATUS','STKUOM','LC_PRS_INV-ADJ','SYS_DCS','DCS','','','','1','prtmst.stkuom','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def
+SL_VERSION,ifd_id,ifd_ver,ifd_descr,ifd_typ_cd,data_lay_id,ifd_grp_id,eo_id,eo_ver,root_seg_rpt_brk_flg,recursive_flg,post_alg_id,pre_alg_id,ifd_tag,post_proc_flg
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','LENS Inventory Status Change','O','CSV','LENS','LC_PRS_INV-STS','2009.2','F','T','','','INVENTORY_STATUS_CHANGE',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def
+SL_VERSION,ifd_id,ifd_ver,ifd_descr,ifd_typ_cd,data_lay_id,ifd_grp_id,eo_id,eo_ver,root_seg_rpt_brk_flg,recursive_flg,post_alg_id,pre_alg_id,ifd_tag,post_proc_flg
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','Inventory Status Change IFD','O','CSV','INVENTORY','LC_PRS_INV-STS','2009.2','F','F','','','LC_PRS_INVSTS_CHANGE_IFD',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def
+SL_VERSION,ifd_id,ifd_ver,ifd_descr,ifd_typ_cd,data_lay_id,ifd_grp_id,eo_id,eo_ver,root_seg_rpt_brk_flg,recursive_flg,post_alg_id,pre_alg_id,ifd_tag,post_proc_flg
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','Inventory Status Change for Commander Recall','O','CSV','DW','LC_PRS_INV-STS','2009.2','F','T','','','LC_PRS_TL_INVSTS_CHANGE',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','','Lens Subscribe','','LC_PRS_INV-STS','2009.2','STATUS','','','','','','','','','','INVENTORY_STATUS_CHANGE_SEG','','','XTXTN'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','HOLD','','Inventory Hold','2','LC_PRS_INV-STS','2009.2','HOLD','','','LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','','','','','HOLD','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','1','Inventory Status Change IFD','','LC_PRS_INV-STS','2009.2','STATUS','','','','','','','','','','LC_PRS_INVSTS_CHANGE_IFD_SEG','','T','XTXTN'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','','INVENTORY STATUS CHANGE','','LC_PRS_INV-STS','2009.2','STATUS','','','','','','','','','T','INVENTORY_STATUS_CHANGE','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','ADJQTY','Adjust Quantity','130','','','','','','LC_PRS_INV-STS','TRNQTY','','','EA','N','','','','','','','','N','9999999999','N','','','10','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','CNSG_FLG','This field specifies the status of the consigned inventory state.','190','','','','','','LC_PRS_INV-STS','CNSG_FLG','','','EA','N','','','','','','','','N','9','N','','','1','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','CSTMS_BOND_FLG','Customs Bonded flag','610','','','','','','LC_PRS_INV-STS','TO_CSTMS_BOND_FLG','','','EA','N','','','','','','','','N','','N','','','1','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','CSTMS_CNSGNMNT_ID','Customs Consignment ID','590','','','','','','LC_PRS_INV-STS','TO_CSTMS_CNSGNMNT_ID','','','EA','C','','','','','','','','N','','N','','','72','','F','','','','F','','18'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','DEST_IFD_ID','Destination IFD Id','10','','','','','','','','','','CO','C','','','','INVENTORY_STATUS_CHANGE','','','','N','','N','','','120','','','','','','','','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','DEST_IFD_SEG_ID','Destination IFD Segment Id','30','','','','','','','','','','CO','C','','','','INVENTORY_STATUS_CHANGE','','','','N','','N','','','120','','','','','','','','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','DEST_IFD_VER','Destination IFD Version','20','','','','','','','','','','CO','C','','','','2010.2','','','','N','','N','','','40','','','','','','','','10'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','DEST_SYS_ID','Destination System Id','40','','','','','','','','','','CO','C','','','','LENS','','','','N','','N','','','160','','','','','','','','40'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','DTY_STMP_FLG','Excise Duty Stamp','620','','','','','','LC_PRS_INV-STS','TO_DTY_STMP_FLG','','','EA','N','','','','','','','','N','','N','','','1','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','EXPIRE_DTE','Expiration Date','240','','','','','','LC_PRS_INV-STS','TO_EXPIRE_DTE','','','EA','D','','','','','','','','N','YYYYMMDDHH24MISS','N','','','64','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','EXPIRE_DTE_FMT','Expiration Date Format (The date format used to format the Expiration Date)','250','','','','','','','','','','ALG','C','LC_PRS_GET_EXPIRE_DTE_FORMAT','','','','','','','N','','N','','','64','','F','','','','F','','16'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','EXPIRE_DTE_FMTVAL','Formatted Expiration Date','260','','','','','','','','','','ALG','C','LC_PRS_GET_EXPIRE_DTE_FMT_VAL','','','','','','','N','','N','','','64','','F','','','','F','','16'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','FRM_INVSTS','From Inventory Status','70','','','','','','LC_PRS_INV-STS','FR_INVSTS','','','EA','C','','','','','','','','N','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','HLD_FLG','Hold Flag','200','','','','','','LC_PRS_INV-STS','HLD_FLG','','','EA','N','','','','','','','','L','9','N','','','1','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_DTE1','Inventory Attribute Date 1','530','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_DTE1','','','EA','D','','','','','','','','N','YYYYMMDDHH24MISS','N','','','14','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_DTE1_FMT','Inventory Attribute Date 1 Format','540','','','','','','','','','','ALG','C','LC_PRS_GET_INV_ATTR_DTE1_FMT','','','','','','','N','','R','','','56','','F','','','','F','','14'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_DTE1_FMTVAL','Inventory Attribute Date 1 Formatted Value','550','','','','','','','','','','ALG','C','LC_PRS_GET_INV_ATR_DTE1_FMTVAL','','','','','','','N','','R','','','56','','F','','','','F','','14'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_DTE2','Inventory Attribute Date 2','560','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_DTE2','','','EA','D','','','','','','','','N','YYYYMMDDHH24MISS','N','','','14','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_DTE2_FMT','Inventory Attribute Date 2 Format','570','','','','','','','','','','ALG','C','LC_PRS_GET_INV_ATTR_DTE2_FMT','','','','','','','N','','R','','','56','','F','','','','F','','14'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_DTE2_FMTVAL','Inventory Attribute Date 2 Formatted Value','580','','','','','','','','','','ALG','C','LC_PRS_GET_INV_ATR_DTE2_FMTVAL','','','','','','','N','','R','','','56','','F','','','','F','','14'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_FLT1','Inventory Attribute Decimal 1','500','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_FLT1','','','EA','N','','','','','','','','N','99999999999999.9999','N','','','19','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_FLT2','Inventory Attribute Decimal 2','510','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_FLT2','','','EA','N','','','','','','','','N','99999999999999.9999','N','','','19','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_FLT3','Inventory Attribute Decimal 3','520','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_FLT3','','','EA','N','','','','','','','','N','99999999999999.9999','N','','','19','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_INT1','Inventory Attribute Number 1','450','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_INT1','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_INT2','Inventory Attribute Number 2','460','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_INT2','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_INT3','Inventory Attribute Number 3','470','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_INT3','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_INT4','Inventory Attribute Number 4','480','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_INT4','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_INT5','Inventory Attribute Number 5','490','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_INT5','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR1','Inventory Attribute Text 1','278','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR1','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR10','Inventory Attribute Text 10','360','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR10','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR11','Inventory Attribute Text 11','370','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR11','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR12','Inventory Attribute Text 12','380','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR12','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR13','Inventory Attribute Text 13','390','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR13','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR14','Inventory Attribute Text 14','400','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR14','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR15','Inventory Attribute Text 15','410','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR15','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR16','Inventory Attribute Text 16','420','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR16','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR17','Inventory Attribute Text 17','430','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR17','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR18','Inventory Attribute Text 18','440','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR18','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR2','Inventory Attribute Text 2','279','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR2','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR3','Inventory Attribute Text 3','290','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR3','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR4','Inventory Attribute Text 4','300','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR4','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR5','In5entory Attribute Text 5','310','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR5','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR6','Inventory Attribute Text 6','320','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR6','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR7','Inventory Attribute Text 7','330','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR7','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR8','Inventory Attribute Text 8','340','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR8','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','INV_ATTR_STR9','Inventory Attribute Text 9','350','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR9','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','LOTFLG','Lot Flag','110','','','','','','','','','','CO','N','','','','','','','','N','9','N','','','1','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','LOTNUM','Lot Number','120','','','','','','LC_PRS_INV-STS','TO_LOTNUM','','','EA','C','','','','','','','','N','','N','','','100','','','','','','','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','MANDTE','Manufactured Date','210','','','','','','LC_PRS_INV-STS','TO_MANDTE','','','EA','D','','','','','','','','N','YYYYMMDDHH24MISS','N','','','64','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','MANDTE_FMT','Manufactured Date Format (The date format used to format the Manufacture Date)','220','','','','','','','','','','ALG','C','LC_PRS_GET_MANDTE_FORMAT','','','','','','','N','','N','','','64','','F','','','','F','','16'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','MANDTE_FMTVAL','Formatted Manufactured Date','230','','','','','','','','','','ALG','C','LC_PRS_GET_MANDTE_FORMAT_VAL','','','','','','','N','','N','','','64','','F','','','','F','','16'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','ORGCOD','Origin Code','160','','','','','','LC_PRS_INV-STS','TO_ORGCOD','','','EA','C','','','','','','','','N','','N','','','100','','','','','','','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','OWNER','Consignment Type','270','','','','','','LC_PRS_INV-STS','OWNER','','','EA','C','','','','','','','','N','','N','','','128','','F','','','','F','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','PRTNUM','Item Number','50','','','','','','LC_PRS_INV-STS','PRTNUM','','','EA','C','','','','','','','','N','','N','','','200','','','','','','','','50'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','PRT_CLIENT_ID','Item Client Id','140','','','','','','LC_PRS_INV-STS','PRT_CLIENT_ID','','','EA','C','','','','','','','','N','','N','','','32','','','','','','','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','REVLVL','Revision Level','150','','','','','','LC_PRS_INV-STS','TO_REVLVL','','','EA','C','','','','','','','','N','','N','','','20','','','','','','','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','RTTN_ID','Rotation Id','600','','','','','','LC_PRS_INV-STS','TO_RTTN_ID','','','EA','C','','','','','','','','N','','N','','','40','','F','','','','F','','10'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','SITNAM','Site Name','170','','','','','','','','','','ALG','C','LC_PRS_GET_LENS_SITNAM','','','','','','','N','','N','','','240','','','','','','','','60'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','SUPNUM','Supplier Number','180','','','','','','LC_PRS_INV-STS','SUPNUM','','','EA','C','','','','','','','','N','','N','','','128','','','','','','','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','SUP_LOTNUM','Suppiler Lot Number','125','','','','','','LC_PRS_INV-STS','TO_SUP_LOTNUM','','','EA','C','','','','','','','','N','','N','','','100','','F','','','','F','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','TO_HSTLOC','To Host Location','90','','','','','','LC_PRS_INV-STS','TO_INVSTS','','','EA','C','LC_PRS_GEN_GET_HOST_LOC','','','','','','','N','','N','','','100','','','','','','','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','TO_HSTSTS','To Host Status','100','','','','','','LC_PRS_INV-STS','TO_INVSTS','','','EA','C','LC_PRS_GEN_GET_HOST_STATUS','','','','','','','N','','N','','','100','','','','','','','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','TO_INVSTS','To Inventory Status','80','','','','','','LC_PRS_INV-STS','TO_INVSTS','','','EA','C','','','','','','','','N','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','INVENTORY_STATUS_CHANGE','WH_ID','Warehouse ID','271','','','','','','LC_PRS_INV-STS','WH_ID','','','EA','C','','','','','','','','N','','N','','','32','','F','','','','F','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','HOLD','HLDNUM','Hold Number','20','','','','','','LC_PRS_INV-STS','HLDNUM','','','EA','C','','','','','','','','N','','N','','','10','','F','','','','F','','3'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','HOLD','HLDPFX','Hold Prefix','10','','','','','','LC_PRS_INV-STS','HLDPFX','','','EA','C','','','','1','','','','N','','N','','','32','','F','','','','F','','1'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','HOLD','HLD_QTY','Held Quantity','30','','','','','','LC_PRS_INV-STS','HLD_QTY','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','CHGQTY','Changed Quantity','12','','','','','','LC_PRS_INV-STS','TRNQTY','','','EA','N','','','','','','','','R','0999999999','N','','','10','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','CNSG_FLG','This field specifies the status of the consigned inventory state.','120','','','','','','LC_PRS_INV-STS','CNSG_FLG','','','EA','N','','','','','','','','N','','N','','','1','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','CSTMS_BOND_FLG','Customs Bonded flag','540','','','','','','LC_PRS_INV-STS','TO_CSTMS_BOND_FLG','','','EA','N','','','','','','','','N','','N','','','1','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','CSTMS_CNSGNMNT_ID','Customs Consignment ID','520','','','','','','LC_PRS_INV-STS','TO_CSTMS_CNSGNMNT_ID','','','EA','C','','','','','','','','N','','N','','','72','','F','','','','F','','18'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','DTY_STMP_FLG','Excise Duty Stamp','550','','','','','','LC_PRS_INV-STS','TO_DTY_STMP_FLG','','','EA','N','','','','','','','','N','','N','','','1','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','EXPIRE_DTE','Expiration Date','170','','','','','','LC_PRS_INV-STS','TO_EXPIRE_DTE','','','EA','D','','','','','','','','N','YYYYMMDDHH24MISS','N','','','64','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','EXPIRE_DTE_FMT','Expiration Date Format (The date format used to format the Expiration Date)','180','','','','','','','','','','ALG','C','LC_PRS_GET_EXPIRE_DTE_FORMAT','','','','','','','N','','N','','','64','','F','','','','F','','16'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','EXPIRE_DTE_FMTVAL','Formatted Expiration Date','190','','','','','','','','','','ALG','C','LC_PRS_GET_EXPIRE_DTE_FMT_VAL','','','','','','','N','','N','','','64','','F','','','','F','','16'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','FR_ACCT','From Host Account Code','11','','','','','','LC_PRS_INV-STS','HSTSRC','','','EA','C','LC_PRS_GEN_GET_HOST_STATUS','','','','','','','L','','N','','','120','','','','','','','','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','FR_INVSTS','From Inventory Status (length changed to 4 with 6.0)','60','','','','','','LC_PRS_INV-STS','FR_INVSTS','','','EA','C','','','','','','','','L','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','HLD_FLG','This indicates that the inventory that is being changed is currently on hold or not.','130','','','','','','LC_PRS_INV-STS','HLD_FLG','','','EA','N','','','','','','','','N','9','N','','','1','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_DTE1','Inventory Attribute Date 1','460','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_DTE1','','','EA','D','','','','','','','','N','YYYYMMDDHH24MISS','N','','','14','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_DTE1_FMT','Inventory Attribute Date 1 Format','470','','','','','','','','','','ALG','C','LC_PRS_GET_INV_ATTR_DTE1_FMT','','','','','','','N','','R','','','56','','F','','','','F','','14'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_DTE1_FMTVAL','Inventory Attribute Date 1 Formatted Value','480','','','','','','','','','','ALG','C','LC_PRS_GET_INV_ATR_DTE1_FMTVAL','','','','','','','N','','R','','','56','','F','','','','F','','14'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_DTE2','Inventory Attribute Date 2','490','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_DTE2','','','EA','D','','','','','','','','N','YYYYMMDDHH24MISS','N','','','14','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_DTE2_FMT','Inventory Attribute Date 2 Format','500','','','','','','','','','','ALG','C','LC_PRS_GET_INV_ATTR_DTE2_FMT','','','','','','','N','','R','','','56','','F','','','','F','','14'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_DTE2_FMTVAL','Inventory Attribute Date 2 Formatted Value','510','','','','','','','','','','ALG','C','LC_PRS_GET_INV_ATR_DTE2_FMTVAL','','','','','','','N','','R','','','56','','F','','','','F','','14'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_FLT1','Inventory Attribute Decimal 1','430','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_FLT1','','','EA','N','','','','','','','','N','99999999999999.9999','N','','','19','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_FLT2','Inventory Attribute Decimal 2','440','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_FLT2','','','EA','N','','','','','','','','N','99999999999999.9999','N','','','19','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_FLT3','Inventory Attribute Decimal 3','450','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_FLT3','','','EA','N','','','','','','','','N','99999999999999.9999','N','','','19','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_INT1','Inventory Attribute Number 1','380','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_INT1','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_INT2','Inventory Attribute Number 2','390','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_INT2','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_INT3','Inventory Attribute Number 3','400','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_INT3','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_INT4','Inventory Attribute Number 4','410','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_INT4','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_INT5','Inventory Attribute Number 5','420','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_INT5','','','EA','N','','','','','','','','N','0999999999','N','','','10','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR1','Inventory Attribute Text 1','200','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR1','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR10','Inventory Attribute Text 10','290','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR10','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR11','Inventory Attribute Text 11','300','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR11','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR12','Inventory Attribute Text 12','310','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR12','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR13','Inventory Attribute Text 13','320','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR13','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR14','Inventory Attribute Text 14','330','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR14','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR15','Inventory Attribute Text 15','340','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR15','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR16','Inventory Attribute Text 16','350','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR16','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR17','Inventory Attribute Text 17','360','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR17','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR18','Inventory Attribute Text 18','370','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR18','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR2','Inventory Attribute Text 2','210','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR2','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR3','Inventory Attribute Text 3','220','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR3','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR4','Inventory Attribute Text 4','230','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR4','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR5','Inventory Attribute Text 5','240','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR5','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR6','Inventory Attribute Text 6','250','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR6','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR7','Inventory Attribute Text 7','260','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR7','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR8','Inventory Attribute Text 8','270','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR8','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','INV_ATTR_STR9','Inventory Attribute Text 9','280','','','','','','LC_PRS_INV-STS','TO_INV_ATTR_STR9','','','EA','C','','','','','','','','N','','N','','','160','','F','','','','F','','100'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','LOTNUM','Lot Number','8','','','','','','LC_PRS_INV-STS','TO_LOTNUM','','','EA','C','','','','','','','','L','','N','','','100','','','','','','','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','MANDTE','Manufactured Date','140','','','','','','LC_PRS_INV-STS','TO_MANDTE','','','EA','D','','','','','','','','N','YYYYMMDDHH24MISS','N','','','64','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','MANDTE_FMT','Manufactured Date Format (The date format used to format the Manufacture Date)','150','','','','','','','','','','ALG','C','LC_PRS_GET_MANDTE_FORMAT','','','','','','','N','','N','','','64','','F','','','','F','','16'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','MANDTE_FMTVAL','Formatted Manufactured Date','160','','','','','','','','','','ALG','C','LC_PRS_GET_MANDTE_FORMAT_VAL','','','','','','','N','','N','','','64','','F','','','','F','','16'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','ORGCOD','Origin Code','6','','','','','','LC_PRS_INV-STS','TO_ORGCOD','','','EA','C','','','','','','','','L','','N','','','100','','','','','','','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','PRTNUM','Item Number','4','','','','','','LC_PRS_INV-STS','PRTNUM','','','EA','C','','','','','','','','L','','N','','','200','','','','','','','','50'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','PRT_CLIENT_ID','Item Client ID','5','','','','','','LC_PRS_INV-STS','PRT_CLIENT_ID','','','EA','C','','','','','','','','L','','N','','','32','','','','','','','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','REACOD','Reason Code','80','','','','','','LC_PRS_INV-STS','REACOD','','','EA','C','','','','','','','','L','','N','','','80','','','','','','','','20'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','REVLVL','Revision Level','7','','','','','','LC_PRS_INV-STS','TO_REVLVL','','','EA','C','','','','','','','','L','','N','','','20','','','','','','','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','RTTN_ID','Rotation ID','530','','','','','','LC_PRS_INV-STS','TO_RTTN_ID','','','EA','C','','','','','','','','N','','N','','','40','','F','','','','F','','10'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','SITCOD','DCS Site Code','2','','','','','','','','','','ALG','C','LC_PRS_GET_SITCOD','','','','','','','L','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','STKUOM','Stocking UOM','50','','LC_PRS_INV-STS','2009.2','STATUS','STKUOM','','','','','EO','C','','','','','','','','L','','N','','','8','','','','','','','','2'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','SUBNUM','Sub-LPN','13','','','','','','LC_PRS_INV-STS','SUBNUM','','','EA','C','','','','','','','','L','','N','','','120','','','','','','','','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','SUPNUM','Supplier Number','110','','','','','','LC_PRS_INV-STS','SUPNUM','','','EA','C','','','','','','','','N','','N','','','128','','','','','','','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','SUP_LOTNUM','Supplier Lot Number','9','','','','','','LC_PRS_INV-STS','TO_SUP_LOTNUM','','','EA','C','','','','','','','','L','','N','','','100','','F','','','','F','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','TO_ACCT','To Host Account Code','10','','','','','','LC_PRS_INV-STS','HSTDST','','','EA','C','LC_PRS_GEN_GET_HOST_STATUS','','','','','','','L','','N','','','120','','','','','','','','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','TO_INVSTS','Target Inventory Status (length changed to 4 with 6.0)','70','','','','','','LC_PRS_INV-STS','TO_INVSTS','','','EA','C','','','','','','','','L','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','TRANID','Transaction ID','1','','','','','','','','','','CO','C','','','','LC_PRS_INV-STS','','','','L','','N','','','40','XIGNR','','','','','','','10'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','TRNDTE','Transaction Date','100','','','','','','','','','','IE','D','','','','','to_char(sysdate,''YYYYMMDDHH24MISS'')','','','N','YYYYMMDDHH24MISS','N','','','14','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','TRNNUM','Transaction Number','3','','','','','','','','','','KW','N','','SL_EVT_DATA_SEQ','','','','','','L','00000000000000000009','N','','','20','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','LC_PRS_INVSTS_CHANGE_IFD','WH_ID','Warehouse ID','90','','','','','','LC_PRS_INV-STS','TRANS_WH_ID','','','EA','C','','','','','','','','N','','N','','','32','','','','','','','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','ADJDTE','Adjustmen Date','230','','','','','','','','','','KW','D','','SL_EVT_DT','','','','','','N','','N','','','','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','CATCH_QTY','Catch Quantity','180','','','','','','','','','','CO','N','','','','0','','','','R','','N','','','9','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','CATCH_UNIT_TYP','Catch Unit Type','190','','','','','','','','','','CO','C','','','','UNIT','','','','L','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','CLIENT_ID','Client ID','220','','','','','','LC_PRS_INV-STS','PRT_CLIENT_ID','','','EA','C','','','','','','','','L','','N','','','32','','','','','','','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','DMG_RSN_TXT','Damage Reason','200','','','','','','LC_PRS_INV-STS','REACOD','','','EA','C','','','','','','','','L','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','DTLNUM','Detail LPN','240','','','','','','LC_PRS_INV-STS','DTLNUM','','','EA','C','','','','','','','','N','','N','','','128','','F','','','','F','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','EXPDTE','Expire Date','250','','','','','','LC_PRS_INV-STS','TO_EXPIRE_DTE','','','EA','D','','','','','','','','N','','N','','','','','F','','','','F','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','FROM_INV_STAT','From Inventory Status','150','','','','','','LC_PRS_INV-STS','FR_INVSTS','','','EA','C','','','','','','','','L','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','HOST_ITEM_NUM','Host Item Number','130','','','','','','LC_PRS_INV-STS','PRTNUM','','','EA','C','','','','','','','','L','','N','','','200','','','','','','','','50'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','HOST_LOC_NUM','Host Location Number','90','','','','','','LC_PRS_INV-STS','STOLOC','','','EA','C','','','','','','','','N','','N','','','40','','','','','','','','10'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','INV_STAT_TXT','Inventory Status','170','','','','','','LC_PRS_INV-STS','TO_INVSTS','','','EA','C','','','','','','','','L','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','ITEM_NUM','Item Number','120','','','','','','LC_PRS_INV-STS','PRTNUM','','','EA','C','SL_CHAR_NVL','','','PART','','','','L','','N','','','200','','','','','','','','50'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','LOT_NUM','Lot Number','140','','','','','','LC_PRS_INV-STS','TO_LOTNUM','','','EA','C','SL_CHAR_NVL','','','----','','','','L','','N','','','100','','','','','','','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','LPN','LPN','100','','','','','','LC_PRS_INV-STS','LODNUM','','','EA','C','SL_CHAR_NVL','','','INV_ID','','','','N','','N','','','80','','','','','','','','20'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','ORGCOD','Origin Code','260','','','','','','LC_PRS_INV-STS','TO_ORGCOD','','','EA','C','','','','','','','','N','','N','','','100','','F','','','','F','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','ORIGIN_HOST_NAME','Origin Host Name','10','','','','','','','','','','KW','C','','SL_EVT_SYS_ID','','','','','','L','','N','','','80','','','','','','','','20'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','PLATFORM','Platform','110','','','','','','','','','','ALG','C','LC_PRS_GET_ASSET_TYP_FOR_LPN','','','','','','','L','','N','','','16','','','','','','','','30'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','PRT_CLIENT_ID','Item Client ID','270','','','','','','LC_PRS_INV-STS','PRT_CLIENT_ID','','','EA','C','','','','','','','','N','','N','','','32','','F','','','','F','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','QTY','Quantity','160','','','','','','LC_PRS_INV-STS','TRNQTY','','','EA','N','','','','','','','','R','0000000000','N','','','10','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','REVLVL','Revision Level
+','280','','','','','','LC_PRS_INV-STS','TO_REVLVL','','','EA','C','','','','','','','','N','','N','','','20','','F','','','','F','','20'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','STK_UOM_TYPTXT','Stocking UOM','210','','LC_PRS_INV-STS','2009.2','STATUS','STKUOM','','','','','EO','C','','','','','','','','L','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','SUBNUM','Sub-LPN','290','','','','','','LC_PRS_INV-STS','SUBNUM','','','EA','C','','','','','','','','N','','N','','','128','','F','','','','F','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','SUPNUM','Supplier Number','300','','','','','','LC_PRS_INV-STS','SUPNUM','','','EA','C','','','','','','','','N','','N','','','128','','F','','','','F','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','SUP_LOTNUM','Supplier Lot Number','311','','','','','','LC_PRS_INV-STS','TO_SUP_LOTNUM','','','EA','C','','','','','','','','N','','N','','','100','','F','','','','F','','25'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','TRAN_ACT','Transaction Action','70','','','','','','','','','','CO','C','','','','03','','','','L','','N','','','8','','','','','','','','2'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','TRAN_CD','Transaction Code','40','','','','','','','','','','CO','C','','','','ISC','','','','L','','N','','','40','','','','','','','','10'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','TRAN_DT','Transaction Date','20','','','','','','','','','','KW','D','','SL_SYSDATE','','','','','','R','YYYYMMDDHH24MISS','N','','','14','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','TRAN_SEG','Transaction Segment','60','','','','','','','','','','CO','C','','','','0010','','','','L','','N','','','16','','','','','','','','4'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','TRAN_SEQ','Transaction Sequence','30','','','','','','','','','','KW','N','','SL_IFD_DATA_DTL_SEQ','','','','','','R','99999999','N','','','8','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','TRAN_VER','Transaction Version','50','','','','','','','','','','CO','C','','','','2010.2','','','','L','','N','','','24','','','','','','','','6'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','INVENTORY_STATUS_CHANGE','WH_ID','Warehouse ID','80','','','','','','LC_PRS_INV-STS','WH_ID','','','EA','C','SL_CHAR_NVL','','','WMD1','','','','L','','N','','','32','','','','','','','','32'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
+SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
+2018.1,'LC_PRS_INVSTS_CHANGE-LENS','2011.1','LENS','LC_PRS_BLK_INVSTS_SEND_TO_LENS','B','SYNCD','','F','F','F','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
+SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','HOST','LC_PRS_BLOCK_INVSTS_CHNG','B','ASYNC','','T','T','T','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
+SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
+2018.1,'LC_PRS_INVSTS_CHANGE_IFD','2010.2','HUB','','','ASYNC','','F','F','F','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
+SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
+2018.1,'LC_PRS_TL_INVSTS_CHANGE','2010.1','DW','','','ASYNC','','F','F','F','','','','','',''
+
+CSV__TAG__KLUDGE___COMMIT

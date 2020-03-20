@@ -1,0 +1,31 @@
+/************************************************************************/
+/* *Please* back up database prior to executing this script.            */
+/*                                                                      */
+/* WARNING: Use with caution (dangerous components follow)!             */
+/*                                                                      */
+/* This script will attempt to wipe transaction definitions.            */
+/*                                                                      */
+/* You may choose to use this for transactions where you are            */
+/* attempting to remove fields from existing transaction definitions.   */
+/*                                                                      */
+/* But you may want to consider using new a transaction instead of      */
+/* wiping existing transaction as this script attempts to do.           */
+/************************************************************************/
+sl_wipe evt_def where evt_id='LC_PRS_INV-RCV' catch (-1403)
+/
+sl_wipe eo_def where eo_id='LC_PRS_INV-RCV' and eo_ver='2012.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_INVENTORY_RECEIPT-LENS' and ifd_ver='2011.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_INVENTORY_RECEIPT_IFD' and ifd_ver='2010.2' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_INVENTORY_RCPT_WKO_IFD' and ifd_ver='2010.2' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_TL_COMPONENT_UPDATE' and ifd_ver='2010.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_PRS_TL_INVENTORY_RECEIPT' and ifd_ver='2012.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_TL_LINE_RECEIPT' and ifd_ver='2010.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC_TL_LINE_RETURN' and ifd_ver='2010.1' catch (-1403)
+/
