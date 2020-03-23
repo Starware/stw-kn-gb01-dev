@@ -1,0 +1,36 @@
+<command>
+<name>create work order from bom</name>
+<description>Create Work Order From Bom</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+[select 1
+       from poldat_view
+      where polcod = 'LC_RECEIVING'
+        and polvar = 'WORK-ORDER-DEAULT-INVSTS'
+        and polval = 'ENABLED'
+        and rtnum1 = 1
+        and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+|
+if (@?= 0 and (!@invsts or @invsts is null))
+{
+	[select rcvsts
+	   from prtmst_view
+	  where prtnum = @prtnum
+		and prt_client_id = nvl(@prt_client_id,@client_id)
+		and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+	|
+	if (@? = 0)
+	{
+		publish data 
+		  where def_rcv_sts = @rcvsts
+	}
+}
+|
+^create work order from bom
+ where invsts = nvl(@def_rcv_sts, @invsts) 
+   and @*
+
+]]>
+</local-syntax>
+</command>

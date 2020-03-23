@@ -1,0 +1,44 @@
+<command>
+<name>create receive invoice master line</name>
+<description>create receive invoice master line</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+
+[select distinct rimhdr.invtyp
+   from rimhdr
+  where rimhdr.client_id = @client_id
+    and rimhdr.invnum = @invnum
+    and rimhdr.supnum = @supnum
+    and rimhdr.wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+|
+if (@? = 0 and (!@rcvsts or @rcvsts is null))
+{
+    [select 1
+       from poldat_view
+      where polcod = 'LC_RECEIVING'
+        and polvar = 'DEAULT-RCVSTS'
+        and polval = 'INBOUND-ORDER-TYP'
+        and rtstr1 = @invtyp
+        and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+    |
+    if (@? = 0)
+    {
+        [select rcvsts
+           from prtmst_view
+          where prtnum = @prtnum
+            and prt_client_id = @prt_client_id
+            and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+        |
+        publish data
+		  where def_rcv_sts =@rcvsts
+    }
+}
+|
+^create receive invoice master line
+ where rcvsts = nvl(@def_rcv_sts, @rcvsts)
+   and @*
+
+]]>
+</local-syntax>
+</command>

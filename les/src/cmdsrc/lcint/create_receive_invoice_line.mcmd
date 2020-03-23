@@ -1,0 +1,45 @@
+<command>
+<name>create receive invoice line</name>
+<description>Change LC Receive Inventory Status</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+
+[select distinct rcvinv.invtyp
+   from rcvinv
+  where rcvinv.trknum = @trknum
+    and rcvinv.client_id = @client_id
+    and rcvinv.invnum = @invnum
+    and rcvinv.supnum = @supnum
+    and rcvinv.wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+|
+if (@? = 0)
+{
+    [select 1
+       from poldat_view
+      where polcod = 'LC_RECEIVING'
+        and polvar = 'DEAULT-RCVSTS'
+        and polval = 'INBOUND-ORDER-TYP'
+        and rtstr1 = @invtyp
+        and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+    |
+    if (@? = 0)
+    {
+        [select rcvsts
+           from prtmst_view
+          where prtnum = @prtnum
+            and prt_client_id = @prt_client_id
+            and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+        |
+        publish data
+		  where def_rcv_sts =@rcvsts
+    }
+}
+|
+^create receive invoice line
+ where rcvsts = nvl(@def_rcv_sts, @rcvsts)
+   and @*
+
+]]>
+</local-syntax>
+</command>
