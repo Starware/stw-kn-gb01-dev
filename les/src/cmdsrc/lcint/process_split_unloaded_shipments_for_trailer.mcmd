@@ -1,0 +1,157 @@
+<command>
+<name>process split unloaded shipments for trailer</name>
+<description>Process Split Unloaded Shipments For Trailer</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+
+[select 1
+   from poldat_view pv
+   join trlr tr
+     on tr.stoloc_wh_id = pv.wh_id
+  where pv.polcod = 'LC-SPLIT-SHIPMENT'
+    and pv.polvar = 'SPLIT-LOGIC'
+    and pv.polval = 'COMMIT-AFTER-EACH'
+    and pv.rtnum1 = 1
+    and tr.trlr_id = @trlr_id] catch(-1403)
+|
+if (@? = 0)
+{
+    validate stack variable not null
+        where name = 'trlr_id'
+    |
+    validate stack variable not null
+        where name = 'car_move_id'
+    |
+    if (@new_dstloc#onstack and
+        (@new_dstloc is null or @new_dstloc = '')) {
+
+        /**
+         * If the "new_dstloc" is passed in but not a correct value
+         * we hide the variable from being processed.
+         */
+        hide stack variable
+            where name = 'new_dstloc'
+    }
+    |
+    if (@new_stop_seal#onstack and
+        (@new_stop_seal is null or @new_stop_seal = '')) {
+
+        /**
+         * If the "new_stop_seal" is passed in but not a correct value
+         * we hide the variable from being processed.
+         */
+        hide stack variable
+            where name = 'new_stop_seal'
+    }
+    |
+    /**
+     * Unassigned shipments that have not been loaded from
+     * the outbound load before we begin the split shipment process
+     * for closing a trailer.
+     */
+    deassign non loaded shipments from outbound load
+        where car_move_id = @car_move_id
+          and dstloc = @new_dstloc catch(-1403)
+    |
+    [select stop_id
+       from stop,
+            car_move
+      where stop.car_move_id = car_move.car_move_id
+        and nvl(stop.stop_cmpl_flg, 0) <> 1
+        and car_move.trlr_id = @trlr_id] catch(-1403) >> stops
+    |
+    /*
+     * This is here to provide some progress update
+     */
+    if (@async_res_id)
+    {
+        update asynchronous resource progress asynchronously
+            where async_res_id = @async_res_id
+              and errmsg = 'processSplitUnloadedShipmentsForTrailer'
+              and progress = 10
+    }
+    |
+    [[
+        import com.redprairie.moca.*
+        def res;
+        def shipmentRes;
+        def asyncProgress = 10;
+        
+        // We want to be at 80 by the end of this loop 10 (before this script) + 70 = 80
+        def asyncProgressInc = Math.floor(stops.getRowCount() > 0 ? 70/stops.getRowCount() : 70);
+        
+        // Iterate through each stop to find shipments that are partially loaded.
+        while (stops.next()) {
+            res = moca.executeInline("list partially loaded shipments for shipment split"
+                                   + "    where stop_id = '" + stops.getString("stop_id") + "' catch(-1403)");
+
+            // Split the shipment if its partially loaded.
+            // parflg determines whether we want to split
+            // or ship short based on partial flag on
+            // order line
+            if (res.getRowCount() > 0) {
+                while (res.next()) {
+                    moca.executeInline("split unloaded shipment"
+                                     + "    where ship_id   = '" + res.getString('ship_id') + "'"
+                                     + "      and wh_id     = '" + res.getString('wh_id') + "'"
+                                     + "      and @+stop_seal^new_stop_seal"
+                                     + "      and @+dstloc^new_dstloc"
+                                     + "      and @+parflg; commit");
+                }
+            }
+            else {
+                shipmentRes = moca.executeInline("list shipments"
+                                               + "    where stop_id = '" + stops.getString("stop_id") + "' catch(-1403)");
+
+                if (shipmentRes.getRowCount() == 0) {
+                    moca.executeInline("remove stop"
+                                     + "    where stop_id = '" + stops.getString("stop_id") + "'"
+                                     + "      and ignore_no_stop = 1")
+                }
+            }
+            asyncProgress += asyncProgressInc;
+            
+            if(async_res_id) {
+                moca.executeInline("update asynchronous resource progress asynchronously" +
+                                   "  where async_res_id = @async_res_id" +
+                                   "    and errmsg = 'processSplitUnloadedShipmentsForTrailer'" +
+                                   "    and progress = " + asyncProgress);
+            }
+        }
+    ]]
+    |
+    close shipping transport equipment
+        where trlr_id = @trlr_id
+          and @+trlr_seal1^new_seal1
+          and @+trlr_seal2^new_seal2
+          and @+trlr_seal3^new_seal3
+          and @+trlr_seal4^new_seal4
+          and @+wh_id
+          and @+yard_loc^new_yard_loc
+          and @+pend_dte^new_pend_dte
+          and @+asg_usr_id^new_asg_usr_id
+          and @+dispatch_trailer
+          and @+leave_equipment
+}
+else
+{
+    ^process split unloaded shipments for trailer
+}
+
+]]>
+</local-syntax>
+  <argument name="car_move_id" required="yes" datatype="string">car_move_id</argument>
+  <argument name="trlr_id" required="yes" datatype="string">trlr_id</argument>
+  <argument name="new_stop_seal" required="no" datatype="string">new_stop_seal</argument>
+  <argument name="new_dstloc" required="no" datatype="string">new_dstloc</argument>
+  <argument name="new_seal1" required="no" datatype="string">new_seal1</argument>
+  <argument name="new_seal2" required="no" datatype="string">new_seal2</argument>
+  <argument name="new_seal3" required="no" datatype="string">new_seal3</argument>
+  <argument name="new_seal4" required="no" datatype="string">new_seal4</argument>  
+  <argument name="new_yard_loc" required="no" datatype="string">new_yard_loc</argument>  
+  <argument name="new_pend_dte" required="no" datatype="string">new_pend_dte</argument>
+  <argument name="new_asg_usr_id" required="no" datatype="string">new_asg_usr_id</argument>
+  <argument name="dispatch_trailer" required="no" datatype="string">dispatch_trailer</argument>
+  <argument name="leave_equipment" required="no" datatype="string">leave_equipment</argument>
+</command>
