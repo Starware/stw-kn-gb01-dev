@@ -1,3 +1,0 @@
-mls_id,locale_id,prod_id,appl_id,frm_id,vartn,srt_seq,cust_lvl,mls_text,grp_nam
-err900003,US_ENGLISH,LES,LES,LES,LES,0,0,"Items marked as Receivable cannot be updated",
-err900003,EN-GB,LES,LES,LES,LES,0,0,"Items marked as Receivable cannot be updated",
