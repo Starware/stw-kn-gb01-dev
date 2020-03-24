@@ -1,0 +1,112 @@
+<trigger>
+
+<name>update_lc_over_allocation_details</name>
+
+<on-command>create work order detail</on-command>
+
+<fire-sequence>9000</fire-sequence>
+
+<local-syntax>
+<![CDATA[
+    [select 1
+   from poldat_view
+  where polcod = 'LC-WORK-ORDER'
+	and polvar = 'OVER-ALLOCATION'
+	and polval = 'ENABLED'
+	and wh_id = nvl(@wh_id,@@wh_id)
+	and rtnum1 = 1]catch(-1403)
+|
+if(@? =0)
+{		
+
+	[select wkodtl.linqty
+	   from wkodtl
+	  where wkonum = @wkonum
+		and wkolin = @wkolin
+		and wkorev = @wkorev
+		and client_id = @client_id
+		and seqnum = @seqnum
+		and prtnum = @prtnum
+		and prt_client_id = @prt_client_id
+		and wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+	|
+	if (@? = 0)
+	{
+		[select prtsize
+		   from prtmst_view
+		  where prtnum = @prtnum
+			and prt_client_id = @prt_client_id
+			and wh_id = nvl(@wh_id, @@wh_id)
+			and prtsize is not null] catch(-1403)
+		|
+		if (@prtsize = 'P')
+		{
+			[select prtftp_dtl.untqty pal_qty
+			   from prtftp_dtl
+			   join prtftp
+				 on prtftp.prtnum = prtftp_dtl.prtnum
+				and prtftp.prt_client_id = prtftp_dtl.prt_client_id
+				and prtftp.wh_id = prtftp_dtl.wh_id
+				and prtftp.ftpcod = prtftp_dtl.ftpcod
+				and prtftp.defftp_flg = 1
+			  where prtftp_dtl.pal_flg = 1
+				and prtftp_dtl.prtnum = @prtnum
+				and prtftp_dtl.prt_client_id = @prt_client_id
+				and prtftp_dtl.wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+			|
+			if ((@linqty % @pal_qty) != 0)
+			{
+				change record
+				 where table_name = 'wkodtl'
+				   and wkonum = @wkonum
+				   and wkolin = @wkolin
+				   and wkorev = @wkorev
+				   and client_id = @client_id
+				   and seqnum = @seqnum
+				   and prtnum = @prtnum
+				   and prt_client_id = @prt_client_id
+				   and wh_id = nvl(@wh_id, @@wh_id)
+				   and rpqflg = 1
+				   and ovrcod = 'UQTY'
+				   and ovramt = @pal_qty
+			}
+		}
+		else if (@prtsize = 'C')
+		{
+			[select prtftp_dtl.untqty cas_qty
+			   from prtftp_dtl
+			   join prtftp
+				 on prtftp.prtnum = prtftp_dtl.prtnum
+				and prtftp.prt_client_id = prtftp_dtl.prt_client_id
+				and prtftp.wh_id = prtftp_dtl.wh_id
+				and prtftp.ftpcod = prtftp_dtl.ftpcod
+				and prtftp.defftp_flg = 1
+			  where prtftp_dtl.cas_flg = 1
+				and prtftp_dtl.prtnum = @prtnum
+				and prtftp_dtl.prt_client_id = @prt_client_id
+				and prtftp_dtl.wh_id = nvl(@wh_id, @@wh_id)] catch(-1403)
+			|
+			if ((@linqty % @cas_qty) != 0)
+			{
+				change record
+				 where table_name = 'wkodtl'
+				   and wkonum = @wkonum
+				   and wkolin = @wkolin
+				   and wkorev = @wkorev
+				   and client_id = @client_id
+				   and seqnum = @seqnum
+				   and prtnum = @prtnum
+				   and prt_client_id = @prt_client_id
+				   and wh_id = nvl(@wh_id, @@wh_id)
+				   and rpqflg = 1
+				   and ovrcod = 'UQTY'
+				   and ovramt = @cas_qty
+			}
+		}
+	}
+}
+
+]]>
+</local-syntax>
+</trigger>
+
