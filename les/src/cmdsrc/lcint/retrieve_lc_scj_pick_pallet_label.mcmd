@@ -4,44 +4,47 @@
 <type>Local Syntax</type>
 <local-syntax>
 <![CDATA[
-if(@lodnum)
+if (@lodnum)
 {
-	[select distinct prtmst_view.prtnum,
-			 prtdsc.lngdsc,
-			 all_inventory_view.ftpcod,
-			 all_inventory_view.lodnum,
-			 alt_prtmst.prtnum alt_prtnum,
-			 to_char(sysdate, 'YYYYMMDDHH24MiSS') dte,
-			 sum(all_inventory_view.untqty) untqty
-		from all_inventory_view
-		join prtmst_view
-		  on prtmst_view.prtnum = all_inventory_view.prtnum
-		 and prtmst_view.wh_id = all_inventory_view.wh_id
-		join prtdsc
-		  on prtdsc.colval = all_inventory_view.prtnum || '|' || all_inventory_view.prt_client_id || '|' || all_inventory_view.wh_id
-		 and prtdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
-		 and prtdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
-		join alt_prtmst
-		  on alt_prtmst.prtnum = prtmst_view.prtnum
-		 and alt_prtmst.prt_client_id = prtmst_view.prt_client_id
-	   where all_inventory_view.wrkref is not null
-		 and all_inventory_view.wh_id = nvl(@wh_id,@@wh_id)
-		 and all_inventory_view.lodnum = @lodnum
-	   group by prtmst_view.prtnum,
-			 prtdsc.lngdsc,
-			 alt_prtmst.prtnum,
-			 all_inventory_view.ftpcod,
-			 all_inventory_view.lodnum] catch(-1403)
-	|
-	publish data
-	  where ean = '02' || @alt_prtnum || '10' || @lodnum || '37' || @untqty
-		and prtnum = @prtnum
-		and lngdsc = @lngdsc
-		and ftpcod = @ftpcod
-		and lodnum = @lodnum
-		and alt_prtnum = @alt_prtnum
-		and untqty = @untqty
-		and dte = @dte
+    [select distinct prtmst_view.prtnum,
+            prtdsc.lngdsc,
+            all_inventory_view.ftpcod,
+            all_inventory_view.lotnum,
+            alt_prtmst.alt_prtnum alt_prtnum,
+            to_char(all_inventory_view.expire_dte, 'YYMMDD') expire_dte,
+            to_char(sysdate, 'YYYYMMDDHH24MiSS') dte,
+            lpad(sum(all_inventory_view.untqty), 4, 0) untqty
+       from all_inventory_view
+       join prtmst_view
+         on prtmst_view.prtnum = all_inventory_view.prtnum
+        and prtmst_view.wh_id = all_inventory_view.wh_id
+       join prtdsc
+         on prtdsc.colval = all_inventory_view.prtnum || '|' || all_inventory_view.prt_client_id || '|' || all_inventory_view.wh_id
+        and prtdsc.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
+        and prtdsc.locale_id = nvl(@locale_id, 'US_ENGLISH')
+       join alt_prtmst
+         on alt_prtmst.prtnum = prtmst_view.prtnum
+        and alt_prtmst.prt_client_id = prtmst_view.prt_client_id
+        and alt_prtmst.alt_prt_typ = 'EAN'
+      where all_inventory_view.wrkref is not null
+        and all_inventory_view.wh_id = nvl(@wh_id, @@wh_id)
+        and all_inventory_view.lodnum = @lodnum
+      group by prtmst_view.prtnum,
+            prtdsc.lngdsc,
+            alt_prtmst.alt_prtnum,
+            all_inventory_view.ftpcod,
+            all_inventory_view.lotnum,
+            expire_dte] catch(-1403)
+    |
+    publish data
+     where ean = '15' || @expire_dte || '02' || @alt_prtnum || '10' || @lotnum || '37' || @untqty
+       and prtnum = @prtnum
+       and lngdsc = @lngdsc
+       and ftpcod = @ftpcod
+       and lotnum = @lotnum
+       and alt_prtnum = @alt_prtnum
+       and untqty = @untqty
+       and dte = @dte
 }
 ]]>
 </local-syntax>

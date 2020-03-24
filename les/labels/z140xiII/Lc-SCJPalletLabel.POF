@@ -13,9 +13,9 @@
 ^FT122,1100^A0B,35,28^FH\^FD~ftpcod,12~^FS
 ^FT200,1100^A0B,57,33^FH\^FD~lngdsc,40~^FS
 ^FT96,476^A0B,73,43^FH\^FDSC Johnson Professional^FS
-^FT679,1002^A0B,28,33^FH\^FDThe world's leading away from home skin care company^FS
+^FT679,1002^A0B,28,33^FH\^FDA Family Company^FS
 ^FT583,230^A0B,95,100^FH\^FD~untqty,5~^FS
-^FT583,1100^A0B,28,28^FH\^FD~lodnum,12~^FS
+^FT583,1100^A0B,28,28^FH\^FD~lotnum,12~^FS
 ^FT583,928^A0B,28,28^FH\^FD/^FS
 ^FT583,913^A0B,28,28^FH\^FD~dte,20~^FS
 ^FT574,221^A@R,13,11,TT0003M_^FB54,1,0,C^FH\^CI17^F8^FD~CMD=retrieve lc scj pick pallet label,25~^FS^CI0
