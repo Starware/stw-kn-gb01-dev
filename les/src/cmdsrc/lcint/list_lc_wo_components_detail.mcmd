@@ -1,0 +1,33 @@
+<command>
+<name>list lc wo components detail</name>
+<description>List Work Order components details for Production Zone</description>
+<type>Local Syntax</type>
+<local-syntax>
+<![CDATA[
+
+[select distinct client_id
+   from inventory_pckwrk_view
+  where lodnum = @lodnum
+    and wkonum is not null] catch(-1403)
+|
+[select count('X')
+   from poldat
+  where polcod = 'LC-WKO-INV-MOV'
+    and polvar = 'ENABLE'
+    and polval = 'CLIENT_ID'
+    and wh_id_tmpl = @wh_id
+    and rtstr1 = @client_id] catch(-1403)
+|
+if (@? = 0)
+{
+    sl_log event
+     where evt_id = 'LC-WKO-INV-MOV'
+       and sys_id = 'DCS'
+       and lodnum = @lodnum
+       and wh_id = @wh_id
+       and user_id = @user_id catch(@?)
+}
+
+]>
+</local-syntax>
+</command>

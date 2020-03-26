@@ -93,6 +93,9 @@ slImp -f $LESDIR/db/data/load/integrator/lc/LC_UNRESTRICT_LOT.slexp -v 2>&1 >> $
 echo "slImp -f LC_PRS_PART_OUB.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC_PRS_PART_OUB.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 
+echo "slImp -f LC-WKO-INV_MOV.slexp -v" >> ${POSTINSTALL_LOG}
+slImp -f $LESDIR/db/data/load/integrator/lc/LC-WKO-INV_MOV.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
+
 echo "slImp -f LC-INV-RCV.slexp -v" >> ${POSTINSTALL_LOG}
 slImp -f $LESDIR/db/data/load/integrator/lc/LC-INV-RCV.slexp -v 2>&1 >> ${POSTINSTALL_LOG} || false
 

@@ -1,0 +1,160 @@
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_def
+SL_VERSION,alg_id,alg_grp_id,alg_typ_cd,alg_descr,need_evt_flg,need_evt_arg_flg,need_next_eo_seg_flg,need_this_eo_seg_flg,var_arg_list_flg,overstack_arg_flg,always_local_flg,code,code_len
+2018.1,'LC-WKO-INV-MOV-ALG','SL_RETR_MTHD_IMPL','MOCA','Algorithim for LC-WKO-INV-MOV','F','F','F','F','F','F','T','[select ipv.prtnum prtnum,
+        ipv.lotnum lotnum,
+        sum(ipv.untqty) untqty,
+        ipv.wkonum wkonum,
+        w.prdlin prdlin
+   from inventory_pckwrk_view ipv
+   join wkohdr w
+     on ipv.wh_id = w.wh_id
+    and ipv.client_id = w.client_id
+    and ipv.wkonum = w.wkonum
+    and ipv.wkorev = w.wkorev
+  where ipv.wh_id = :i_c_wh_id
+    and ipv.lodnum = :i_c_lodnum
+  group by ipv.prtnum,
+        ipv.lotnum,
+        ipv.wkonum, 
+        w.prdlin]','457'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC-WKO-INV-MOV-ALG','I_C_LODNUM',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_alg_in_bnd_var
+SL_VERSION,alg_id,in_bnd_var_id,bnd_var_tag
+2018.1,'LC-WKO-INV-MOV-ALG','I_C_WH_ID',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def_grp
+SL_VERSION,sys_grp_id,sys_grp_descr
+2018.1,'LS','Group - LES'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def_grp
+SL_VERSION,sys_grp_id,sys_grp_descr
+2018.1,'LEGACY','Legacy Systems'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def
+SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_commit_ctxt_defn_cd,pre_async_alg_id,post_async_alg_id,pre_dwnld_alg_id,post_dwnld_alg_id,fail_evt_id,prsrv_evt_seq_flg,snd_err_stat_flg,rcv_fail_evt_id,rcv_succ_evt_id,null_ind_char,nochg_ind_char,absent_ind_char,eol_delim,mailbox_nam,host_port,host_nam,service,sys_user_id,sys_password,sys_conn_data,moca_sys_flg,xml_tag_data_inst,xml_tag_ifd,xml_tag_data,max_grp_siz
+2018.1,'DCS','DCS Warehouse Management System','DCS','LS','T','T','COMM','','','','','','F','T','','','','*','+','<13><10>','','','','','','','','T','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sys_def
+SL_VERSION,sys_id,sys_descr,native_nam,sys_grp_id,ena_flg,sl_host_sys_flg,i_commit_ctxt_defn_cd,pre_async_alg_id,post_async_alg_id,pre_dwnld_alg_id,post_dwnld_alg_id,fail_evt_id,prsrv_evt_seq_flg,snd_err_stat_flg,rcv_fail_evt_id,rcv_succ_evt_id,null_ind_char,nochg_ind_char,absent_ind_char,eol_delim,mailbox_nam,host_port,host_nam,service,sys_user_id,sys_password,sys_conn_data,moca_sys_flg,xml_tag_data_inst,xml_tag_ifd,xml_tag_data,max_grp_siz
+2018.1,'HOST','Generic Host System','HOST','LEGACY','T','F','SIFD','','','','','','T','T','','','','*','+','<10>','','','','','','','','','','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def_grp
+SL_VERSION,ifd_grp_id,ifd_grp_descr
+2018.1,'ORDER','Group - Order'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_def
+SL_VERSION,retr_mthd_id,retr_mthd_descr
+2018.1,'LC-WKO-INV-MOV-RET','Retrevie method for LC-WKO-INV-MOV'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_retr_mthd_impl_def
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,retr_mthd_impl_cd,alg_id
+2018.1,'LC-WKO-INV-MOV-RET','SYS_DCS','DCS','','','','ALG','LC-WKO-INV-MOV-ALG'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_sql_crsr_component
+SL_VERSION,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,component_ordr,sql_set_oper,sql_code,sql_code_len
+2018.1,'LC-WKO-INV-MOV-RET','SYS_DCS','DCS','','','','0','0','','from prtmst_view prtmst where prtnum=:i_c_prtnum','48'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_def_grp
+SL_VERSION,evt_grp_id,evt_grp_descr
+2018.1,'LEF TRANSACTION EVENTS','Logistic Execution Foundation Events'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_def
+SL_VERSION,evt_id,evt_descr,log_evt_flg,evt_grp_id
+2018.1,'LC-WKO-INV-MOV','Work Order transaction','F','LEF TRANSACTION EVENTS'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-WKO-INV-MOV','LODNUM','Load Number','C','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_evt_arg_def
+SL_VERSION,evt_id,evt_arg_id,evt_arg_descr,data_typ_cd,require_flg
+2018.1,'LC-WKO-INV-MOV','WH_ID','Warehouse ID','C','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_def
+SL_VERSION,eo_id,eo_ver,eo_descr,evt_id,always_create_flg
+2018.1,'LC-WKO-INV-MOV','2020.1','Component Issue Againt Work Order','LC-WKO-INV-MOV','T'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_seg
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_seg_descr,parent_eo_id,parent_eo_ver,parent_eo_seg_id,blk_alg_id,blk_alg_eval_cd,retr_mthd_id,eo_seg_ordr
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','Work Order Move Segment','','','','','','LC-WKO-INV-MOV-RET',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','LOTNUM','Lot Number','C','20','','25',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','PRDLIN','Production Line','C','40','','20',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','PRTNUM','Item Number','C','10','','50',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','UNTQTY','Unit Quantity','N','50','','',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_fld
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,eo_fld_descr,data_typ_cd,eo_fld_ordr,eo_fld_sql_ordr,eo_fld_len,eo_fld_max_chars
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','WKONUM','Work Order Number','C','30','','20',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','LOTNUM','LC-WKO-INV-MOV-RET','SYS_DCS','DCS','','','','0','lotnum','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','PRDLIN','LC-WKO-INV-MOV-RET','SYS_DCS','DCS','','','','0','prdlin','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','PRTNUM','LC-WKO-INV-MOV-RET','SYS_DCS','DCS','','','','0','prtnum','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','UNTQTY','LC-WKO-INV-MOV-RET','SYS_DCS','DCS','','','','0','untqty','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_eo_col
+SL_VERSION,eo_id,eo_ver,eo_seg_id,eo_fld_id,retr_mthd_id,retr_mthd_impl_genid,sys_id,ifd_id,ifd_ver,ifd_seg_id,sql_component_seq,sql_crsr_col,grp_by_flg
+2018.1,'LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','WKONUM','LC-WKO-INV-MOV-RET','SYS_DCS','DCS','','','','0','wkonum','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_def
+SL_VERSION,ifd_id,ifd_ver,ifd_descr,ifd_typ_cd,data_lay_id,ifd_grp_id,eo_id,eo_ver,root_seg_rpt_brk_flg,recursive_flg,post_alg_id,pre_alg_id,ifd_tag,post_proc_flg
+2018.1,'LC-WKO-INV-MOV-IFD','2020.1','LC-WKO-INV-MOV','O','CSV','ORDER','LC-WKO-INV-MOV','2020.1','F','T','','','LC-WKO-INV-MOV-IFD','F'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_seg
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_seg_rel_pos,ifd_seg_descr,ifd_seg_ordr,eo_id,eo_ver,eo_seg_id,pre_alg_id,post_alg_id,parent_ifd_id,parent_ifd_ver,parent_ifd_seg_id,blk_alg_id,blk_alg_eval_cd,proc_alg_id,xml_use_seg_tag_flg,ifd_seg_tag,sib_is_rel_flg,sync_with_eo_flg,ifd_seg_ol_attr_cd
+2018.1,'LC-WKO-INV-MOV-IFD','2020.1','LC-WKO-INV-MOV','','LC-WKO-INV-MOV segment','','LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','','','','','','','','','T','LC-WKO-INV-MOV','','T','XTXTN'
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC-WKO-INV-MOV-IFD','2020.1','LC-WKO-INV-MOV','LOTNUM','Lot Number','20','','LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','LOTNUM','','','','','EO','C','','','','','','','','N','','N','','','25','','T','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC-WKO-INV-MOV-IFD','2020.1','LC-WKO-INV-MOV','PRDLIN','Production Line','40','','LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','PRDLIN','','','','','EO','C','','','','','','','','N','','N','','','20','','T','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC-WKO-INV-MOV-IFD','2020.1','LC-WKO-INV-MOV','PRTNUM','Item Number','10','','LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','PRTNUM','','','','','EO','C','','','','','','','','N','','N','','','50','','T','','','Currently, no English translation is available.','T','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC-WKO-INV-MOV-IFD','2020.1','LC-WKO-INV-MOV','UNTQTY','Unit Quantity','50','','LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','UNTQTY','','','','','EO','N','','','','','','','','N','','N','','','4','','T','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_ifd_fld
+SL_VERSION,ifd_id,ifd_ver,ifd_seg_id,ifd_fld_id,ifd_fld_descr,ifd_fld_ordr,ifd_fld_tag,eo_id,eo_ver,eo_seg_id,eo_fld_id,evt_id,evt_arg_id,eo_fld_grp_func,ifd_fld_sql_ordr,ifd_fld_class_cd,data_typ_cd,fld_alg_id,kw_id,pre_alg_bnd_var_id,fld_val,sql_expr,default_expr,change_expr,fld_jus_cd,fld_fmt,fld_trm_cd,pad_char,trm_char,ifd_fld_len,ifd_fld_attr_cd,create_only_flg,ol_fld_tag,ol_grp_func,validation_cmnt,required_flg,default_val_cmnt,ifd_fld_max_chars
+2018.1,'LC-WKO-INV-MOV-IFD','2020.1','LC-WKO-INV-MOV','WKONUM','Work Order Number','30','','LC-WKO-INV-MOV','2020.1','LC-WKO-INV-MOV-SEG','WKONUM','','','','','EO','C','','','','','','','','N','','N','','','20','','T','','','Currently, no English translation is available.','F','Currently, no English translation is available.',''
+
+CSV__TAG__KLUDGE___TABLE_NAME sl_o_ifd_sys_map
+SL_VERSION,ifd_id,ifd_ver,sys_id,blk_alg_id,blk_alg_eval_cd,comm_mode_cd,comm_mthd_id,persist_eo_flg,persist_ifd_flg,ena_flg,grp_ordr,snd_ordr,head_evt_id,tail_evt_id,succ_evt_id,fail_evt_id
+2018.1,'LC-WKO-INV-MOV-IFD','2020.1','HOST','','','ASYNC','','T','F','T','','','','','',''
+
+
+
+CSV__TAG__KLUDGE___COMMIT

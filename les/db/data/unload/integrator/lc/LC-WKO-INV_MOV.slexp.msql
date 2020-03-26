@@ -1,0 +1,19 @@
+/************************************************************************/
+/* *Please* back up database prior to executing this script.            */
+/*                                                                      */
+/* WARNING: Use with caution (dangerous components follow)!             */
+/*                                                                      */
+/* This script will attempt to wipe transaction definitions.            */
+/*                                                                      */
+/* You may choose to use this for transactions where you are            */
+/* attempting to remove fields from existing transaction definitions.   */
+/*                                                                      */
+/* But you may want to consider using new a transaction instead of      */
+/* wiping existing transaction as this script attempts to do.           */
+/************************************************************************/
+sl_wipe evt_def where evt_id='LC-WKO-INV-MOV' catch (-1403)
+/
+sl_wipe eo_def where eo_id='LC-WKO-INV-MOV' and eo_ver='2020.1' catch (-1403)
+/
+sl_wipe ifd_def where ifd_id='LC-WKO-INV-MOV-IFD' and ifd_ver='2020.1' catch (-1403)
+/
