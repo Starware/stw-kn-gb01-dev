@@ -10,6 +10,7 @@
    from poldat_view
   where polcod = 'TCL-INTERFACE'
     and polvar = 'WATCHED-LOCATION'
+	and rtstr1 = 'LC-PALLET-STORE-TCL'
     and polval = @dstloc
     and wh_id = nvl(@wh_id,@@wh_id)
     and rtnum1 = 1] catch(-1403)
