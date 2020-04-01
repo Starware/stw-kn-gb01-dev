@@ -1,0 +1,52 @@
+<command>
+  <name>generate lc delivery note documents</name>
+  <description>generate lc delivery note documents</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+  <![CDATA[
+
+if (@trlr_cod = 'SHIP')
+{
+    [select distinct ord.ordnum ordnum,
+            ord.ordtyp ordtyp
+       from shipping_pckwrk_view
+       join ord
+         on ord.ordnum = shipping_pckwrk_view.ordnum
+        and ord.wh_id = shipping_pckwrk_view.wh_id
+        and ord.client_id = shipping_pckwrk_view.client_id
+      where trlr_id = @trlr_id] catch(-1403)
+    |
+    [select rtstr2 rpt_id
+       from poldat_view
+      where polcod = 'LC_SHIPPING'
+        and polvar = 'DELIVERY_NOTE'
+        and polval = 'ENABLED'
+        and wh_id = @wh_id
+        and rtstr1 = @ordtyp] catch(-1403)
+    |
+    if (@? = 0)
+    {
+        if (!@prtadr)
+        {
+            [select def_printer prtadr
+               from rpt_config
+              where rpt_id = @rpt_id] catch(-1403)
+        }
+        |
+        if (@? = 0)
+        {
+            generate moca report
+             where rpt_id = @rpt_id
+               and dest_typ = 'printer'
+               and dest = @prtadr
+               and gen_usr_id = nvl(@usr_id, @@usr_id)
+               and locale_id = nvl(@locale_id, @@locale_id)
+               and ordnum = @ordnum
+               and trlr_id = @trlr_id catch(@?)
+        }
+    }
+}
+
+]]>
+  </local-syntax>
+</command>

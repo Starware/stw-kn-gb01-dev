@@ -1,0 +1,140 @@
+<command>
+  <name>get lc sales delivery note details</name>
+  <description>get lc sales delivery note details</description>
+  <type>Local Syntax</type>
+  <local-syntax>
+  <![CDATA[
+
+[select t.trlr_id,
+        c.carcod carcod,
+        car_adr.adrnam car_adrnam,
+        car_adr.adrln1 car_adrln1,
+        car_adr.adrln2 car_adrln2,
+        car_adr.adrpsz || ' ' || car_adr.adrcty car_postcode_city,
+        car_dsc.lngdsc car_country,
+        spv.srvlvl,
+        st_a.adrnam ship_to_adrnam,
+        st_a.adrln1 st_adrln1,
+        st_a.adrln2 st_adrln2,
+        st_a.adrpsz || '    ' || st_a.adrcty st_psz_cty,
+        st_d.lngdsc st_country,
+        bt_a.adrnam bill_to_adrnam,
+        bt_a.adrln1 bt_adrln1,
+        bt_a.adrln2 bt_adrln2,
+        bt_a.adrpsz || '    ' || bt_a.adrcty bt_psz_cty,
+        bt_a.ctry_name country_cod,
+        bt_d.lngdsc bt_country,
+        o.dlvnum delivery_number,
+        to_char(t.close_dte, 'MM-DD-YYYY') shipment_date,
+        o.ordnum sale_order,
+        to_char(o.adddte, 'MM-DD-YYYY') order_date,
+        o.cponum customer_po_number,
+        ol.ordlin line_no,
+        ol.ordqty ordered_quantity,
+        sum(ipv.pckqty) delivered_qty,
+        spv.pck_uom picking_unit,
+        ap.alt_prtnum previous_material,
+        ipv.prtnum material,
+        ol.cstprt customer_material,
+        ds.lngdsc description,
+        ipv.lotnum batch_number,
+        sum(ipv.pckqty) * round((pfd.grswgt * 0.001), 3) weight_kg,
+        sum(ipv.pckqty) * round((pfd.grswgt * 0.001 * 2.20462), 3) weight_lbs
+   from trlr t
+   left
+   join carhdr c
+     on t.carcod = c.carcod
+   left
+   join adrmst car_adr
+     on c.adr_id = car_adr.adr_id
+   left
+   join dscmst car_dsc
+     on car_dsc.colnam = 'ctry_name'
+    and car_dsc.colval = car_adr.ctry_name
+    and car_dsc.locale_id = 'EN-GB'
+   join shipping_pckwrk_view spv
+     on t.stoloc_wh_id = spv.wh_id
+    and t.trlr_id = spv.trlr_id
+   join adrmst st_a
+     on st_a.adr_id = spv.st_adr_id
+   join dscmst st_d
+     on st_d.colnam = 'ctry_name'
+    and st_d.colval = st_a.ctry_name
+    and st_d.locale_id = 'EN-GB'
+   join adrmst bt_a
+     on bt_a.adr_id = spv.bt_adr_id
+   join dscmst bt_d
+     on bt_d.colnam = 'ctry_name'
+    and bt_d.colval = bt_a.ctry_name
+    and bt_d.locale_id = 'EN-GB'
+   join ord_line ol
+     on spv.ordnum = ol.ordnum
+    and spv.ordlin = ol.ordlin
+    and spv.prtnum = ol.prtnum
+   join ord o
+     on o.ordnum = ol.ordnum
+    and o.wh_id = ol.wh_id
+    and o.client_id = ol.client_id
+   join inventory_pckwrk_view ipv
+     on ipv.wrkref_dtl = spv.wrkref_dtl
+    and ipv.ordnum = spv.ordnum
+    and ipv.ordlin = spv.ordlin
+    and ipv.prtnum = spv.prtnum
+   left
+   join alt_prtmst ap
+     on ap.prtnum = ipv.prtnum
+    and ap.prt_client_id = ipv.prt_client_id
+    and ap.alt_prt_typ = 'EAN'
+   join prtftp_dtl pfd
+     on pfd.prtnum = ipv.prtnum
+    and pfd.prt_client_id = ipv.prt_client_id
+    and pfd.wh_id = ipv.wh_id
+    and pfd.uomcod = 'EA'
+   join prtdsc ds
+     on ds.colval = ipv.prtnum || '|' || ipv.prt_client_id || '|' || ipv.wh_id
+    and ds.locale_id = 'EN-GB'
+    and ds.colnam = 'prtnum|prt_client_id|wh_id_tmpl'
+  where t.trlr_id = @trlr_id
+    and spv.ordnum = @ordnum
+  group by t.trlr_id,
+        c.carcod,
+        car_adr.adrnam,
+        car_adr.adrln1,
+        car_adr.adrln2,
+        car_adr.adrpsz,
+        car_adr.adrcty,
+        car_dsc.lngdsc,
+        spv.srvlvl,
+        st_a.adrnam,
+        st_a.adrln1,
+        st_a.adrln2,
+        st_a.adrpsz,
+        st_a.adrcty,
+        st_d.lngdsc,
+        bt_a.adrnam,
+        bt_a.adrln1,
+        bt_a.adrln2,
+        bt_a.adrpsz,
+        bt_a.adrcty,
+        bt_d.lngdsc,
+        bt_a.ctry_name,
+        o.dlvnum,
+        t.close_dte,
+        o.ordnum,
+        o.adddte,
+        o.cponum,
+        ol.ordlin,
+        ol.ordqty,
+        spv.pck_uom,
+        ap.alt_prtnum,
+        ipv.prtnum,
+        ol.cstprt,
+        ds.lngdsc,
+        ipv.lotnum,
+        pfd.grswgt,
+        pfd.grswgt
+  order by ol.ordlin]
+
+]]>
+  </local-syntax>
+</command>
